@@ -40,8 +40,56 @@ MySceneGraph.prototype.onXMLReady=function()
 	this.scene.onGraphLoaded();
 };
 
+MySceneGraph.prototype.parseScene = function(rootElement) {
+	var elems =  rootElement.getElementsByTagName('scene');
+	if (elems == null) {
+		return "scene element is missing.";
+	}
 
+	if (elems.length != 1) {
+		return "either zero or more than one 'scene' element found.";
+	}
 
+	var scene = elems[0];
+
+	this.root = this.reader.getString(scene,'root');
+	this.axis_length = this.reader.getString(scene,'axis_length');
+
+	console.log("Scene read from file: {root=" + this.root + ", axis_length=" + this.axis_length);
+
+};
+
+MySceneGraph.prototype.parseViews = function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseIllumination = function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseLights= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseTextures= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseMaterials= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseTransformations= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parsePrimitives= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseComponents= function(rootElement) {
+	//TODO
+};
 /*
  * Example of method that parses elements of one block and stores information in a specific data structure
  */
