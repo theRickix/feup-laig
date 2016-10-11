@@ -59,29 +59,69 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 
 };
 
+MySceneGraph.prototype.parseData = function(rootElement) {
+	//TODO
+	this.perspectives = [];
+
+}
+
 MySceneGraph.prototype.parseViews = function(rootElement) {
     var elems =  rootElement.getElementsByTagName('views');
     if (elems == null) {
         return "view element is missing.";
     }
 
-    if (elems.length != 1) {
-        return "either zero or more than one 'view' element found.";
+    if (elems.length < 1) {
+        return "no 'view' element found.";
     }
 
-    // <------------ Iterar
     var view = elems[0];
 
     this.default = this.reader.getString(view,'default');
 
-    var elems =  rootElement.getElementsByTagName('perspective');
+	var perspectives = view.getElementsByTagName('perspective');
 
-    console.log("view read from file: {default=" + this.default);
+	for(var i=0; i<perspectives.length; i++) {
+		var id = this.reader.getString(perspectives[i], 'id');
+		var near = this.reader.getFloat(perspectives[i], 'near');
+		var far = this.reader.getFloat(perspectives[i], 'far');
+		var angle = this.reader.getFloat(perspectives[i], 'angle');
+
+		var from = perspectives[i].getElementsByTagName('from');
+		var to = perspectives[i].getElementsByTagName('to');
+
+		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from), this.parseCoordinates(target));
+		camera.id = id;
+		this.perspectives.push(camera);
+
+	}
+
+    //console.log("view read from file: {default=" + this.default);
 
 };
 
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
-	//TODO
+	var elems =  rootElement.getElementsByTagName('illumination');
+	if (elems == null) {
+		return "illumination element is missing.";
+	}
+
+	if (elems.length < 1) {
+		return "no 'illumination' element found.";
+	}
+
+	var illumination = elems[0];
+
+	var doublesided = this.reader.getBoolean(illumination, "doublesided");
+	var local = this.reader.getBoolean(illumination, "local");
+
+	var ambient = illumination.getElementsByName("ambient");
+	var background = illumination.getElementsByName("background");
+
+	this.ambient = this.parseColours(ambient);
+	this.background = this.parseColours(background);
+
+
 };
 
 MySceneGraph.prototype.parseLights= function(rootElement) {
@@ -106,6 +146,22 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 
 MySceneGraph.prototype.parseComponents= function(rootElement) {
 	//TODO
+};
+
+MySceneGraph.prototype.parseCoordinates= function(element) {
+	var x = this.reader.getFloat(element, 'x');
+	var y = this.reader.getFloat(element, 'y');
+	var z = this.reader.getFloat(element, 'z');
+	return vec3.fromValues(x, y, z);
+};
+
+MySceneGraph.prototype.parseColours= function(element) {
+	var r = this.reader.getFloat(element, 'r');
+	var g = this.reader.getFloat(element, 'g');
+	var b = this.reader.getFloat(element, 'b');
+	var a = this.reader.getFloat(element, 'a');
+
+	return vec4.fromValues(r, g, b, a);
 };
 /*
  * Example of method that parses elements of one block and stores information in a specific data structure
