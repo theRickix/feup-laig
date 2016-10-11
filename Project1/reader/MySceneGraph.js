@@ -53,14 +53,31 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 	var scene = elems[0];
 
 	this.root = this.reader.getString(scene,'root');
-	this.axis_length = this.reader.getString(scene,'axis_length');
+	this.axis_length = this.reader.getFloat(scene,'axis_length');
 
 	console.log("Scene read from file: {root=" + this.root + ", axis_length=" + this.axis_length);
 
 };
 
 MySceneGraph.prototype.parseViews = function(rootElement) {
-	//TODO
+    var elems =  rootElement.getElementsByTagName('views');
+    if (elems == null) {
+        return "view element is missing.";
+    }
+
+    if (elems.length != 1) {
+        return "either zero or more than one 'view' element found.";
+    }
+
+    // <------------ Iterar
+    var view = elems[0];
+
+    this.default = this.reader.getString(view,'default');
+
+    var elems =  rootElement.getElementsByTagName('perspective');
+
+    console.log("view read from file: {default=" + this.default);
+
 };
 
 MySceneGraph.prototype.parseIllumination = function(rootElement) {
