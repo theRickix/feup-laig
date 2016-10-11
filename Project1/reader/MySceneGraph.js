@@ -7,6 +7,12 @@ function MySceneGraph(filename, scene) {
 	scene.graph=this;
 
 	this.perspectives = [];
+	this.omni = [];
+	this.spot = [];
+	this.textures = [];
+	this.materials = [];
+	this.transformations = [];
+	this.primitives = [];
 		
 	// File reading 
 	this.reader = new CGFXMLreader();
@@ -86,7 +92,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 		var from = perspectives[i].getElementsByTagName('from');
 		var to = perspectives[i].getElementsByTagName('to');
 
-		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from[0]), this.parseCoordinates(to[0]));
+		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from[0], false), this.parseCoordinates(to[0], false));
 		camera.id = id;
 		this.perspectives.push(camera);
 
@@ -123,7 +129,7 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 MySceneGraph.prototype.parseLights= function(rootElement) {
 	var elems =  rootElement.getElementsByTagName('illumination');
 
-	if (elements == null || elements.length <1) {
+	if (elems == null || elems.length <1) {
 		return "no lights found";
 	}
 
@@ -169,11 +175,16 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 	//TODO
 };
 
-MySceneGraph.prototype.parseCoordinates= function(element) {
+MySceneGraph.prototype.parseCoordinates= function(element,hasW) {
 	var x = this.reader.getFloat(element, 'x');
 	var y = this.reader.getFloat(element, 'y');
 	var z = this.reader.getFloat(element, 'z');
-	return vec3.fromValues(x, y, z);
+	if(!hasW)
+		return vec3.fromValues(x, y, z);
+	else {
+		var w = this.reader.getFloat(element, 'w');
+		return vec4.fromValues(x, y, z, w);
+	}
 };
 
 MySceneGraph.prototype.parseColours= function(element) {
