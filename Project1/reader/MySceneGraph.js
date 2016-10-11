@@ -5,6 +5,8 @@ function MySceneGraph(filename, scene) {
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
 	scene.graph=this;
+
+	this.perspectives = [];
 		
 	// File reading 
 	this.reader = new CGFXMLreader();
@@ -59,12 +61,6 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 
 };
 
-MySceneGraph.prototype.parseData = function(rootElement) {
-	//TODO
-	this.perspectives = [];
-
-}
-
 MySceneGraph.prototype.parseViews = function(rootElement) {
     var elems =  rootElement.getElementsByTagName('views');
     if (elems == null) {
@@ -90,7 +86,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 		var from = perspectives[i].getElementsByTagName('from');
 		var to = perspectives[i].getElementsByTagName('to');
 
-		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from), this.parseCoordinates(target));
+		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from[0]), this.parseCoordinates(to[0]));
 		camera.id = id;
 		this.perspectives.push(camera);
 
@@ -118,15 +114,40 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	var ambient = illumination.getElementsByName("ambient");
 	var background = illumination.getElementsByName("background");
 
-	this.ambient = this.parseColours(ambient);
-	this.background = this.parseColours(background);
+	this.ambient = this.parseColours(ambient[0]);
+	this.background = this.parseColours(background[0]);
 
 
 };
 
 MySceneGraph.prototype.parseLights= function(rootElement) {
-	//TODO
+	var elems =  rootElement.getElementsByTagName('illumination');
+
+	if (elements == null || elements.length <1) {
+		return "no lights found";
+	}
+
+	var lights = elems[0];
+
+	for(var i=0; i < lights.child.length; i++) {
+		switch(lights.children[i].tagName) {
+			case "omni":
+				this.parseOmniLights(lights.children[i]); break;
+
+			case "spot":
+				this.parseSpotLights(lights.children[i]); break;
+		}
+	}
 };
+
+MySceneGraph.prototype.parseOmniLights= function(rootElement) {
+	//TODO
+}
+
+MySceneGraph.prototype.parseSpotLights= function(rootElement) {
+	//TODO
+}
+
 
 MySceneGraph.prototype.parseTextures= function(rootElement) {
 	//TODO
