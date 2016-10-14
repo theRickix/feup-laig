@@ -5,13 +5,6 @@ function MySceneGraph(filename, scene) {
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
 	scene.graph=this;
-	
-	this.omni = [];
-	this.spot = [];
-	this.textures = [];
-	this.materials = [];
-	this.transformations = [];
-	this.primitives = [];
 		
 	// File reading 
 	this.reader = new CGFXMLreader();
@@ -59,10 +52,8 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 
 	var scene = elems[0];
 
-	this.scene = [];
-
-	this.scene['root'] = this.reader.getString(scene,'root');
-	this.scene['axis_length'] = this.reader.getFloat(scene,'axis_length');
+	this.root = this.reader.getString(scene,'root');
+	this.axis_lenght = this.reader.getFloat(scene,'axis_length');
 
 	console.log("Scene read from file: {root=" + this.scene.root + ", axis_length=" + this.scene.axis_length);
 
@@ -118,14 +109,16 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 
 	var illumination = elems[0];
 
-	var doublesided = this.reader.getBoolean(illumination, "doublesided");
-	var local = this.reader.getBoolean(illumination, "local");
+	this.illumination = [];
+
+	this.illumination['doublesided'] = this.reader.getBoolean(illumination, "doublesided");
+	this.illumination['local'] = this.reader.getBoolean(illumination, "local");
 
 	var ambient = illumination.getElementsByName("ambient");
 	var background = illumination.getElementsByName("background");
 
-	this.ambient = this.parseColours(ambient[0]);
-	this.background = this.parseColours(background[0]);
+	this.illumination['ambient'] = this.parseColours(ambient[0]);
+	this.illumination['background']= this.parseColours(background[0]);
 
 
 };
@@ -138,6 +131,8 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 	}
 
 	var lights = elems[0];
+
+	this.lights = [];
 
 	for(var i=0; i < lights.child.length; i++) {
 		switch(lights.children[i].tagName) {
