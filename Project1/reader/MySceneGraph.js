@@ -5,8 +5,7 @@ function MySceneGraph(filename, scene) {
 	// Establish bidirectional references between scene and graph
 	this.scene = scene;
 	scene.graph=this;
-
-	this.perspectives = [];
+	
 	this.omni = [];
 	this.spot = [];
 	this.textures = [];
@@ -60,10 +59,12 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 
 	var scene = elems[0];
 
-	this.root = this.reader.getString(scene,'root');
-	this.axis_length = this.reader.getFloat(scene,'axis_length');
+	this.scene = [];
 
-	console.log("Scene read from file: {root=" + this.root + ", axis_length=" + this.axis_length);
+	this.scene['root'] = this.reader.getString(scene,'root');
+	this.scene['axis_length'] = this.reader.getFloat(scene,'axis_length');
+
+	console.log("Scene read from file: {root=" + this.scene.root + ", axis_length=" + this.scene.axis_length);
 
 };
 
@@ -79,7 +80,10 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 
     var view = elems[0];
 
-    this.default = this.reader.getString(view,'default');
+	this.view = [];
+
+    this.view['default'] = this.reader.getString(view,'default');
+	this.view['perspectives'] = [];
 
 	var perspectives = view.getElementsByTagName('perspective');
 
@@ -94,7 +98,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 
 		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from[0], false), this.parseCoordinates(to[0], false));
 		camera.id = id;
-		this.perspectives.push(camera);
+		this.view.perspectives.push(camera);
 
 	}
 
