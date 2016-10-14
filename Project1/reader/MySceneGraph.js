@@ -133,6 +133,8 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 	var lights = elems[0];
 
 	this.lights = [];
+	this.lights['omni'] = [];
+	this.lights['spot'] = [];
 
 	for(var i=0; i < lights.child.length; i++) {
 		switch(lights.children[i].tagName) {
@@ -146,11 +148,37 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseOmniLights= function(rootElement) {
-	//TODO
+	var tmp_omni = [];
+
+	var location = rootElement.getElementsByTagName('location');
+	var ambient = rootElement.getElementsByTagName('ambient');
+	var diffuse = rootElement.getElementsByTagName('diffuse');
+	var specular = rootElement.getElementsByTagName('specular');
+
+	omni['location'] = this.parseCoordinates(location);
+	omni['ambient'] = this.parseColours(ambient);
+	omni['diffuse'] = this.parseColours(diffuse);
+	omni['specular'] = this.parseColours(specular);
+
+	this.lights.omni.push(tmp_omni);
 }
 
 MySceneGraph.prototype.parseSpotLights= function(rootElement) {
-	//TODO
+	var tmp_spot = [];
+
+	var target = rootElement.getElementsByTagName('target');
+	var location = rootElement.getElementsByTagName('location');
+	var ambient = rootElement.getElementsByTagName('ambient');
+	var diffuse = rootElement.getElementsByTagName('diffuse');
+	var specular = rootElement.getElementsByTagName('specular');
+
+	spot['target'] = this.parseCoordinates(target,false);
+	spot['location'] = this.parseCoordinates(location,true);
+	spot['ambient'] = this.parseColours(ambient);
+	spot['diffuse'] = this.parseColours(diffuse);
+	spot['specular'] = this.parseColours(specular);
+
+	this.lights.spot.push(tmp_spot);
 }
 
 
