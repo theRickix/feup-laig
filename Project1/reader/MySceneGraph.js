@@ -90,7 +90,6 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from[0], false), this.parseCoordinates(to[0], false));
 		camera.id = id;
 		this.view.perspectives.push(camera);
-
 	}
 
     //console.log("view read from file: {default=" + this.default);
@@ -173,7 +172,7 @@ MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 	var specular = rootElement.getElementsByTagName('specular');
 
 	spot['target'] = this.parseCoordinates(target,false);
-	spot['location'] = this.parseCoordinates(location,true);
+	spot['location'] = this.parseCoordinates(location,false);
 	spot['ambient'] = this.parseColours(ambient);
 	spot['diffuse'] = this.parseColours(diffuse);
 	spot['specular'] = this.parseColours(specular);
