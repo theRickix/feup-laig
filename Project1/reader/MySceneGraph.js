@@ -269,6 +269,8 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 
 		var tmp_primitive = [];
 
+		tmp_primitive['id'] = this.reader.getString(primitive,'id');
+
 		switch(primitive.firstChild.tagName) {
 			case "rectangle":
 				this.parseRectangle(primitive.firstChild,tmp_primitive);
