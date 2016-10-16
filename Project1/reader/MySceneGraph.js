@@ -313,7 +313,18 @@ MySceneGraph.prototype.parseTorus= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseComponents= function(rootElement) {
-	//TODO
+	var elems =  rootElement.getElementsByTagName('components');
+
+	var components = elems[0];
+
+	this.components = [];
+
+	for(var i=0; i < components.children.length; i++) {
+		var component = components.children[i];
+		var tmp_component = [];
+
+		tmp_component['id'] = this.reader.getString(component,'id');
+	}
 };
 
 MySceneGraph.prototype.parseCoordinates= function(element,hasW) {
