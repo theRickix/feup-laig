@@ -333,10 +333,19 @@ MySceneGraph.prototype.parseCylinder= function(element,primitive) {
 };
 
 MySceneGraph.prototype.parseSphere= function(rootElement,primitive) {
+	var radius = this.reader.getFloat(element, 'radius');
+	var slices = this.reader.getInteger(element, 'slices');
+	var stacks = this.reader.getInteger(element, 'stacks');
+
 	this.primitives.push(primitive);
 };
 
 MySceneGraph.prototype.parseTorus= function(rootElement,primitive) {
+	var inner = this.reader.getFloat(element, 'inner');
+	var outer = this.reader.getFloat(element, 'outer');
+	var slices = this.reader.getInteger(element, 'slices');
+	var loops = this.reader.getInteger(element, 'loops');
+
 	this.primitives.push(primitive);
 };
 
