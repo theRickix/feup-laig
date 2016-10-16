@@ -203,8 +203,9 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseMaterials= function(rootElement) {
+	var elems =  rootElement.getElementsByTagName('materials');
+	var materials=elems[0];
 
-	var materials=elemens[0];
 	this.materials = [];
 
 	var tmp_material=[];
