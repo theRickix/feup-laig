@@ -262,20 +262,54 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 	var primitives = elems[0];
 
 	this.primitives = [];
-	this.primitives['rectangle'];
-	this.primitives['triangle'];
-	this.primitives['cylinder'];
-	this.primitives['sphere'];
-	this.primitives['torus'];
 
-
-	for ( var i=0; i < primitives.child.lentgh; i++)
+	for ( var i=0; i < primitives.child.length; i++)
 	{
-		var primitive = primitives.firstChild;
+		var primitive = primitives.children[i];
 
-		switch(primitive)
+		switch(primitive.firstChild.tagName) {
+			case "rectangle":
+				this.parseRectangle(primitive.firstChild);
+				break;
+
+			case "triangle":
+				this.parseTriangle(primitive.firstChild);
+				break;
+
+			case "cylinder":
+				this.parseCylinder(primitive.firstChild);
+				break;
+
+			case "sphere":
+				this.parseSphere(primitive.firstChild);
+				break;
+
+			case "torus":
+				this.parseTorus(primitive.firstChild);
+				break;
+		}
 	}
 
+};
+
+MySceneGraph.prototype.parseRectangle= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseTriangle= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseCylinder= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseSphere= function(rootElement) {
+	//TODO
+};
+
+MySceneGraph.prototype.parseTorus= function(rootElement) {
+	//TODO
 };
 
 MySceneGraph.prototype.parseComponents= function(rootElement) {
