@@ -294,16 +294,18 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 
 };
 
-MySceneGraph.prototype.parseRectangle= function(element) {
-	var x1 = this.reader.getFloat(element, 'x1');
+MySceneGraph.prototype.parseRectangle= function(element,primitive) {
+	primitive['rectangle']['x1'] = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var x2 = this.reader.getFloat(element, 'x2');
 	var y2 = this.reader.getFloat(element, 'y2');
+
+	this.primitives.push(primitive);
 	
 
 };
 
-MySceneGraph.prototype.parseTriangle= function(element) {
+MySceneGraph.prototype.parseTriangle= function(element,primitive) {
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var z1 = this.reader.getFloat(element, 'z1');
@@ -314,22 +316,26 @@ MySceneGraph.prototype.parseTriangle= function(element) {
 	var y3 = this.reader.getFloat(element, 'y3');
 	var z3 = this.reader.getFloat(element, 'z3');
 
+	this.primitives.push(primitive);
+
 };
 
-MySceneGraph.prototype.parseCylinder= function(element) {
+MySceneGraph.prototype.parseCylinder= function(element,primitive) {
 	var base = this.reader.getFloat(element, 'base');
 	var top = this.reader.getFloat(element, 'top');
 	var height = this.reader.getFloat(element, 'height');
 	var slices = this.reader.getInteger(element, 'slices');
 	var stacks = this.reader.getInteger(element, 'stacks');
+
+	this.primitives.push(primitive);
 };
 
-MySceneGraph.prototype.parseSphere= function(rootElement) {
-	//TODO
+MySceneGraph.prototype.parseSphere= function(rootElement,primitive) {
+	this.primitives.push(primitive);
 };
 
-MySceneGraph.prototype.parseTorus= function(rootElement) {
-	//TODO
+MySceneGraph.prototype.parseTorus= function(rootElement,primitive) {
+	this.primitives.push(primitive);
 };
 
 MySceneGraph.prototype.parseComponents= function(rootElement) {
