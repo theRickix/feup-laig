@@ -208,8 +208,8 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 
 	this.materials = [];
 
-	for(var i=0; i < textures.child.length; i++) {
-		var texture = textures.children[i];
+	for(var i=0; i < materials.child.length; i++) {
+		var material = materials.children[i];
 
 		var tmp_material = [];
 
@@ -220,11 +220,11 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 		var shininess = rootElement.getElementsByTagName('shininess');
 
 
-		material['emission'] = this.parseColours(emission);
-		material['ambient'] = this.parseColours(ambient);
-		material['diffuse'] = this.parseColours(diffuse);
-		material['specular'] = this.parseColours(specular);
-		material['shininess'] = this.parseColours(shininess);
+		tmp_material['emission'] = this.parseColours(emission);
+		tmp_material['ambient'] = this.parseColours(ambient);
+		tmp_material['diffuse'] = this.parseColours(diffuse);
+		tmp_material['specular'] = this.parseColours(specular);
+		tmp_material['shininess'] = this.parseColours(shininess);
 
 		this.materials.material.push(tmp_material);
 	}
