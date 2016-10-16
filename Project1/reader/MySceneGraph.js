@@ -182,7 +182,24 @@ MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 
 
 MySceneGraph.prototype.parseTextures= function(rootElement) {
-	//TODO
+	var elems =  rootElement.getElementsByTagName('textures');
+
+	var textures = elems[0];
+	this.textures = [];
+
+	for(var i=0; i < textures.child.length; i++) {
+		var texture = textures.children[i];
+
+		var tmp_texture = [];
+
+		tmp_texture['id'] = this.reader.getString(texture,'id');
+		tmp_texture['file'] = this.reader.getString(texture,'file');
+		tmp_texture['length_s'] = this.reader.getString(texture,'length_s');
+		tmp_texture['length_t'] = this.reader.getString(texture,'length_t');
+
+		this.textures.push(tmp_texture);
+	}
+
 };
 
 MySceneGraph.prototype.parseMaterials= function(rootElement) {
