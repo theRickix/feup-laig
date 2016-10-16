@@ -231,7 +231,24 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseTransformations= function(rootElement) {
-	//TODO
+	var elems =  rootElement.getElementsByTagName('transformations');
+
+	var transformations = elems[0];
+	this.transformations = [];
+
+	for(var i=0; i < transformations.child.length; i++) {
+		var transformation = transformations.children[i];
+
+		var tmp_transformation = [];
+
+		tmp_transformation['id'] = this.reader.getString(transformation,'id');
+
+		var translate = transformation.getElementsByTagName(transformation,'translate');
+		var rotate = transformation.getElementsByTagName(transformation,'translate');
+		var scale = transformation.getElementsByTagName(transformation,'translate');
+
+		this.transformations.push(tmp_transformation);
+	}
 };
 
 MySceneGraph.prototype.parsePrimitives= function(rootElement) {
