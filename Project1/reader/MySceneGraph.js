@@ -213,20 +213,20 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 
 		var tmp_material = [];
 
-		var emission = rootElement.getElementsByTagName('emission');
-		var ambient = rootElement.getElementsByTagName('ambient');
-		var diffuse = rootElement.getElementsByTagName('diffuse');
-		var specular = rootElement.getElementsByTagName('specular');
-		var shininess = rootElement.getElementsByTagName('shininess');
+		var emission = material.getElementsByTagName('emission');
+		var ambient = material.getElementsByTagName('ambient');
+		var diffuse = material.getElementsByTagName('diffuse');
+		var specular = material.getElementsByTagName('specular');
+		var shininess = material.getElementsByTagName('shininess');
 
-
+		tmp_material['id'] = this.reader.getString(material,'id');
 		tmp_material['emission'] = this.parseColours(emission);
 		tmp_material['ambient'] = this.parseColours(ambient);
 		tmp_material['diffuse'] = this.parseColours(diffuse);
 		tmp_material['specular'] = this.parseColours(specular);
 		tmp_material['shininess'] = this.parseColours(shininess);
 
-		this.materials.material.push(tmp_material);
+		this.materials.push(tmp_material);
 	}
 };
 
@@ -243,9 +243,14 @@ MySceneGraph.prototype.parseTransformations= function(rootElement) {
 
 		tmp_transformation['id'] = this.reader.getString(transformation,'id');
 
-		var translate = transformation.getElementsByTagName(transformation,'translate');
-		var rotate = transformation.getElementsByTagName(transformation,'translate');
-		var scale = transformation.getElementsByTagName(transformation,'translate');
+		var translate = transformation.getElementsByTagName('translate');
+		var rotate = transformation.getElementsByTagName('rotate');
+		var scale = transformation.getElementsByTagName('scale');
+
+		tmp_transformation['translate'] = this.parseCoordinates(translate,false);
+		tmp_transformation['rotate']['axis'] = this.reader.getString(rotate,'axis');
+		tmp_transformation['rotate']['angle'] = this.reader.getString(rotate,'angle');
+		tmp_transformation['scale'] = this.parseCoordinates(scale,false);
 
 		this.transformations.push(tmp_transformation);
 	}
