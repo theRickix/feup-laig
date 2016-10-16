@@ -267,25 +267,27 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 	{
 		var primitive = primitives.children[i];
 
+		var tmp_primitive = [];
+
 		switch(primitive.firstChild.tagName) {
 			case "rectangle":
-				this.parseRectangle(primitive.firstChild);
+				this.parseRectangle(primitive.firstChild,tmp_primitive);
 				break;
 
 			case "triangle":
-				this.parseTriangle(primitive.firstChild);
+				this.parseTriangle(primitive.firstChild,tmp_primitive);
 				break;
 
 			case "cylinder":
-				this.parseCylinder(primitive.firstChild);
+				this.parseCylinder(primitive.firstChild,tmp_primitive);
 				break;
 
 			case "sphere":
-				this.parseSphere(primitive.firstChild);
+				this.parseSphere(primitive.firstChild,tmp_primitive);
 				break;
 
 			case "torus":
-				this.parseTorus(primitive.firstChild);
+				this.parseTorus(primitive.firstChild,tmp_primitive);
 				break;
 		}
 	}
