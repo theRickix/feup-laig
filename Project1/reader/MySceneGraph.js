@@ -257,7 +257,25 @@ MySceneGraph.prototype.parseTransformations= function(rootElement) {
 };
 
 MySceneGraph.prototype.parsePrimitives= function(rootElement) {
-	//TODO
+	var elems =  rootElement.getElementsByTagName('primitives');
+
+	var primitives = elems[0];
+
+	this.primitives = [];
+	this.primitives['rectangle'];
+	this.primitives['triangle'];
+	this.primitives['cylinder'];
+	this.primitives['sphere'];
+	this.primitives['torus'];
+
+
+	for ( var i=0; i < primitives.child.lentgh; i++)
+	{
+		var primitive = primitives.firstChild;
+
+		switch(primitive)
+	}
+
 };
 
 MySceneGraph.prototype.parseComponents= function(rootElement) {
