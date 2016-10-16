@@ -208,22 +208,26 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 
 	this.materials = [];
 
-	var tmp_material=[];
+	for(var i=0; i < textures.child.length; i++) {
+		var texture = textures.children[i];
 
-	var emission = rootElement.getElementsByTagName('emission');
-	var ambient = rootElement.getElementsByTagName('ambient');
-	var diffuse = rootElement.getElementsByTagName('diffuse');
-	var specular = rootElement.getElementsByTagName('specular');
-	var shininess = rootElement.getElementsByTagName('shininess');
+		var tmp_material = [];
+
+		var emission = rootElement.getElementsByTagName('emission');
+		var ambient = rootElement.getElementsByTagName('ambient');
+		var diffuse = rootElement.getElementsByTagName('diffuse');
+		var specular = rootElement.getElementsByTagName('specular');
+		var shininess = rootElement.getElementsByTagName('shininess');
 
 
-	material['emission'] = this.parseColours(emission);
-	material['ambient'] = this.parseColours(ambient);
-	material['diffuse'] = this.parseColours(diffuse);
-	material['specular'] = this.parseColours(specular);
-	material['shininess'] = this.parseColours(shininess);
+		material['emission'] = this.parseColours(emission);
+		material['ambient'] = this.parseColours(ambient);
+		material['diffuse'] = this.parseColours(diffuse);
+		material['specular'] = this.parseColours(specular);
+		material['shininess'] = this.parseColours(shininess);
 
-	this.materials.material.push(tmp_material);
+		this.materials.material.push(tmp_material);
+	}
 };
 
 MySceneGraph.prototype.parseTransformations= function(rootElement) {
