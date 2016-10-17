@@ -267,47 +267,45 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 	{
 		var primitive = primitives.children[i];
 
-		var tmp_primitive = [];
-
-		tmp_primitive['id'] = this.reader.getString(primitive,'id');
-
 		switch(primitive.firstChild.tagName) {
 			case "rectangle":
-				this.parseRectangle(primitive.firstChild,tmp_primitive);
+				this.parseRectangle(primitive.firstChild);
 				break;
 
 			case "triangle":
-				this.parseTriangle(primitive.firstChild,tmp_primitive);
+				this.parseTriangle(primitive.firstChild);
 				break;
 
 			case "cylinder":
-				this.parseCylinder(primitive.firstChild,tmp_primitive);
+				this.parseCylinder(primitive.firstChild);
 				break;
 
 			case "sphere":
-				this.parseSphere(primitive.firstChild,tmp_primitive);
+				this.parseSphere(primitive.firstChild);
 				break;
 
 			case "torus":
-				this.parseTorus(primitive.firstChild,tmp_primitive);
+				this.parseTorus(primitive.firstChild);
 				break;
 		}
 	}
 
 };
 
-MySceneGraph.prototype.parseRectangle= function(element,primitive) {
-	primitive['rectangle']['x1'] = this.reader.getFloat(element, 'x1');
+MySceneGraph.prototype.parseRectangle= function(element) {
+	var id = this.reader.getString(element, 'id');
+	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var x2 = this.reader.getFloat(element, 'x2');
 	var y2 = this.reader.getFloat(element, 'y2');
 
-	this.primitives.push(primitive);
+	this.primitives.push(new MyRectangle(this.scene,id,x1,y1,x2,y2));
 	
 
 };
 
-MySceneGraph.prototype.parseTriangle= function(element,primitive) {
+MySceneGraph.prototype.parseTriangle= function(element) {
+	var id = this.reader.getString(element, 'id');
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var z1 = this.reader.getFloat(element, 'z1');
@@ -318,7 +316,7 @@ MySceneGraph.prototype.parseTriangle= function(element,primitive) {
 	var y3 = this.reader.getFloat(element, 'y3');
 	var z3 = this.reader.getFloat(element, 'z3');
 
-	this.primitives.push(primitive);
+	this.primitives.push(new MyTriangle(this.scene,x1,y1,z1,x2,y2,z2,x3,y3,z3));
 
 };
 

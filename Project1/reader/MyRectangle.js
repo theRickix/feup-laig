@@ -24,7 +24,7 @@ MyRectangle.prototype.initBuffers = function() {
         this.x1, this.y1, 0,
         this.x2, this.y1, 0,
         this.x1, this.y2, 0,
-        this.x2,this.y2, 0
+        this.x2, this.y2, 0
     ];
 
     this.indices = [
@@ -47,5 +47,6 @@ MyRectangle.prototype.initBuffers = function() {
     ]
 
     this.primitiveType = this.scene.gl.TRIANGLES;
+
     this.initGLBuffers();
 };
