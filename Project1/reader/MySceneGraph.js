@@ -27,12 +27,18 @@ MySceneGraph.prototype.onXMLReady=function()
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
 	// Here should go the calls for different functions to parse the various blocks
-	var error = this.parseGlobalsExample(rootElement);
+	/*var error = this.parseGlobalsExample(rootElement);
 
 	if (error != null) {
 		this.onXMLError(error);
 		return;
-	}	
+	}	*/
+
+	this.parseScene(rootElement);
+	this.parseViews(rootElement);
+	this.parseIllumination(rootElement);
+
+
 
 	this.loadedOk=true;
 	
@@ -53,9 +59,9 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 	var scene = elems[0];
 
 	this.root = this.reader.getString(scene,'root');
-	this.axis_lenght = this.reader.getFloat(scene,'axis_length');
+	this.axis_length = this.reader.getFloat(scene,'axis_length');
 
-	console.log("Scene read from file: {root=" + this.scene.root + ", axis_length=" + this.scene.axis_length);
+	console.log("Scene read from file: {root=" + this.root + ", axis_length=" + this.axis_length);
 
 };
 
@@ -113,13 +119,13 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	this.illumination['doublesided'] = this.reader.getBoolean(illumination, "doublesided");
 	this.illumination['local'] = this.reader.getBoolean(illumination, "local");
 
-	var ambient = illumination.getElementsByName("ambient");
-	var background = illumination.getElementsByName("background");
+	var ambient = illumination.getElementsByTagName("ambient");
+	var background = illumination.getElementsByTagName("background");
 
 	this.illumination['ambient'] = this.parseColours(ambient[0]);
 	this.illumination['background']= this.parseColours(background[0]);
 
-
+	//console.log("Scene read from file: {ambientR=" + this.illumination.background[0]);
 };
 
 MySceneGraph.prototype.parseLights= function(rootElement) {
@@ -266,33 +272,34 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 	for ( var i=0; i < primitives.child.length; i++)
 	{
 		var primitive = primitives.children[i];
+		var id = this.reader.getString(primitive,'id');
 
 		switch(primitive.firstChild.tagName) {
 			case "rectangle":
-				this.parseRectangle(primitive.firstChild);
+				this.parseRectangle(primitive.firstChild,id);
 				break;
 
 			case "triangle":
-				this.parseTriangle(primitive.firstChild);
+				this.parseTriangle(primitive.firstChild,id);
 				break;
 
 			case "cylinder":
-				this.parseCylinder(primitive.firstChild);
+				this.parseCylinder(primitive.firstChild,id);
 				break;
 
 			case "sphere":
-				this.parseSphere(primitive.firstChild);
+				this.parseSphere(primitive.firstChild,id);
 				break;
 
 			case "torus":
-				this.parseTorus(primitive.firstChild);
+				this.parseTorus(primitive.firstChild,id);
 				break;
 		}
 	}
 
 };
 
-MySceneGraph.prototype.parseRectangle= function(element) {
+MySceneGraph.prototype.parseRectangle= function(element,id) {
 	var id = this.reader.getString(element, 'id');
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
@@ -304,7 +311,7 @@ MySceneGraph.prototype.parseRectangle= function(element) {
 
 };
 
-MySceneGraph.prototype.parseTriangle= function(element) {
+MySceneGraph.prototype.parseTriangle= function(element,id) {
 	var id = this.reader.getString(element, 'id');
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
@@ -320,7 +327,7 @@ MySceneGraph.prototype.parseTriangle= function(element) {
 
 };
 
-MySceneGraph.prototype.parseCylinder= function(element,primitive) {
+MySceneGraph.prototype.parseCylinder= function(element,id) {
 	var base = this.reader.getFloat(element, 'base');
 	var top = this.reader.getFloat(element, 'top');
 	var height = this.reader.getFloat(element, 'height');
@@ -330,7 +337,7 @@ MySceneGraph.prototype.parseCylinder= function(element,primitive) {
 	this.primitives.push(primitive);
 };
 
-MySceneGraph.prototype.parseSphere= function(rootElement,primitive) {
+MySceneGraph.prototype.parseSphere= function(rootElement,id) {
 	var radius = this.reader.getFloat(element, 'radius');
 	var slices = this.reader.getInteger(element, 'slices');
 	var stacks = this.reader.getInteger(element, 'stacks');
@@ -338,7 +345,7 @@ MySceneGraph.prototype.parseSphere= function(rootElement,primitive) {
 	this.primitives.push(primitive);
 };
 
-MySceneGraph.prototype.parseTorus= function(rootElement,primitive) {
+MySceneGraph.prototype.parseTorus= function(rootElement,id) {
 	var inner = this.reader.getFloat(element, 'inner');
 	var outer = this.reader.getFloat(element, 'outer');
 	var slices = this.reader.getInteger(element, 'slices');

@@ -1,6 +1,7 @@
 
 function XMLscene() {
     CGFscene.call(this);
+    graph = null;  //apontador para myscenegraph
 }
 
 XMLscene.prototype = Object.create(CGFscene.prototype);
@@ -14,13 +15,18 @@ XMLscene.prototype.init = function (application) {
     this.initLights();
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
+   // this.initIllumination();
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 	this.axis=new CGFaxis(this);
 };
+
+XMLscene.prototype.initIllumination = function () {
+    this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
+    this.setAmbient(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
+}
 
 XMLscene.prototype.initLights = function () {
 
@@ -44,9 +50,10 @@ XMLscene.prototype.setDefaultAppearance = function () {
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () 
 {
-	this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
+	/*this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	this.lights[0].setVisible(true);
-    this.lights[0].enable();
+    this.lights[0].enable();*/
+	this.initIllumination();
 };
 
 XMLscene.prototype.display = function () {
@@ -64,10 +71,10 @@ XMLscene.prototype.display = function () {
 	this.applyViewMatrix();
 
 	// Draw axis
-	this.axis.display();
+	//this.axis.display();
 
 	this.setDefaultAppearance();
-    
+
 	// ---- END Background, camera and axis setup
 
 	// it is important that things depending on the proper loading of the graph
