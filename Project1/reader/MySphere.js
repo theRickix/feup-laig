@@ -24,8 +24,45 @@ MySphere.prototype.constructor = MySphere;
 
 MySphere.prototype.initBuffers = function() {
 
+this.primitiveType = this.scene.gl.TRIANGLES;
+
+    this.vertices = [];
+    this.indices = [];
+    this.normals = [];
+    this.texCoords=[];
+
+
+    var theta = Math.PI / this.stacks;
+    var phi = 2*Math.PI / this.slices;
+
+
+    for ( var latband = 0; latband <= this.stacks; ++latband)
+    {
+        for (var slice = 0; slice <=this.slices; ++latband)
+        {
+            this.vertices.push(this.radius * Math.sin(latband * theta) * Math.cos(slice * phi), this.radius * Math.sin(latband * theta) * Math.sin(slice * phi), this.radius * Math.cos(latband * theta));
+            this.normals.push(Math.sin(latband * theta) * Math.cos(slice * phi), Math.sin(latband * theta) * Math.sin(slice * phi), Math.cos(latband * theta));
+            this.texCoords.push(slice/this.slices, latband/this.stacks);
+        }
+        }
+
+    for ( var latband = 0; latband < this.stacks; ++latband)
+    {
+        for(var slice = 0; slice < this.slices; ++slice)
+        {
+            this.indices.push(latband * (this.slices + 1) + slice, (latband + 1) * (this.slices + 1) + slice, (latband + 1) * (this.slices + 1) + slice + 1);
+            this.indices.push(latband * (this.slices + 1) + slice, (latband + 1) * (this.slices + 1) + slice + 1, latband * (this.slices + 1) + slice + 1);
+        }
+    }
+
+    //this.primitiveType = this.scene.gl.TRIANGLES; --> inicializado em cima
+    //this.initGLBuffers();
+    };
+
+    
 
 
 
-}
+
+
 
