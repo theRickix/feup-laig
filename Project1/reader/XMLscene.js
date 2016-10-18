@@ -10,10 +10,10 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
-   /* this.initCameras();
+    this.initCameras();
 
-    this.initLights();*/
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    this.initLights();
+
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
    // this.initIllumination();
     this.gl.clearDepth(100.0);
@@ -24,11 +24,6 @@ XMLscene.prototype.init = function (application) {
     this.rect = new MyRectangle(this,'',1,1,5,5);
 };
 
-XMLscene.prototype.initIllumination = function () {
-    this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
-    this.setAmbient(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
-}
-
 XMLscene.prototype.initLights = function () {
 
 	this.lights[0].setPosition(2, 3, 3, 1);
@@ -37,17 +32,25 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-    console.log(this.graph.view.perspectives.length);
+    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+};
 
-    for(var i=0; i<this.graph.view.perspectives.length; i++) {
-        if(this.graph.view.perspectives[i].id === this.graph.view.default) {
+XMLscene.prototype.setCameras = function () {
+    for (var i = 0; i < this.graph.view.perspectives.length; i++) {
+        if (this.graph.view.perspectives[i].id === this.graph.view.default) {
             this.camera = this.graph.view.perspectives[i];
             this.activeCamera = i;
-            console.log('camera found');
+            console.log('Default camera from .dsx: OK!');
             break;
         }
     }
-};
+}
+
+XMLscene.prototype.setIllumination = function () {
+    this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
+    this.setAmbient(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
+}
+
 
 XMLscene.prototype.setDefaultAppearance = function () {
     this.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -63,8 +66,8 @@ XMLscene.prototype.onGraphLoaded = function ()
 	/*this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	this.lights[0].setVisible(true);
     this.lights[0].enable();*/
-	this.initIllumination();
-    this.initCameras();
+	this.setIllumination();
+    this.setCameras();
 };
 
 XMLscene.prototype.display = function () {

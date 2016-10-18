@@ -26,13 +26,17 @@ MySceneGraph.prototype.onXMLReady=function()
 	console.log("XML Loading finished.");
 	var rootElement = this.reader.xmlDoc.documentElement;
 	
-	// Here should go the calls for different functions to parse the various blocks
+	/*// Here should go the calls for different functions to parse the various blocks
 	var error = this.parseGlobalsExample(rootElement);
 
 	if (error != null) {
 		this.onXMLError(error);
 		return;
-	}	
+	}	*/
+
+	this.parseScene(rootElement);
+	this.parseViews(rootElement);
+	this.parseIllumination(rootElement);
 
 	this.loadedOk=true;
 	
@@ -113,8 +117,8 @@ MySceneGraph.prototype.parseIllumination = function(rootElement) {
 	this.illumination['doublesided'] = this.reader.getBoolean(illumination, "doublesided");
 	this.illumination['local'] = this.reader.getBoolean(illumination, "local");
 
-	var ambient = illumination.getElementsByName("ambient");
-	var background = illumination.getElementsByName("background");
+	var ambient = illumination.getElementsByTagName("ambient");
+	var background = illumination.getElementsByTagName("background");
 
 	this.illumination['ambient'] = this.parseColours(ambient[0]);
 	this.illumination['background']= this.parseColours(background[0]);
