@@ -81,6 +81,8 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
     this.view['default'] = this.reader.getString(view,'default');
 	this.view['perspectives'] = [];
 
+	console.log('View default: '+this.view.default);
+
 	var perspectives = view.getElementsByTagName('perspective');
 
 	for(var i=0; i<perspectives.length; i++) {
@@ -95,7 +97,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from[0], false), this.parseCoordinates(to[0], false));
 		camera.id = id;
 		this.view.perspectives.push(camera);
-		console.log(camera.id);
+		console.log("Perspective with id '"+camera.id+"' loaded.");
 
 	}
 
@@ -154,29 +156,33 @@ MySceneGraph.prototype.parseLights= function(rootElement) {
 MySceneGraph.prototype.parseOmniLights= function(rootElement) {
 	var tmp_omni = [];
 
+	var id = this.reader.getString(rootElement,"id");
 	var location = rootElement.getElementsByTagName('location');
 	var ambient = rootElement.getElementsByTagName('ambient');
 	var diffuse = rootElement.getElementsByTagName('diffuse');
 	var specular = rootElement.getElementsByTagName('specular');
 
+	tmp_omni['id'] = id;
 	tmp_omni['location'] = this.parseCoordinates(location[0],true);
 	tmp_omni['ambient'] = this.parseColours(ambient[0]);
 	tmp_omni['diffuse'] = this.parseColours(diffuse[0]);
 	tmp_omni['specular'] = this.parseColours(specular[0]);
 
 	this.lights.omni.push(tmp_omni);
-	console.log('Omni found!');
+	console.log("Omni with id '"+tmp_omni.id+"' loaded.");
 }
 
 MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 	var tmp_spot = [];
 
+	var id = this.reader.getString(rootElement,'id');
 	var target = rootElement.getElementsByTagName('target');
 	var location = rootElement.getElementsByTagName('location');
 	var ambient = rootElement.getElementsByTagName('ambient');
 	var diffuse = rootElement.getElementsByTagName('diffuse');
 	var specular = rootElement.getElementsByTagName('specular');
 
+	tmp_spot['id'] = id;
 	tmp_spot['target'] = this.parseCoordinates(target[0],false);
 	tmp_spot['location'] = this.parseCoordinates(location[0],false);
 	tmp_spot['ambient'] = this.parseColours(ambient[0]);
@@ -184,6 +190,7 @@ MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 	tmp_spot['specular'] = this.parseColours(specular[0]);
 
 	this.lights.spot.push(tmp_spot);
+	console.log("Spot with id '"+tmp_spot.id+"' loaded.");
 }
 
 

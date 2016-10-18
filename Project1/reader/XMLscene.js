@@ -15,7 +15,6 @@ XMLscene.prototype.init = function (application) {
     this.initLights();
 
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-   // this.initIllumination();
     this.gl.clearDepth(100.0);
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
@@ -127,9 +126,10 @@ XMLscene.prototype.display = function () {
 	// it is important that things depending on the proper loading of the graph
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
-	if (this.graph.loadedOk)
-	{
-		this.lights[0].update();
+	if (this.graph.loadedOk) {
+	    for(var i=0; i<this.lights.length;i++) {
+	       this.lights[i].update();
+        }
 	};	
 };
 
