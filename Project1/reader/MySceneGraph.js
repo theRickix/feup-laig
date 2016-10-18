@@ -293,7 +293,6 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 };
 
 MySceneGraph.prototype.parseRectangle= function(element) {
-	var id = this.reader.getString(element, 'id');
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var x2 = this.reader.getFloat(element, 'x2');
@@ -305,7 +304,6 @@ MySceneGraph.prototype.parseRectangle= function(element) {
 };
 
 MySceneGraph.prototype.parseTriangle= function(element) {
-	var id = this.reader.getString(element, 'id');
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var z1 = this.reader.getFloat(element, 'z1');

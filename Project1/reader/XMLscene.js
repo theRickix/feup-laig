@@ -20,6 +20,7 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
 	this.axis=new CGFaxis(this);
+    this.rect = new MyRectangle(this,'',1,1,5,5);
 };
 
 XMLscene.prototype.initLights = function () {
@@ -65,6 +66,8 @@ XMLscene.prototype.display = function () {
 
 	// Draw axis
 	this.axis.display();
+
+    this.rect.display();
 
 	this.setDefaultAppearance();
     
