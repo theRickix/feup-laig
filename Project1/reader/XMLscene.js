@@ -10,10 +10,10 @@ XMLscene.prototype.constructor = XMLscene;
 XMLscene.prototype.init = function (application) {
     CGFscene.prototype.init.call(this, application);
 
-    this.initCameras();
+   /* this.initCameras();
 
-    this.initLights();
-
+    this.initLights();*/
+    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
    // this.initIllumination();
     this.gl.clearDepth(100.0);
@@ -37,7 +37,16 @@ XMLscene.prototype.initLights = function () {
 };
 
 XMLscene.prototype.initCameras = function () {
-    this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+    console.log(this.graph.view.perspectives.length);
+
+    for(var i=0; i<this.graph.view.perspectives.length; i++) {
+        if(this.graph.view.perspectives[i].id === this.graph.view.default) {
+            this.camera = this.graph.view.perspectives[i];
+            this.activeCamera = i;
+            console.log('camera found');
+            break;
+        }
+    }
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -55,6 +64,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.lights[0].setVisible(true);
     this.lights[0].enable();*/
 	this.initIllumination();
+    this.initCameras();
 };
 
 XMLscene.prototype.display = function () {

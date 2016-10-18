@@ -90,9 +90,9 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 		var camera = new CGFcamera(angle, near, far, this.parseCoordinates(from[0], false), this.parseCoordinates(to[0], false));
 		camera.id = id;
 		this.view.perspectives.push(camera);
-	}
+		console.log(camera.id);
 
-    //console.log("view read from file: {default=" + this.default);
+	}
 
 };
 
