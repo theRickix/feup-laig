@@ -59,6 +59,36 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);	
 };
 
+XMLscene.prototype.setLights = function () {
+    var lightN=0;
+    for(var i=0; i<this.graph.lights.omni.length; i++) {
+        var light = this.graph.lights.omni[i];
+
+        this.lights[lightN].setPosition(light.location[0],light.location[1],light.location[2],light.location[3]);
+        this.lights[lightN].setAmbient(light.ambient[0],light.ambient[1],light.ambient[2],light.ambient[3]);
+        this.lights[lightN].setDiffuse(light.diffuse[0],light.diffuse[1],light.diffuse[2],light.diffuse[3]);
+        this.lights[lightN].setSpecular(light.specular[0],light.specular[1],light.specular[2],light.specular[3]);
+
+        console.log("Omni Light #"+i+": OK!");
+        lightN++
+    }
+
+    for(var i=0; i<this.graph.lights.spot.length; i++) {
+        //TODO: add target???
+        var light = this.graph.lights.spot[i];
+
+        this.lights[lightN].setPosition(light.location[0],light.location[1],light.location[2]);
+        this.lights[lightN].setAmbient(light.ambient[0],light.ambient[1],light.ambient[2],light.ambient[3]);
+        this.lights[lightN].setDiffuse(light.diffuse[0],light.diffuse[1],light.diffuse[2],light.diffuse[3]);
+        this.lights[lightN].setSpecular(light.specular[0],light.specular[1],light.specular[2],light.specular[3]);
+
+        console.log("Spot Light #"+i+": OK!");
+        lightN++;
+    }
+
+    console.log(lightN+" lights: OK!")
+};
+
 // Handler called when the graph is finally loaded. 
 // As loading is asynchronous, this may be called already after the application has started the run loop
 XMLscene.prototype.onGraphLoaded = function () 
@@ -68,6 +98,7 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.lights[0].enable();*/
 	this.setIllumination();
     this.setCameras();
+    this.setLights();
 };
 
 XMLscene.prototype.display = function () {

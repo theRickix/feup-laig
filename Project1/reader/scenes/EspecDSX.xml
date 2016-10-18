@@ -106,7 +106,7 @@
         <transformation id="ss">
             <!-- deve existir pelo menos uma instrução de transformacao; -->
             <!-- podem ser usadas tantas instrucoes quantas as -->
-            <!-- necessárias, mas escritas pela mesma ordem que
+            <!-- necessárias, mas escritas pela mesma ordem que -->
             <!-- seria usada na sua escrita diretamente em código WebGL -->
 
             <translate x="ff" y="ff" z="ff" />
