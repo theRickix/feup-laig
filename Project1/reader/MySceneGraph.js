@@ -157,12 +157,14 @@ MySceneGraph.prototype.parseOmniLights= function(rootElement) {
 	var tmp_omni = [];
 
 	var id = this.reader.getString(rootElement,"id");
+	var enabled = this.reader.getBoolean(rootElement,"enabled");
 	var location = rootElement.getElementsByTagName('location');
 	var ambient = rootElement.getElementsByTagName('ambient');
 	var diffuse = rootElement.getElementsByTagName('diffuse');
 	var specular = rootElement.getElementsByTagName('specular');
 
 	tmp_omni['id'] = id;
+	tmp_omni['enabled'] = enabled;
 	tmp_omni['location'] = this.parseCoordinates(location[0],true);
 	tmp_omni['ambient'] = this.parseColours(ambient[0]);
 	tmp_omni['diffuse'] = this.parseColours(diffuse[0]);
@@ -176,6 +178,7 @@ MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 	var tmp_spot = [];
 
 	var id = this.reader.getString(rootElement,'id');
+	var enabled = this.reader.getBoolean(rootElement,"enabled");
 	var target = rootElement.getElementsByTagName('target');
 	var location = rootElement.getElementsByTagName('location');
 	var ambient = rootElement.getElementsByTagName('ambient');
@@ -183,6 +186,7 @@ MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 	var specular = rootElement.getElementsByTagName('specular');
 
 	tmp_spot['id'] = id;
+	tmp_spot['enabled'] = enabled;
 	tmp_spot['target'] = this.parseCoordinates(target[0],false);
 	tmp_spot['location'] = this.parseCoordinates(location[0],false);
 	tmp_spot['ambient'] = this.parseColours(ambient[0]);

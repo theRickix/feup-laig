@@ -19,9 +19,12 @@ XMLscene.prototype.init = function (application) {
     this.gl.enable(this.gl.DEPTH_TEST);
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
+    this.enableTextures(true);
 	this.axis=new CGFaxis(this);
     this.rect = new MyRectangle(this,'',1,1,5,5);
 };
+
+
 
 XMLscene.prototype.initLights = function () {
 
@@ -47,7 +50,8 @@ XMLscene.prototype.setCameras = function () {
 
 XMLscene.prototype.setIllumination = function () {
     this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
-    this.setAmbient(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
+    this.setGlobalAmbientLight(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
+    console.log("Background and ambient illumination: OK!");
 }
 
 
@@ -63,12 +67,34 @@ XMLscene.prototype.setLights = function () {
     for(var i=0; i<this.graph.lights.omni.length; i++) {
         var light = this.graph.lights.omni[i];
 
-        this.lights[lightN].setPosition(light.location[0],light.location[1],light.location[2],light.location[3]);
-        this.lights[lightN].setAmbient(light.ambient[0],light.ambient[1],light.ambient[2],light.ambient[3]);
-        this.lights[lightN].setDiffuse(light.diffuse[0],light.diffuse[1],light.diffuse[2],light.diffuse[3]);
-        this.lights[lightN].setSpecular(light.specular[0],light.specular[1],light.specular[2],light.specular[3]);
+        this.lights[lightN].setPosition(light.location[0],
+                                        light.location[1],
+                                        light.location[2],
+                                        light.location[3]);
+
+        this.lights[lightN].setAmbient(light.ambient[0],
+                                        light.ambient[1],
+                                        light.ambient[2],
+                                        light.ambient[3]);
+
+        this.lights[lightN].setDiffuse(light.diffuse[0],
+                                        light.diffuse[1],
+                                        light.diffuse[2],
+                                        light.diffuse[3]);
+
+        this.lights[lightN].setSpecular(light.specular[0],
+                                        light.specular[1],
+                                        light.specular[2],
+                                        light.specular[3]);
 
         console.log("Omni Light #"+i+": OK!");
+
+
+        if(light.enabled) {
+            this.lights[lightN].enable();
+            console.log('...and enabled!');
+        }
+
         lightN++
     }
 
@@ -76,12 +102,33 @@ XMLscene.prototype.setLights = function () {
         //TODO: add target???
         var light = this.graph.lights.spot[i];
 
-        this.lights[lightN].setPosition(light.location[0],light.location[1],light.location[2]);
-        this.lights[lightN].setAmbient(light.ambient[0],light.ambient[1],light.ambient[2],light.ambient[3]);
-        this.lights[lightN].setDiffuse(light.diffuse[0],light.diffuse[1],light.diffuse[2],light.diffuse[3]);
-        this.lights[lightN].setSpecular(light.specular[0],light.specular[1],light.specular[2],light.specular[3]);
+        this.lights[lightN].setPosition(light.location[0],
+                                        light.location[1],
+                                        light.location[2]);
+
+        this.lights[lightN].setAmbient(light.ambient[0],
+                                        light.ambient[1],
+                                        light.ambient[2],
+                                        light.ambient[3]);
+
+        this.lights[lightN].setDiffuse(light.diffuse[0],
+                                        light.diffuse[1],
+                                        light.diffuse[2],
+                                        light.diffuse[3]);
+
+        this.lights[lightN].setSpecular(light.specular[0],
+                                        light.specular[1],
+                                        light.specular[2],
+                                        light.specular[3]);
 
         console.log("Spot Light #"+i+": OK!");
+
+        if(light.enabled) {
+            this.lights[lightN].enable();
+            console.log('and enabled');
+        }
+
+
         lightN++;
     }
 
