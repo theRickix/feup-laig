@@ -41,6 +41,7 @@ MySceneGraph.prototype.onXMLReady=function()
 	this.parseTextures(rootElement);
 	this.parseMaterials(rootElement);
 	this.parseTransformations(rootElement);
+	this.parseComponents(rootElement);
 
 
 	this.loadedOk=true;
@@ -396,14 +397,80 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 
 		tmp_component['id'] = this.reader.getString(component,'id');
 
+		//TRANSFORMATIONS
 		var transformation = component.getElementsByTagName("transformation");
 
-		if(transformation[0].contains("transformationref")) {
+		tmp_component['transformation'] = [];
+
+		if(transformation[0].getElementsByTagName("transformationref") != 0) {
 			var transformationref = transformation[0].getElementsByTagName("transformationref");
+			tmp_component['transformation']['hasRef'] = true;
+			tmp_component['transformation']['transformationref'] = transformationref;
 		}
 		else {
+			for(var j=0; j<transformation[0].childElementCount; j++) {
+				var transformationElement = [];
 
+				switch (transformation[0].children[j].tagName) {
+					case 'translate':
+						transformationElement['attributes'] = this.parseCoordinates(transformation[0].children[j], false);
+						transformationElement['type'] = 'translate';
+						tmp_component.transformation.push(transformationElement);
+						break;
+
+					case 'rotate':
+						transformationElement['axis'] = this.reader.getString(transformation[0].children[j], 'axis');
+						transformationElement['angle'] = this.reader.getString(transformation[0].children[j], 'angle');
+						transformationElement['type'] = 'rotate';
+						tmp_component.transformation.push(transformationElement);
+						break;
+
+					case 'scale':
+						transformationElement['attributes'] = this.parseCoordinates(transformation[0].children[j], false);
+						transformationElement['type'] = 'scale';
+						tmp_component.transformation.push(transformationElement);
+						break;
+				}
+			}
+			tmp_component['transformation']['hasRef'] = false;
 		}
+
+		//MATERIALS
+		var materials = component.getElementsByTagName("materials");
+
+		tmp_component['material'] = [];
+		for(var j=0; j<materials[0].childElementCount; j++) {
+			var id = this.reader.getString(materials[0].children[j], "id");
+			tmp_component.material.push(id);
+		}
+
+		var texture = component.getElementsByTagName("texture");
+
+		tmp_component['texture'] = this.reader.getString(texture[0],'id');
+
+		var children = component.getElementsByTagName("children");
+
+		tmp_component['children'] = [];
+
+		for(var j=0; j<children[0].childElementCount; j++) {
+			var child = [];
+			switch(children[0].children[j].tagName) {
+				case "componentref":
+					child['id'] = this.reader.getString(children[0].children[j], "id");
+					child['type'] = 'componentref';
+					break;
+
+				case "primitiveref":
+					child['id'] = this.reader.getString(children[0].children[j], "id");
+					child['type'] = 'primitiveref';
+					break;
+			}
+
+			tmp_component.children.push(child);
+		}
+
+		this.components.push(tmp_component);
+		console.log("Component #"+i+" with id '"+tmp_component.id+"' added!");
 
 	}
 };
