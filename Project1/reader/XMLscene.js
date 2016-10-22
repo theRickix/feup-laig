@@ -44,7 +44,7 @@ XMLscene.prototype.initCameras = function () {
 
 XMLscene.prototype.setAxis = function () {
     this.axis = new CGFaxis(this,this.graph.axis_lenght);
-}
+};
 
 
 XMLscene.prototype.setCameras = function () {
@@ -56,14 +56,14 @@ XMLscene.prototype.setCameras = function () {
             break;
         }
     }
-}
+};
 
 
 XMLscene.prototype.setIllumination = function () {
     this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
     this.setGlobalAmbientLight(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
     console.log("Background and ambient illumination: OK!");
-}
+};
 
 
 XMLscene.prototype.setLights = function () {
@@ -174,7 +174,7 @@ XMLscene.prototype.setMaterials = function () {
 
         console.log('Material #'+i+': OK!');
     }
-}
+};
 
 XMLscene.prototype.setTransformations = function () {
     this.transformations = [];
@@ -184,35 +184,36 @@ XMLscene.prototype.setTransformations = function () {
         var id = transformation.id;
         var matrix = mat4.create();
 
-        if(transformation.type === 'translate') {
-            mat4.translate(matrix, matrix, [transformation.attributes[0],transformation.attributes[1],transformation.attributes[2]]);
-        }
+        for(var j=0; j < transformation.length; j++) {
+            if (transformation[j].type === 'translate') {
+                mat4.translate(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
+            }
 
-        if(transformation.type === 'scale') {
-            mat4.scale(matrix, matrix, [transformation.attributes[0],transformation.attributes[1],transformation.attributes[2]]);
-        }
+            if (transformation[j].type === 'scale') {
+                mat4.scale(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
+            }
 
-        if(transformation.type === 'rotate') {
-            switch(transformation.axis) {
-                case 'x':
-                    mat4.rotateX(matrix,matrix,transformation.angle * Math.PI / 180);
-                    break;
+            if (transformation[j].type === 'rotate') {
+                switch (transformation[j].axis) {
+                    case 'x':
+                        mat4.rotateX(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                        break;
 
-                case 'y':
-                    mat4.rotateY(matrix,matrix,transformation.angle * Math.PI / 180);
-                    break;
+                    case 'y':
+                        mat4.rotateY(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                        break;
 
-                case 'z':
-                    mat4.rotateZ(matrix,matrix,transformation.angle * Math.PI / 180);
-                    break;
+                    case 'z':
+                        mat4.rotateZ(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                        break;
+                }
             }
         }
-
         this.transformations[id] = matrix;
         console.log('Transformation #'+i+": OK!");
 
     }
-}
+};
 
 XMLscene.prototype.setTextures = function () {
     this.textures = [];
@@ -228,7 +229,7 @@ XMLscene.prototype.setTextures = function () {
 
         console.log('Texture #'+i+": OK!");
     }
-}
+};
 
 XMLscene.prototype.nextCamera = function () {
     //If there's just 1 camera, stop function
@@ -290,6 +291,6 @@ XMLscene.prototype.display = function () {
 	    for(var i=0; i<this.lights.length;i++) {
 	       this.lights[i].update();
         }
-	};	
+	}
 };
 

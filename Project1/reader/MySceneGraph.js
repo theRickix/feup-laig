@@ -265,26 +265,33 @@ MySceneGraph.prototype.parseTransformations= function(rootElement) {
 
 		var tmp_transformation = [];
 
-		switch(transformation.children[0].tagName) {
-			case 'translate':
-				tmp_transformation['attributes'] = this.parseCoordinates(transformation.children[0],false);
-				tmp_transformation['type'] = 'translate';
-				break;
+		for(var j=0; j<transformation.childElementCount; j++) {
+			var transformationElement = [];
 
-			case 'rotate':
-				tmp_transformation['axis'] = this.reader.getString(transformation.children[0],'axis');
-				tmp_transformation['angle'] = this.reader.getString(transformation.children[0],'angle');
-				tmp_transformation['type'] = 'rotate';
-				break;
+			switch (transformation.children[j].tagName) {
+				case 'translate':
+					transformationElement['attributes'] = this.parseCoordinates(transformation.children[j], false);
+					transformationElement['type'] = 'translate';
+					tmp_transformation.push(transformationElement);
+					break;
 
-			case 'scale':
-				tmp_transformation['attributes'] = this.parseCoordinates(transformation.children[0],false);
-				tmp_transformation['type'] = 'scale';
-				break;
+				case 'rotate':
+					transformationElement['axis'] = this.reader.getString(transformation.children[j], 'axis');
+					transformationElement['angle'] = this.reader.getString(transformation.children[j], 'angle');
+					transformationElement['type'] = 'rotate';
+					tmp_transformation.push(transformationElement);
+					break;
+
+				case 'scale':
+					transformationElement['attributes'] = this.parseCoordinates(transformation.children[j], false);
+					transformationElement['type'] = 'scale';
+					tmp_transformation.push(transformationElement);
+					break;
+			}
 		}
 		tmp_transformation['id'] = this.reader.getString(transformation,'id');
 		this.transformations.push(tmp_transformation);
-		console.log("Transformation #"+i+" with type '"+tmp_transformation.type+"' and id '"+tmp_transformation.id+"' added!");
+		console.log("Transformation #"+i+"' with id '"+tmp_transformation.id+"' added!");
 	}
 };
 
@@ -388,6 +395,16 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 		var tmp_component = [];
 
 		tmp_component['id'] = this.reader.getString(component,'id');
+
+		var transformation = component.getElementsByTagName("transformation");
+
+		if(transformation[0].contains("transformationref")) {
+			var transformationref = transformation[0].getElementsByTagName("transformationref");
+		}
+		else {
+
+		}
+
 	}
 };
 
