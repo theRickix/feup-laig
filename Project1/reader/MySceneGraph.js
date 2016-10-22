@@ -451,22 +451,20 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 		var children = component.getElementsByTagName("children");
 
 		tmp_component['children'] = [];
+		tmp_component['children']['componentref'] = [];
+		tmp_component['children']['primitiveref'] = [];
 
 		for(var j=0; j<children[0].childElementCount; j++) {
 			var child = [];
 			switch(children[0].children[j].tagName) {
 				case "componentref":
-					child['id'] = this.reader.getString(children[0].children[j], "id");
-					child['type'] = 'componentref';
+					tmp_component.children.componentref.push(this.reader.getString(children[0].children[j], "id"));
 					break;
 
 				case "primitiveref":
-					child['id'] = this.reader.getString(children[0].children[j], "id");
-					child['type'] = 'primitiveref';
+					tmp_component.children.primitiveref.push(this.reader.getString(children[0].children[j], "id"));
 					break;
 			}
-
-			tmp_component.children.push(child);
 		}
 
 		this.components.push(tmp_component);
