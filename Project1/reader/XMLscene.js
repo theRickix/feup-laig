@@ -24,7 +24,12 @@ XMLscene.prototype.init = function (application) {
     this.rect = new MyRectangle(this,'',1,1,5,5);
 };
 
-
+XMLscene.prototype.setDefaultAppearance = function () {
+    this.setAmbient(0.2, 0.4, 0.8, 1.0);
+    this.setDiffuse(0.2, 0.4, 0.8, 1.0);
+    this.setSpecular(0.2, 0.4, 0.8, 1.0);
+    this.setShininess(10.0);
+};
 
 XMLscene.prototype.initLights = function () {
 
@@ -53,19 +58,13 @@ XMLscene.prototype.setCameras = function () {
     }
 }
 
+
 XMLscene.prototype.setIllumination = function () {
     this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
     this.setGlobalAmbientLight(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
     console.log("Background and ambient illumination: OK!");
 }
 
-
-XMLscene.prototype.setDefaultAppearance = function () {
-    this.setAmbient(0.2, 0.4, 0.8, 1.0);
-    this.setDiffuse(0.2, 0.4, 0.8, 1.0);
-    this.setSpecular(0.2, 0.4, 0.8, 1.0);
-    this.setShininess(10.0);	
-};
 
 XMLscene.prototype.setLights = function () {
     var lightN=0;
@@ -138,6 +137,20 @@ XMLscene.prototype.setLights = function () {
     }
 
     console.log(lightN+" lights: OK!")
+};
+
+XMLscene.prototype.nextCamera = function () {
+    //If there's just 1 camera, stop function
+    if(this.graph.view.perspectives.length == 0)
+        return;
+
+    //Go to next camera or back to beginning if finalone
+    if(this.activeCamera < this.graph.view.perspectives.length-1)
+        this.activeCamera++;
+    else
+        this.activeCamera=0;
+
+    this.camera = this.graph.view.perspectives[this.activeCamera];
 };
 
 // Handler called when the graph is finally loaded. 
