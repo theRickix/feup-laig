@@ -139,6 +139,41 @@ XMLscene.prototype.setLights = function () {
     console.log(lightN+" lights: OK!")
 };
 
+XMLscene.prototype.setMaterials = function () {
+    this.materials = [];
+
+    for (var i = 0; i < this.graph.materials.length; i++) {
+
+        //For better organization of code
+        var material = this.graph.materials[i];
+        var id = material.id;
+
+        this.materials[id] = new CGFappearance(this);
+
+        this.materials[id].setEmission(material.emission[0],
+            material.emission[1],
+            material.emission[2],
+            material.emission[3]);
+
+        this.materials[id].setAmbient(material.ambient[0],
+            material.ambient[1],
+            material.ambient[2],
+            material.ambient[3]);
+
+        this.materials[id].setDiffuse(material.diffuse[0],
+            material.diffuse[1],
+            material.diffuse[2],
+            material.diffuse[3]);
+
+        this.materials[id].setSpecular(material.specular[0],
+            material.specular[1],
+            material.specular[2],
+            material.specular[3]);
+
+        this.materials[id].setShininess(material.shininess);
+    }
+}
+
 XMLscene.prototype.nextCamera = function () {
     //If there's just 1 camera, stop function
     if(this.graph.view.perspectives.length == 0)

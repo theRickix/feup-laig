@@ -241,7 +241,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 		tmp_material['ambient'] = this.parseColours(ambient);
 		tmp_material['diffuse'] = this.parseColours(diffuse);
 		tmp_material['specular'] = this.parseColours(specular);
-		tmp_material['shininess'] = this.parseColours(shininess);
+		tmp_material['shininess'] = this.reader.getFloat(shininess,'value');
 
 		this.materials.push(tmp_material);
 	}
