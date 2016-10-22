@@ -38,6 +38,10 @@ MySceneGraph.prototype.onXMLReady=function()
 	this.parseViews(rootElement);
 	this.parseIllumination(rootElement);
 	this.parseLights(rootElement);
+	this.parseTextures(rootElement);
+	this.parseMaterials(rootElement);
+	this.parseTransformations(rootElement);
+
 
 	this.loadedOk=true;
 	
@@ -204,7 +208,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 	var textures = elems[0];
 	this.textures = [];
 
-	for(var i=0; i < textures.child.length; i++) {
+	for(var i=0; i < textures.childElementCount; i++) {
 		var texture = textures.children[i];
 
 		var tmp_texture = [];
@@ -215,6 +219,7 @@ MySceneGraph.prototype.parseTextures= function(rootElement) {
 		tmp_texture['length_t'] = this.reader.getString(texture,'length_t');
 
 		this.textures.push(tmp_texture);
+		console.log("Texture #"+i+" with id '"+tmp_texture.id+"' added!");
 	}
 
 };
@@ -225,7 +230,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 
 	this.materials = [];
 
-	for(var i=0; i < materials.child.length; i++) {
+	for(var i=0; i < materials.childElementCount; i++) {
 		var material = materials.children[i];
 
 		var tmp_material = [];
@@ -237,13 +242,14 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 		var shininess = material.getElementsByTagName('shininess');
 
 		tmp_material['id'] = this.reader.getString(material,'id');
-		tmp_material['emission'] = this.parseColours(emission);
-		tmp_material['ambient'] = this.parseColours(ambient);
-		tmp_material['diffuse'] = this.parseColours(diffuse);
-		tmp_material['specular'] = this.parseColours(specular);
-		tmp_material['shininess'] = this.reader.getFloat(shininess,'value');
+		tmp_material['emission'] = this.parseColours(emission[0]);
+		tmp_material['ambient'] = this.parseColours(ambient[0]);
+		tmp_material['diffuse'] = this.parseColours(diffuse[0]);
+		tmp_material['specular'] = this.parseColours(specular[0]);
+		tmp_material['shininess'] = this.reader.getFloat(shininess[0],'value');
 
 		this.materials.push(tmp_material);
+		console.log("Material #"+i+" with id '"+tmp_material.id+" added!");
 	}
 };
 
@@ -252,24 +258,33 @@ MySceneGraph.prototype.parseTransformations= function(rootElement) {
 
 	var transformations = elems[0];
 	this.transformations = [];
+	//console.log(transformations.childElementCount);
+	for(var i=0; i < transformations.childElementCount; i++) {
 
-	for(var i=0; i < transformations.child.length; i++) {
 		var transformation = transformations.children[i];
 
 		var tmp_transformation = [];
 
+		switch(transformation.children[0].tagName) {
+			case 'translate':
+				tmp_transformation = this.parseCoordinates(transformation.children[0],false);
+				tmp_transformation['type'] = 'translate';
+				break;
+
+			case 'rotate':
+				tmp_transformation['axis'] = this.reader.getString(transformation.children[0],'axis');
+				tmp_transformation['angle'] = this.reader.getString(transformation.children[0],'angle');
+				tmp_transformation['type'] = 'rotate';
+				break;
+
+			case 'scale':
+				tmp_transformation = this.parseCoordinates(transformation.children[0],false);
+				tmp_transformation['type'] = 'scale';
+				break;
+		}
 		tmp_transformation['id'] = this.reader.getString(transformation,'id');
-
-		var translate = transformation.getElementsByTagName('translate');
-		var rotate = transformation.getElementsByTagName('rotate');
-		var scale = transformation.getElementsByTagName('scale');
-
-		tmp_transformation['translate'] = this.parseCoordinates(translate,false);
-		tmp_transformation['rotate']['axis'] = this.reader.getString(rotate,'axis');
-		tmp_transformation['rotate']['angle'] = this.reader.getString(rotate,'angle');
-		tmp_transformation['scale'] = this.parseCoordinates(scale,false);
-
 		this.transformations.push(tmp_transformation);
+		console.log("Transformation #"+i+" with type '"+tmp_transformation.type+"' and id '"+tmp_transformation.id+"' added!");
 	}
 };
 

@@ -171,6 +171,8 @@ XMLscene.prototype.setMaterials = function () {
             material.specular[3]);
 
         this.materials[id].setShininess(material.shininess);
+
+        console.log('Material #'+i+': OK!');
     }
 }
 
@@ -199,6 +201,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	this.setIllumination();
     this.setCameras();
     this.setLights();
+    this.setMaterials();
 };
 
 XMLscene.prototype.display = function () {
