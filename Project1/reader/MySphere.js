@@ -1,5 +1,6 @@
 /**
- * Created by Ricardo on 18/10/2016.
+ * MySphere
+ * @constructor
  */
 
 function MySphere (scene, id, radius, slices, stacks)
@@ -29,7 +30,7 @@ this.primitiveType = this.scene.gl.TRIANGLES;
     this.vertices = [];
     this.indices = [];
     this.normals = [];
-    this.texCoords=[];
+    this.textureCoords=[];
 
 
     var theta = Math.PI / this.stacks;
@@ -42,7 +43,7 @@ this.primitiveType = this.scene.gl.TRIANGLES;
         {
             this.vertices.push(this.radius * Math.sin(latband * theta) * Math.cos(slice * phi), this.radius * Math.sin(latband * theta) * Math.sin(slice * phi), this.radius * Math.cos(latband * theta));
             this.normals.push(Math.sin(latband * theta) * Math.cos(slice * phi), Math.sin(latband * theta) * Math.sin(slice * phi), Math.cos(latband * theta));
-            this.texCoords.push(slice/this.slices, latband/this.stacks);
+            this.textureCoords.push(slice/this.slices, latband/this.stacks);
         }
         }
 
@@ -55,11 +56,9 @@ this.primitiveType = this.scene.gl.TRIANGLES;
         }
     }
 
-    //this.primitiveType = this.scene.gl.TRIANGLES; --> inicializado em cima
-    //this.initGLBuffers();
+
     };
 
-    
 
 
 
