@@ -38,7 +38,7 @@ XMLscene.prototype.initCameras = function () {
 };
 
 XMLscene.prototype.setAxis = function () {
-    this.axis = new CFGaxis(this,this.graph.axis_lenght);
+    this.axis = new CGFaxis(this,this.graph.axis_lenght);
 }
 
 
