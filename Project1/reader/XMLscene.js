@@ -176,6 +176,60 @@ XMLscene.prototype.setMaterials = function () {
     }
 }
 
+XMLscene.prototype.setTransformations = function () {
+    this.transformations = [];
+
+    for(var i=0; i < this.graph.transformations.length; i++) {
+        var transformation = this.graph.transformations[i];
+        var id = transformation.id;
+        var matrix = mat4.create();
+
+        if(transformation.type === 'translate') {
+            mat4.translate(matrix, matrix, [transformation.attributes[0],transformation.attributes[1],transformation.attributes[2]]);
+        }
+
+        if(transformation.type === 'scale') {
+            mat4.scale(matrix, matrix, [transformation.attributes[0],transformation.attributes[1],transformation.attributes[2]]);
+        }
+
+        if(transformation.type === 'rotate') {
+            switch(transformation.axis) {
+                case 'x':
+                    mat4.rotateX(matrix,matrix,transformation.angle * Math.PI / 180);
+                    break;
+
+                case 'y':
+                    mat4.rotateY(matrix,matrix,transformation.angle * Math.PI / 180);
+                    break;
+
+                case 'z':
+                    mat4.rotateZ(matrix,matrix,transformation.angle * Math.PI / 180);
+                    break;
+            }
+        }
+
+        this.transformations[id] = matrix;
+        console.log('Transformation #'+i+": OK!");
+
+    }
+}
+
+XMLscene.prototype.setTextures = function () {
+    this.textures = [];
+
+    for(var i=0; i < this.graph.textures.length; i++) {
+        var texture = this.graph.textures[i];
+        var id = texture.id;
+
+        this.textures[id] = new CGFappearance();
+        this.textures[id].length_s = texture.length_s;
+        this.textures[id].length_t = texture.length_t;
+        this.textures[id].loadTexture(texture.file);
+
+        console.log('Texture #'+i+": OK!");
+    }
+}
+
 XMLscene.prototype.nextCamera = function () {
     //If there's just 1 camera, stop function
     if(this.graph.view.perspectives.length == 0)
@@ -202,6 +256,8 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.setCameras();
     this.setLights();
     this.setMaterials();
+    this.setTransformations();
+    this.setTextures();
 };
 
 XMLscene.prototype.display = function () {

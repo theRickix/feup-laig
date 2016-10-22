@@ -62,9 +62,9 @@ MySceneGraph.prototype.parseScene = function(rootElement) {
 	var scene = elems[0];
 
 	this.root = this.reader.getString(scene,'root');
-	this.axis_lenght = this.reader.getFloat(scene,'axis_length');
+	this.axis_length = this.reader.getFloat(scene,'axis_length');
 
-	console.log("Scene read from file: {root=" + this.scene.root + ", axis_length=" + this.scene.axis_length);
+	console.log("Scene read from file: {root=" + this.root + ", axis_length=" + this.axis_length);
 
 };
 
@@ -267,7 +267,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement) {
 
 		switch(transformation.children[0].tagName) {
 			case 'translate':
-				tmp_transformation = this.parseCoordinates(transformation.children[0],false);
+				tmp_transformation['attributes'] = this.parseCoordinates(transformation.children[0],false);
 				tmp_transformation['type'] = 'translate';
 				break;
 
@@ -278,7 +278,7 @@ MySceneGraph.prototype.parseTransformations= function(rootElement) {
 				break;
 
 			case 'scale':
-				tmp_transformation = this.parseCoordinates(transformation.children[0],false);
+				tmp_transformation['attributes'] = this.parseCoordinates(transformation.children[0],false);
 				tmp_transformation['type'] = 'scale';
 				break;
 		}
