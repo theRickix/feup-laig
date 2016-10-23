@@ -41,12 +41,12 @@ Base.prototype.initBuffers = function () {
         this.normals.push(0,0,1);
         this.textureCoords.push(0.5 + 0.5 * xposition, 0.5 - 0.5 * yposition);
 
-       if(longNumber > 1)
-       {
-           this.indices.push(numSlices++, numSlices, 0);
-       }
+      // if(longNumber > 1)
+    //   {
+    //       this.indices.push(numSlices++, numSlices, 0);
+    //   }
        // this.indices.push(this.slices, numSlices, 0);
-    }
+  //  }
 
     this.indices.push(0, numSlices, 1);
 
@@ -111,16 +111,16 @@ Surface.prototype.initBuffers = function () {
             var sIndice = fIndice + this.slices + 1;
 
 
-           // this.indices.push(fIndice, sIndice + 1, sIndice);
-           // this.indices.push(fIndice, fIndice + 1, sIndice + 1);
+            this.indices.push(fIndice, sIndice + 1, sIndice);
+            this.indices.push(fIndice, fIndice + 1, sIndice + 1);
 
-            this.indices.push(latNumber * (this.slices+1)+longNumber);
-            this.indices.push(latNumber * (this.slices+1)+longNumber+1);
-            this.indices.push((latNumber+1) * (this.slices+1)+longNumber);
+        //    this.indices.push(latNumber * (this.slices+1)+longNumber);
+        //    this.indices.push(latNumber * (this.slices+1)+longNumber+1);
+        //    this.indices.push((latNumber+1) * (this.slices+1)+longNumber);
 
-            this.indices.push(latNumber * (this.slices+1)+longNumber+1);
-            this.indices.push((latNumber+1) * (this.slices+1)+longNumber+1);
-            this.indices.push((latNumber+1) * (this.slices+1)+longNumber);
+         //   this.indices.push(latNumber * (this.slices+1)+longNumber+1);
+         //   this.indices.push((latNumber+1) * (this.slices+1)+longNumber+1);
+          //  this.indices.push((latNumber+1) * (this.slices+1)+longNumber);
           //  this.indices.push( latNumber * (this.slices + 1) + longNumber , (latNumber + 1) * (this.slices + 1) + longNumber, (latNumber + 1) * (this.slices + 1) + longNumber + 1);
           //  this.indices.push ( latNumber * (this.slices + 1) + longNumber, (latNumber + 1) * (this.slices + 1) + longNumber +1, latNumber * (this.slices + 1) + longNumber + 1);
 
