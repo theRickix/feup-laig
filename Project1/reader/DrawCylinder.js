@@ -46,7 +46,7 @@ Base.prototype.initBuffers = function () {
     //       this.indices.push(numSlices++, numSlices, 0);
     //   }
        // this.indices.push(this.slices, numSlices, 0);
-  //  }
+   }
 
     this.indices.push(0, numSlices, 1);
 
@@ -130,4 +130,4 @@ Surface.prototype.initBuffers = function () {
 
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
-}};
+};
