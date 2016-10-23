@@ -12,9 +12,9 @@ function MyCylinder (scene,base, top, height, slices, stacks){
 
     CGFobject.call(this, scene);
 
-    this.bottom = new DrawCylinder.Base(scene, base, slices);
-    this.top = new DrawCylinder.Base(scene, top, slices);
-    this.surface= new DrawCylinder.Surface(scene, base, top, height, slices, stacks);
+    this.bottom = new Base(scene, base, slices);
+    this.top = new Base(scene, top, slices);
+    this.surface= new Surface(scene, base, top, height, slices, stacks);
 
 
 

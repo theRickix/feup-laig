@@ -22,6 +22,9 @@ XMLscene.prototype.init = function (application) {
     this.enableTextures(true);
 	this.axis=new CGFaxis(this);
     this.rect = new MyRectangle(this,'',1,1,5,5);
+    this.torus = new MyTorus(this,5,10,5,5);
+    this.sphere = new MySphere(this,'',2,10,10);
+    this.cylinder = new MyCylinder(this,5,5,3,5,5);
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -252,13 +255,13 @@ XMLscene.prototype.onGraphLoaded = function ()
 	/*this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	this.lights[0].setVisible(true);
     this.lights[0].enable();*/
-	this.setAxis();
+	/*this.setAxis();
 	this.setIllumination();
     this.setCameras();
     this.setLights();
     this.setMaterials();
     this.setTransformations();
-    this.setTextures();
+    this.setTextures();*/
 };
 
 XMLscene.prototype.display = function () {
@@ -278,8 +281,9 @@ XMLscene.prototype.display = function () {
 	// Draw axis
 	//this.axis.display();
 
-    this.rect.display();
-
+   //this.rect.display();
+   // this.torus.display();
+    this.sphere.display();
 	this.setDefaultAppearance();
 
 	// ---- END Background, camera and axis setup

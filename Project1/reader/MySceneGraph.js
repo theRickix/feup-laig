@@ -34,14 +34,14 @@ MySceneGraph.prototype.onXMLReady=function()
 		return;
 	}	*/
 
-	this.parseScene(rootElement);
+	/*this.parseScene(rootElement);
 	this.parseViews(rootElement);
 	this.parseIllumination(rootElement);
 	this.parseLights(rootElement);
 	this.parseTextures(rootElement);
 	this.parseMaterials(rootElement);
 	this.parseTransformations(rootElement);
-	this.parseComponents(rootElement);
+	this.parseComponents(rootElement);*/
 
 
 	this.loadedOk=true;

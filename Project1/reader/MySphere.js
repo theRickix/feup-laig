@@ -51,11 +51,8 @@ MySphere.prototype.initBuffers = function() {
     {
         for(var longBand = 0; longBand < this.slices; ++longBand)
         {
-            //this.indices.push(latband * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand + 1);
-            //this.indices.push(latband * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand + 1, latband * (this.slices + 1) + longBand + 1);
-
-            this.indices.push(latband * (this.slices + 1) + longBand, ((latband + 1) * (this.slices + 1) + longBand) + (this.slices + 1) + 1, ((latband + 1) * (this.slices + 1) + longBand) + (this.slices + 1));
-            this.indices.push(latband * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand + 1, ((latband + 1) * (this.slices + 1) + longBand) + (this.slices + 1) + 1);
+            this.indices.push(latband * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand + 1);
+            this.indices.push(latband * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand + 1, latband * (this.slices + 1) + longBand + 1);
         }
     }
 

@@ -34,8 +34,8 @@ Base.prototype.initBuffers = function () {
     for(var longNumber = 0; longNumber <= this.slices; longNumber++) //iterate through  the slices
 
     {
-        var xposition = Math.cos(slice * ang); //position of the vertice in x
-        var yposition = Math.sin(slice*ang);//position of the vertice in y
+        var xposition = Math.cos(longNumber * angleSlice); //position of the vertice in x
+        var yposition = Math.sin(longNumber * angleSlice);//position of the vertice in y
 
         this.vertices.push(this.radius * xposition, this.radius * yposition, 0);
         this.normals.push(0,0,1);
@@ -92,20 +92,20 @@ Surface.prototype.initBuffers = function () {
         var z = znum * latNumber
         var radius = (this.top - latNumber) * r;
 
-        for (var longNumber = 0; longNumber <= this.slices; slices++) //iterate through slices
+        for (var longNumber = 0; longNumber <= this.slices; longNumber++) //iterate through slices
         {
-            var x = (Math.cos(theta * slice)) * radius
-            var y = (Math.sin(theta * slice)) * radius
+            var x = (Math.cos(theta * longNumber)) * radius;
+            var y = (Math.sin(theta * longNumber)) * radius;
 
             this.vertices.push(x, y, z);
-            this.textureCoords.push(lat / this.stacks, long / this.slices);
+            this.textureCoords.push(latNumber / this.stacks, longNumber / this.slices);
             this.normals.push(x, y, 0);
         }
     }
 
     for (var latNumber = 0; latNumber <= this.stacks; latNumber++)
     {
-        for (var longNumber = 0; longNumber <= this.slices; slices++) //iterate through slices
+        for (var longNumber = 0; longNumber <= this.slices; longNumber++) //iterate through slices
         {
             var fIndice = (latNumber * (this.slices + 1)) + longNumber;
             var sIndice = fIndice + this.slices + 1;
