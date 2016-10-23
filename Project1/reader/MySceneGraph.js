@@ -34,14 +34,15 @@ MySceneGraph.prototype.onXMLReady=function()
 		return;
 	}	*/
 
-	/*this.parseScene(rootElement);
+	this.parseScene(rootElement);
 	this.parseViews(rootElement);
 	this.parseIllumination(rootElement);
 	this.parseLights(rootElement);
 	this.parseTextures(rootElement);
 	this.parseMaterials(rootElement);
 	this.parseTransformations(rootElement);
-	this.parseComponents(rootElement);*/
+	this.parsePrimitives(rootElement);
+	this.parseComponents(rootElement);
 
 
 	this.loadedOk=true;
@@ -305,44 +306,47 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 
 	for ( var i=0; i < primitives.child.length; i++)  {
 		var primitive = primitives.children[i];
+		var id = this.reader.getString(primitive,'id');
 
 		switch(primitive.firstChild.tagName) {
 			case "rectangle":
-				this.parseRectangle(primitive.firstChild);
+				this.parseRectangle(primitive.firstChild,id);
 				break;
 
 			case "triangle":
-				this.parseTriangle(primitive.firstChild);
+				this.parseTriangle(primitive.firstChild,id);
 				break;
 
 			case "cylinder":
-				this.parseCylinder(primitive.firstChild);
+				this.parseCylinder(primitive.firstChild,id);
 				break;
 
 			case "sphere":
-				this.parseSphere(primitive.firstChild);
+				this.parseSphere(primitive.firstChild,id);
 				break;
 
 			case "torus":
-				this.parseTorus(primitive.firstChild);
+				this.parseTorus(primitive.firstChild,id);
 				break;
 		}
 	}
 
 };
 
-MySceneGraph.prototype.parseRectangle= function(element) {
+MySceneGraph.prototype.parseRectangle= function(element,id) {
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var x2 = this.reader.getFloat(element, 'x2');
 	var y2 = this.reader.getFloat(element, 'y2');
 
-	this.primitives.push(new MyRectangle(this.scene,id,x1,y1,x2,y2));
+	var primitive = new MyRectangle(this.scene,id,x1,y1,x2,y2);
+	primitive['id'] = id;
+	this.primitives.push(primitive);
 	
 
 };
 
-MySceneGraph.prototype.parseTriangle= function(element) {
+MySceneGraph.prototype.parseTriangle= function(element,id) {
 	var x1 = this.reader.getFloat(element, 'x1');
 	var y1 = this.reader.getFloat(element, 'y1');
 	var z1 = this.reader.getFloat(element, 'z1');
@@ -353,33 +357,45 @@ MySceneGraph.prototype.parseTriangle= function(element) {
 	var y3 = this.reader.getFloat(element, 'y3');
 	var z3 = this.reader.getFloat(element, 'z3');
 
-	this.primitives.push(new MyTriangle(this.scene,x1,y1,z1,x2,y2,z2,x3,y3,z3));
+	var primitive = new MyTriangle(this.scene,x1,y1,z1,x2,y2,z2,x3,y3,z3);
+	primitive['id'] = id;
+
+	this.primitives.push();
 
 };
 
-MySceneGraph.prototype.parseCylinder= function(element,primitive) {
+MySceneGraph.prototype.parseCylinder= function(element,id) {
 	var base = this.reader.getFloat(element, 'base');
 	var top = this.reader.getFloat(element, 'top');
 	var height = this.reader.getFloat(element, 'height');
 	var slices = this.reader.getInteger(element, 'slices');
 	var stacks = this.reader.getInteger(element, 'stacks');
 
+	var primitive = new MyCylinder(this.scene,base,top,height,slices,stack);
+	primitive['id'] = id;
+
 	this.primitives.push(primitive);
 };
 
-MySceneGraph.prototype.parseSphere= function(rootElement,primitive) {
+MySceneGraph.prototype.parseSphere= function(element,id) {
 	var radius = this.reader.getFloat(element, 'radius');
 	var slices = this.reader.getInteger(element, 'slices');
 	var stacks = this.reader.getInteger(element, 'stacks');
 
+	var primitive = new MySphere(this.scene,radius,slices,stacks);
+	primitive['id'] = id;
+
 	this.primitives.push(primitive);
 };
 
-MySceneGraph.prototype.parseTorus= function(rootElement,primitive) {
+MySceneGraph.prototype.parseTorus= function(element,id) {
 	var inner = this.reader.getFloat(element, 'inner');
 	var outer = this.reader.getFloat(element, 'outer');
 	var slices = this.reader.getInteger(element, 'slices');
 	var loops = this.reader.getInteger(element, 'loops');
+
+	var primitive = new MyTorus(this.scene,inner,outer,slices,loops);
+	primitive['id'] = id;
 
 	this.primitives.push(primitive);
 };
@@ -400,12 +416,12 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 		//TRANSFORMATIONS
 		var transformation = component.getElementsByTagName("transformation");
 
-		tmp_component['transformation'] = [];
+		tmp_component['transformations'] = [];
 
 		if(transformation[0].getElementsByTagName("transformationref") != 0) {
 			var transformationref = transformation[0].getElementsByTagName("transformationref");
-			tmp_component['transformation']['hasRef'] = true;
-			tmp_component['transformation']['transformationref'] = transformationref;
+			tmp_component['transformations']['hasRef'] = true;
+			tmp_component['transformations']['transformationref'] = transformationref;
 		}
 		else {
 			for(var j=0; j<transformation[0].childElementCount; j++) {
@@ -415,20 +431,20 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 					case 'translate':
 						transformationElement['attributes'] = this.parseCoordinates(transformation[0].children[j], false);
 						transformationElement['type'] = 'translate';
-						tmp_component.transformation.push(transformationElement);
+						tmp_component.transformations.push(transformationElement);
 						break;
 
 					case 'rotate':
 						transformationElement['axis'] = this.reader.getString(transformation[0].children[j], 'axis');
 						transformationElement['angle'] = this.reader.getString(transformation[0].children[j], 'angle');
 						transformationElement['type'] = 'rotate';
-						tmp_component.transformation.push(transformationElement);
+						tmp_component.transformations.push(transformationElement);
 						break;
 
 					case 'scale':
 						transformationElement['attributes'] = this.parseCoordinates(transformation[0].children[j], false);
 						transformationElement['type'] = 'scale';
-						tmp_component.transformation.push(transformationElement);
+						tmp_component.transformations.push(transformationElement);
 						break;
 				}
 			}
@@ -451,23 +467,25 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 		var children = component.getElementsByTagName("children");
 
 		tmp_component['children'] = [];
-		tmp_component['children']['componentref'] = [];
-		tmp_component['children']['primitiveref'] = [];
 
 		for(var j=0; j<children[0].childElementCount; j++) {
 			var child = [];
 			switch(children[0].children[j].tagName) {
-				case "componentref":
-					tmp_component.children.componentref.push(this.reader.getString(children[0].children[j], "id"));
+                case "componentref":
+				    child['id'] = this.reader.getString(children[0].children[j], "id");
+                    child['type'] = 'component';
+					tmp_component.children.push(child);
 					break;
 
 				case "primitiveref":
-					tmp_component.children.primitiveref.push(this.reader.getString(children[0].children[j], "id"));
+                    child['id'] = this.reader.getString(children[0].children[j], "id");
+                    child['type'] = 'component';
+					tmp_component.children.push(child);
 					break;
 			}
 		}
 
-		this.components.push(tmp_component);
+		this.components[tmp_component.id] = tmp_component;
 		console.log("Component #"+i+" with id '"+tmp_component.id+"' added!");
 
 	}

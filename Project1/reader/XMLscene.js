@@ -24,7 +24,7 @@ XMLscene.prototype.init = function (application) {
     this.rect = new MyRectangle(this,'',1,1,5,5);
     this.torus = new MyTorus(this,5,10,5,5);
     this.sphere = new MySphere(this,'',2,10,10);
-    this.cylinder = new MyCylinder(this,5,5,3,5,5);
+    this.cylinder = new MyCylinder(this,5,5,10,5,5);
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -185,37 +185,42 @@ XMLscene.prototype.setTransformations = function () {
     for(var i=0; i < this.graph.transformations.length; i++) {
         var transformation = this.graph.transformations[i];
         var id = transformation.id;
-        var matrix = mat4.create();
 
-        for(var j=0; j < transformation.length; j++) {
-            if (transformation[j].type === 'translate') {
-                mat4.translate(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
-            }
-
-            if (transformation[j].type === 'scale') {
-                mat4.scale(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
-            }
-
-            if (transformation[j].type === 'rotate') {
-                switch (transformation[j].axis) {
-                    case 'x':
-                        mat4.rotateX(matrix, matrix, transformation[j].angle * Math.PI / 180);
-                        break;
-
-                    case 'y':
-                        mat4.rotateY(matrix, matrix, transformation[j].angle * Math.PI / 180);
-                        break;
-
-                    case 'z':
-                        mat4.rotateZ(matrix, matrix, transformation[j].angle * Math.PI / 180);
-                        break;
-                }
-            }
-        }
-        this.transformations[id] = matrix;
+        this.transformations[id] = this.setTransformation(id,transformation);
         console.log('Transformation #'+i+": OK!");
 
     }
+};
+
+XMLscene.prototype.setTransformation = function (id,transformation,matrix) {
+    var matrix = mat4.create();
+
+    for(var j=0; j < transformation.length; j++) {
+        if (transformation[j].type === 'translate') {
+            mat4.translate(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
+        }
+
+        if (transformation[j].type === 'scale') {
+            mat4.scale(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
+        }
+
+        if (transformation[j].type === 'rotate') {
+            switch (transformation[j].axis) {
+                case 'x':
+                    mat4.rotateX(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                    break;
+
+                case 'y':
+                    mat4.rotateY(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                    break;
+
+                case 'z':
+                    mat4.rotateZ(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                    break;
+            }
+        }
+    }
+    return matrix;
 };
 
 XMLscene.prototype.setTextures = function () {
@@ -225,13 +230,72 @@ XMLscene.prototype.setTextures = function () {
         var texture = this.graph.textures[i];
         var id = texture.id;
 
-        this.textures[id] = new CGFappearance();
+        this.textures[id] = new CGFappearance(this);
         this.textures[id].length_s = texture.length_s;
         this.textures[id].length_t = texture.length_t;
         this.textures[id].loadTexture(texture.file);
 
         console.log('Texture #'+i+": OK!");
     }
+};
+
+XMLscene.prototype.setPrimitives = function () {
+    this.primitives = [];
+
+    for(var i=0; i < this.graph.primitives.length; i++) {
+        var primitive = this.graph.primitives[i];
+        var id = primitive.id;
+
+        this.primitives[id] = primitive;
+
+        console.log('Primitive #'+i+": OK!");
+    }
+};
+
+XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMaterial) {
+    this.pushMatrix();
+    if(component.transformations.length == 1) {
+        this.multMatrix(this.transformations[component.transformations.transformationref]);
+    }
+    else {
+        for(var i=0; i < component.transformations.length; i++) {
+            var transformation = component.transformations[i];
+            var id = transformation.id;
+
+            var explicitTransformation = this.setTransformation(id,transformation);
+            this.multMatrix(explicitTransformation);
+
+        }
+    }
+
+
+    for(var i=0; component.children.length; i++) {
+        var material = this.materials[component.material[0]];
+        var texture = this.textures[component.texture[0]];
+
+        if(material === 'inherit') {
+            material = this.materials[fatherMaterial];
+        }
+
+        if(texture === 'inherit') {
+            texture = this.materials[fatherTexture];
+        }
+
+        if(texture !== 'none') {
+            material.setTexture(texture);
+        }
+
+        material.apply;
+
+        if (component.children[i] === "component") {
+            this.setComponent(this.graph.components[component.children[i].id], texture, material);
+        }
+        else {
+            this.primitives[component.children[i].id].display();
+        }
+    }
+    this.popMatrix();
+
 };
 
 XMLscene.prototype.nextCamera = function () {
@@ -255,13 +319,14 @@ XMLscene.prototype.onGraphLoaded = function ()
 	/*this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	this.lights[0].setVisible(true);
     this.lights[0].enable();*/
-	/*this.setAxis();
+	this.setAxis();
 	this.setIllumination();
     this.setCameras();
     this.setLights();
     this.setMaterials();
     this.setTransformations();
-    this.setTextures();*/
+    this.setTextures();
+    this.setPrimitives();
 };
 
 XMLscene.prototype.display = function () {
@@ -283,7 +348,7 @@ XMLscene.prototype.display = function () {
 
    //this.rect.display();
    // this.torus.display();
-    this.sphere.display();
+    this.cylinder.display();
 	this.setDefaultAppearance();
 
 	// ---- END Background, camera and axis setup
@@ -292,9 +357,7 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk) {
-	    for(var i=0; i<this.lights.length;i++) {
-	       this.lights[i].update();
-        }
+	   this.setComponent(this.graph.components[this.graph.root]);
 	}
 };
 
