@@ -111,8 +111,11 @@ Surface.prototype.initBuffers = function () {
             var sIndice = fIndice + this.slices + 1;
 
 
-            this.indices.push(fIndice, sIndice + 1, sIndice);
-            this.indices.push(fIndice, fIndice + 1, sIndice + 1);
+           // this.indices.push(fIndice, sIndice + 1, sIndice);
+           // this.indices.push(fIndice, fIndice + 1, sIndice + 1);
+
+            this.indices.push( latNumber * (this.slices + 1) + longNumber , (latNumber + 1) * (this.slices + 1) + longNumber, (latNumber + 1) * (this.slices + 1) + longNumber + 1);
+            this.indices.push ( latNumber * (this.slices + 1) + longNumber, (latNumber + 1) * (this.slices + 1) + longNumber +1, latNumber * (this.slices + 1) + longNumber + 1);
 
         }
 
