@@ -41,12 +41,12 @@ Base.prototype.initBuffers = function () {
         this.normals.push(0,0,1);
         this.textureCoords.push(0.5 + 0.5 * xposition, 0.5 - 0.5 * yposition);
 
-      // if(longNumber > 1)
-    //   {
-    //       this.indices.push(numSlices++, numSlices, 0);
-    //   }
-       // this.indices.push(this.slices, numSlices, 0);
-   }
+        if(longNumber > 1)
+        {
+            this.indices.push(numSlices++, numSlices, 0);
+        }
+
+    }
 
     this.indices.push(0, numSlices, 1);
 
@@ -80,7 +80,7 @@ Surface.prototype.initBuffers = function () {
     this.indices = [];
     this.normals = [];
     this.vertices = [];
-    this.textureCoords = [];
+    this.texCoords = [];
 
 
     var theta = (2*Math.PI) / this.slices;
@@ -90,39 +90,28 @@ Surface.prototype.initBuffers = function () {
     for (var latNumber = 0; latNumber <= this.stacks; latNumber++)
     {
         var z = znum * latNumber
-        var radius = (this.top - latNumber) * r;
+        var radius = this.top - latNumber * r;
 
         for (var longNumber = 0; longNumber <= this.slices; longNumber++) //iterate through slices
         {
-            var x = (Math.cos(theta * longNumber)) * radius;
-            var y = (Math.sin(theta * longNumber)) * radius;
+            var x = radius * Math.cos(theta * longNumber) ;
+            var y = radius * Math.sin(theta * longNumber);
 
             this.vertices.push(x, y, z);
-            this.textureCoords.push(latNumber / this.stacks, longNumber / this.slices);
+            this.texCoords.push((longNumber * theta), z);
             this.normals.push(x, y, 0);
         }
     }
 
-    for (var latNumber = 0; latNumber <= this.stacks; latNumber++)
+    for (var latNumber = 0; latNumber < this.stacks; latNumber++)
     {
-        for (var longNumber = 0; longNumber <= this.slices; longNumber++) //iterate through slices
+        for (var longNumber = 0; longNumber < this.slices; longNumber++) //iterate through slices
         {
-            var fIndice = (latNumber * (this.slices + 1)) + longNumber;
-            var sIndice = fIndice + this.slices + 1;
 
 
-            this.indices.push(fIndice, sIndice + 1, sIndice);
-            this.indices.push(fIndice, fIndice + 1, sIndice + 1);
+            this.indices.push((latNumber * (this.slices + 1)) + longNumber, (latNumber * (this.slices + 1)) + longNumber + this.slices + 1 + 1, (latNumber * (this.slices + 1)) + longNumber + this.slices + 1);
+            this.indices.push((latNumber * (this.slices + 1)) + longNumber, (latNumber * (this.slices + 1)) + longNumber + 1, (latNumber * (this.slices + 1)) + longNumber + this.slices + 1 + 1);
 
-        //    this.indices.push(latNumber * (this.slices+1)+longNumber);
-        //    this.indices.push(latNumber * (this.slices+1)+longNumber+1);
-        //    this.indices.push((latNumber+1) * (this.slices+1)+longNumber);
-
-         //   this.indices.push(latNumber * (this.slices+1)+longNumber+1);
-         //   this.indices.push((latNumber+1) * (this.slices+1)+longNumber+1);
-          //  this.indices.push((latNumber+1) * (this.slices+1)+longNumber);
-          //  this.indices.push( latNumber * (this.slices + 1) + longNumber , (latNumber + 1) * (this.slices + 1) + longNumber, (latNumber + 1) * (this.slices + 1) + longNumber + 1);
-          //  this.indices.push ( latNumber * (this.slices + 1) + longNumber, (latNumber + 1) * (this.slices + 1) + longNumber +1, latNumber * (this.slices + 1) + longNumber + 1);
 
         }
 
