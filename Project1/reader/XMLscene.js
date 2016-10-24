@@ -34,11 +34,17 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);
 };
 
+/*
+ * Apply bidirectional reference to interface
+ */
 XMLscene.prototype.setInterface = function (interface) {
     this.interface = interface;
     this.interface.scene = this;
-}
+};
 
+/*
+ * Initialize default lights
+ */
 XMLscene.prototype.initLights = function () {
 
 	this.lights[0].setPosition(2, 3, 3, 1);
@@ -46,15 +52,23 @@ XMLscene.prototype.initLights = function () {
     this.lights[0].update();
 };
 
+/*
+ * Initialize default camera
+ */
 XMLscene.prototype.initCameras = function () {
     this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
 };
 
+/*
+ * Set axis with input length
+ */
 XMLscene.prototype.setAxis = function () {
     this.axis = new CGFaxis(this,this.graph.axis_length);
 };
 
-
+/*
+ * Set cameras with input perspectives
+ */
 XMLscene.prototype.setCameras = function () {
     for (var i = 0; i < this.graph.view.perspectives.length; i++) {
         if (this.graph.view.perspectives[i].id === this.graph.view.default) {
@@ -66,14 +80,18 @@ XMLscene.prototype.setCameras = function () {
     }
 };
 
-
+/*
+ * Set background and ambient illumation
+ */
 XMLscene.prototype.setIllumination = function () {
     this.gl.clearColor(this.graph.illumination.background[0],this.graph.illumination.background[1],this.graph.illumination.background[2],this.graph.illumination.background[3]);
     this.setGlobalAmbientLight(this.graph.illumination.ambient[0],this.graph.illumination.ambient[1],this.graph.illumination.ambient[2],this.graph.illumination.ambient[3]);
     console.log("Background and ambient illumination: OK!");
 };
 
-
+/*
+ * Set spot and omni lights
+ */
 XMLscene.prototype.setLights = function () {
     var lightN=0;
     this.lightStatus = [];
@@ -118,7 +136,7 @@ XMLscene.prototype.setLights = function () {
     }
 
     for(var i=0; i<this.graph.lights.spot.length; i++) {
-        //TODO: add target???
+
         var light = this.graph.lights.spot[i];
 
         this.lights[lightN].setPosition(light.location[0],
@@ -140,6 +158,10 @@ XMLscene.prototype.setLights = function () {
             light.specular[2],
             light.specular[3]);
 
+        this.lights[lightN].setSpotExponent(light.exponent);
+        this.lights[lightN].setSpotCutOff(light.angle);
+        this.lights[lightN].setSpotDirection(light.target[0],light.target[1],light.target[2]);
+
         console.log("Spot Light #"+i+": OK!");
 
         if(light.enabled) {
@@ -160,6 +182,9 @@ XMLscene.prototype.setLights = function () {
     console.log(lightN+" lights: OK!")
 };
 
+/*
+ * Set given materials
+ */
 XMLscene.prototype.setMaterials = function () {
     this.materials = [];
 
@@ -197,6 +222,9 @@ XMLscene.prototype.setMaterials = function () {
     }
 };
 
+/*
+ * Set all transformations
+ */
 XMLscene.prototype.setTransformations = function () {
     this.transformations = [];
 
@@ -210,6 +238,9 @@ XMLscene.prototype.setTransformations = function () {
     }
 };
 
+/*
+ * Applies the transformation to the scene
+ */
 XMLscene.prototype.setTransformation = function (transformation) {
 
     for(var j=0; j < transformation.length; j++) {
@@ -239,6 +270,9 @@ XMLscene.prototype.setTransformation = function (transformation) {
     }
 };
 
+/*
+ * Set given textures
+ */
 XMLscene.prototype.setTextures = function () {
     this.textures = [];
 
@@ -255,6 +289,9 @@ XMLscene.prototype.setTextures = function () {
     }
 };
 
+/*
+ * Set all the primitives
+ */
 XMLscene.prototype.setPrimitives = function () {
     this.primitives = [];
 
@@ -268,24 +305,12 @@ XMLscene.prototype.setPrimitives = function () {
     }
 };
 
+/*
+ * Iterate from every component and draw the primitives
+ */
 XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMaterial) {
     //console.log(component.id);
     this.pushMatrix();
-
-    /*if(component.id === this.graph.root) {
-        if(component.transformations.hasRef) {
-            this.currentMatrix = this.transformations[component.transformations.transformationref];
-        }
-        else {
-            for(var i=0; i < component.transformations.length; i++) {
-                var transformation = component.transformations[i];
-                var id = transformation.id;
-
-                var currentMatrix = this.setTransformation(id,transformation);
-
-            }
-        }
-    }*/
 
     if(component.transformations.hasRef) {
        // console.log(component.transformations.transformationref);
@@ -331,6 +356,9 @@ XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMateri
 
 };
 
+/*
+ * Go to the next camera
+ */
 XMLscene.prototype.nextCamera = function () {
     //If there's just 1 camera, stop function
     if(this.graph.view.perspectives.length == 0)
@@ -364,35 +392,19 @@ XMLscene.prototype.onGraphLoaded = function ()
 };
 
 XMLscene.prototype.display = function () {
-	// ---- BEGIN Background, camera and axis setup
-	
-	// Clear image and depth buffer everytime we update the scene
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-	// Initialize Model-View matrix as identity (no transformation
 	this.updateProjectionMatrix();
     this.loadIdentity();
 
-	// Apply transformations corresponding to the camera position relative to the origin
 	this.applyViewMatrix();
 
-	// Draw axis
-	//this.axis.display();
-
-
-   // this.torus.display();
-   //this.cylinder.display();
+	this.axis.display();
 
 	this.setDefaultAppearance();
 
-	// ---- END Background, camera and axis setup
-
-	// it is important that things depending on the proper loading of the graph
-	// only get executed after the graph has loaded correctly.
-	// This is one possible way to do it
 	if (this.graph.loadedOk) {
-       // this.rect.display();
         for(var i=0; i<this.lights.length;i++) {
             if(this.lightStatus[i])
                 this.lights[i].enable();
@@ -400,7 +412,7 @@ XMLscene.prototype.display = function () {
                 this.lights[i].disable();
             this.lights[i].update();
         }
-	   this.setComponent(this.graph.components[this.graph.root]);
+	   this.setComponent(this.graph.components[this.graph.root],null,null);
 
 
 	}

@@ -9,7 +9,7 @@ function MyTorus (scene, inner, outter, slices, loops)
     CGFobject.call(this,scene);
 
     this.inner = inner;
-    this.outter = outter;
+    this. outter = outter;
     this.slices = slices;
     this.loops = loops;
 
@@ -30,8 +30,7 @@ MyTorus.prototype.initBuffers = function () {
 
     for (var latNumber = 0; latNumber <= this.loops; latNumber++)
     {  var theta = latNumber * 2 * Math.PI / this.loops;
-        var sinTheta = Math.sin(theta);
-        var cosTheta = Math.cos(theta);
+
 
 
 
@@ -40,43 +39,45 @@ MyTorus.prototype.initBuffers = function () {
         for (var longNumber = 0; longNumber <= this.slices; longNumber++) {
 
             var phi = longNumber * 2 * Math.PI / this.slices;
-            var sinPhi = Math.sin(phi);
-            var cosPhi = Math.cos(phi);
 
-            var x = (this.outter + this.inner * Math.cos(phi)) * Math.cos(theta);
-            var y = (this.outter + this.inner * Math.cos(phi)) * Math.sin(theta);
-            var z = this.inner * Math.sin(phi);    //raio *
+
+            var x = (this.outter + (this.inner * Math.cos(theta))) * Math.cos(phi);
+            var y = (this.outter + (this.inner * Math.cos(theta))) * Math.sin(phi);
+            var z = this.inner * Math.sin(theta);    //raio *
 
             var u = 1 - (longNumber / this.slices);
             var v = 1 - (latNumber / this.loops);
 
             this.vertices.push(x,y,z);
             this.normals.push(x,y,z);
-            this.textureCoords.push(u,v);
+            this.textureCoords.push(v,u);
 
         }
-}
+    }
 
 
-            for (var latNumber = 0; latNumber < this.loops; latNumber++)
-            {
-                for(var longNumber= 0; longNumber < this.slices ; longNumber++)
-                {
-                    var first = (latNumber * (this.slices + 1)) + longNumber;
-                    var second = first + this.slices + 1;
+    for (var latNumber = 0; latNumber < this.loops; latNumber++)
+    {
+        for(var longNumber= 0; longNumber < this.slices ; longNumber++)
+        {
+            var first = (latNumber * (this.slices + 1)) + longNumber;
+            var second = first + this.slices + 1;
 
-                    this.indices.push(first);
-                    this.indices.push(second);
-                    this.indices.push(first + 1);
-                    this.indices.push(second);
-                    this.indices.push(second + 1);
-                    this.indices.push(first + 1);
+            // this.indices.push(first);
+            //  this.indices.push(second);
+            //  this.indices.push(first + 1);
+            //  this.indices.push(second);
+            //  this.indices.push(second + 1);
+            //  this.indices.push(first + 1);
 
-                }
+            this.indices.push(first, second + 1, second);
+            this.indices.push(first, first + 1, second + 1);
 
-            }
+        }
+
+    }
 
 
-            this.primitiveType = this.scene.gl.TRIANGLES;
-            this.initGLBuffers();
+    this.primitiveType = this.scene.gl.TRIANGLES;
+    this.initGLBuffers();
 };

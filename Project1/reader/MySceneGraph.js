@@ -34,15 +34,59 @@ MySceneGraph.prototype.onXMLReady=function()
 		return;
 	}	*/
 
-	this.parseScene(rootElement);
-	this.parseViews(rootElement);
-	this.parseIllumination(rootElement);
-	this.parseLights(rootElement);
-	this.parseTextures(rootElement);
-	this.parseMaterials(rootElement);
-	this.parseTransformations(rootElement);
-	this.parsePrimitives(rootElement);
-	this.parseComponents(rootElement);
+	var error = this.parseScene(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parseViews(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parseIllumination(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parseLights(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parseTextures(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parseMaterials(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parseTransformations(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parsePrimitives(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
+	error = this.parseComponents(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
 
 
 	this.loadedOk=true;
@@ -185,6 +229,7 @@ MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 
 	var id = this.reader.getString(rootElement,'id');
 	var enabled = this.reader.getBoolean(rootElement,"enabled");
+	var exponent = this.reader.getFloat(rootElement,"exponent");
 	var target = rootElement.getElementsByTagName('target');
 	var location = rootElement.getElementsByTagName('location');
 	var ambient = rootElement.getElementsByTagName('ambient');
@@ -193,6 +238,7 @@ MySceneGraph.prototype.parseSpotLights= function(rootElement) {
 
 	tmp_spot['id'] = id;
 	tmp_spot['enabled'] = enabled;
+	tmp_spot['exponent'] = exponent;
 	tmp_spot['target'] = this.parseCoordinates(target[0],false);
 	tmp_spot['location'] = this.parseCoordinates(location[0],false);
 	tmp_spot['ambient'] = this.parseColours(ambient[0]);
