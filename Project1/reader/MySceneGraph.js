@@ -304,31 +304,32 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 
 	this.primitives = [];
 
-	for ( var i=0; i < primitives.child.length; i++)  {
+	for ( var i=0; i < primitives.childElementCount; i++)  {
 		var primitive = primitives.children[i];
 		var id = this.reader.getString(primitive,'id');
 
-		switch(primitive.firstChild.tagName) {
+		switch(primitive.children[0].tagName) {
 			case "rectangle":
-				this.parseRectangle(primitive.firstChild,id);
+				this.parseRectangle(primitive.children[0],id);
 				break;
 
 			case "triangle":
-				this.parseTriangle(primitive.firstChild,id);
+				this.parseTriangle(primitive.children[0],id);
 				break;
 
 			case "cylinder":
-				this.parseCylinder(primitive.firstChild,id);
+				this.parseCylinder(primitive.children[0],id);
 				break;
 
 			case "sphere":
-				this.parseSphere(primitive.firstChild,id);
+				this.parseSphere(primitive.children[0],id);
 				break;
 
 			case "torus":
-				this.parseTorus(primitive.firstChild,id);
+				this.parseTorus(primitive.children[0],id);
 				break;
 		}
+
 	}
 
 };
@@ -342,7 +343,6 @@ MySceneGraph.prototype.parseRectangle= function(element,id) {
 	var primitive = new MyRectangle(this.scene,id,x1,y1,x2,y2);
 	primitive['id'] = id;
 	this.primitives.push(primitive);
-	
 
 };
 
@@ -360,7 +360,7 @@ MySceneGraph.prototype.parseTriangle= function(element,id) {
 	var primitive = new MyTriangle(this.scene,x1,y1,z1,x2,y2,z2,x3,y3,z3);
 	primitive['id'] = id;
 
-	this.primitives.push();
+	this.primitives.push(primitive);
 
 };
 
@@ -371,7 +371,7 @@ MySceneGraph.prototype.parseCylinder= function(element,id) {
 	var slices = this.reader.getInteger(element, 'slices');
 	var stacks = this.reader.getInteger(element, 'stacks');
 
-	var primitive = new MyCylinder(this.scene,base,top,height,slices,stack);
+	var primitive = new MyCylinder(this.scene,base,top,height,slices,stacks);
 	primitive['id'] = id;
 
 	this.primitives.push(primitive);
@@ -384,7 +384,6 @@ MySceneGraph.prototype.parseSphere= function(element,id) {
 
 	var primitive = new MySphere(this.scene,radius,slices,stacks);
 	primitive['id'] = id;
-
 	this.primitives.push(primitive);
 };
 
@@ -418,10 +417,12 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 
 		tmp_component['transformations'] = [];
 
-		if(transformation[0].getElementsByTagName("transformationref") != 0) {
+		if(transformation[0].getElementsByTagName("transformationref").length > 0) {
 			var transformationref = transformation[0].getElementsByTagName("transformationref");
 			tmp_component['transformations']['hasRef'] = true;
-			tmp_component['transformations']['transformationref'] = transformationref;
+			console.log(this.reader.getString(transformationref[0],'id'));
+			tmp_component['transformations']['transformationref'] = this.reader.getString(transformationref[0],'id');
+			//console.log(tmp_component.transformations.transformationref);
 		}
 		else {
 			for(var j=0; j<transformation[0].childElementCount; j++) {
@@ -448,7 +449,7 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 						break;
 				}
 			}
-			tmp_component['transformation']['hasRef'] = false;
+			tmp_component['transformations']['hasRef'] = false;
 		}
 
 		//MATERIALS
@@ -466,7 +467,7 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 
 		var children = component.getElementsByTagName("children");
 
-		tmp_component['children'] = [];
+		tmp_component['childrenNodes'] = [];
 
 		for(var j=0; j<children[0].childElementCount; j++) {
 			var child = [];
@@ -474,13 +475,13 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
                 case "componentref":
 				    child['id'] = this.reader.getString(children[0].children[j], "id");
                     child['type'] = 'component';
-					tmp_component.children.push(child);
+					tmp_component.childrenNodes.push(child);
 					break;
 
 				case "primitiveref":
                     child['id'] = this.reader.getString(children[0].children[j], "id");
-                    child['type'] = 'component';
-					tmp_component.children.push(child);
+                    child['type'] = 'primitive';
+					tmp_component.childrenNodes.push(child);
 					break;
 			}
 		}

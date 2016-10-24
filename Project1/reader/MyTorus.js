@@ -9,7 +9,7 @@ function MyTorus (scene, inner, outter, slices, loops)
     CGFobject.call(this,scene);
 
     this.inner = inner;
-    this. outter = outter;
+    this.outter = outter;
     this.slices = slices;
     this.loops = loops;
 

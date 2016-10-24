@@ -34,6 +34,11 @@ XMLscene.prototype.setDefaultAppearance = function () {
     this.setShininess(10.0);
 };
 
+XMLscene.prototype.setInterface = function (interface) {
+    this.interface = interface;
+    this.interface.scene = this;
+}
+
 XMLscene.prototype.initLights = function () {
 
 	this.lights[0].setPosition(2, 3, 3, 1);
@@ -46,7 +51,7 @@ XMLscene.prototype.initCameras = function () {
 };
 
 XMLscene.prototype.setAxis = function () {
-    this.axis = new CGFaxis(this,this.graph.axis_lenght);
+    this.axis = new CGFaxis(this,this.graph.axis_length);
 };
 
 
@@ -71,35 +76,42 @@ XMLscene.prototype.setIllumination = function () {
 
 XMLscene.prototype.setLights = function () {
     var lightN=0;
+    this.lightStatus = [];
     for(var i=0; i<this.graph.lights.omni.length; i++) {
         var light = this.graph.lights.omni[i];
 
         this.lights[lightN].setPosition(light.location[0],
-                                        light.location[1],
-                                        light.location[2],
-                                        light.location[3]);
+            light.location[1],
+            light.location[2],
+            light.location[3]);
 
         this.lights[lightN].setAmbient(light.ambient[0],
-                                        light.ambient[1],
-                                        light.ambient[2],
-                                        light.ambient[3]);
+            light.ambient[1],
+            light.ambient[2],
+            light.ambient[3]);
 
         this.lights[lightN].setDiffuse(light.diffuse[0],
-                                        light.diffuse[1],
-                                        light.diffuse[2],
-                                        light.diffuse[3]);
+            light.diffuse[1],
+            light.diffuse[2],
+            light.diffuse[3]);
 
         this.lights[lightN].setSpecular(light.specular[0],
-                                        light.specular[1],
-                                        light.specular[2],
-                                        light.specular[3]);
+            light.specular[1],
+            light.specular[2],
+            light.specular[3]);
 
         console.log("Omni Light #"+i+": OK!");
 
 
         if(light.enabled) {
             this.lights[lightN].enable();
+            this.lightStatus.push(true);
             console.log('...and enabled!');
+        }
+        else {
+            this.lights[lightN].disable();
+            this.lightStatus.push(false);
+            console.log('and disabled!');
         }
 
         lightN++
@@ -110,29 +122,35 @@ XMLscene.prototype.setLights = function () {
         var light = this.graph.lights.spot[i];
 
         this.lights[lightN].setPosition(light.location[0],
-                                        light.location[1],
-                                        light.location[2]);
+            light.location[1],
+            light.location[2]);
 
         this.lights[lightN].setAmbient(light.ambient[0],
-                                        light.ambient[1],
-                                        light.ambient[2],
-                                        light.ambient[3]);
+            light.ambient[1],
+            light.ambient[2],
+            light.ambient[3]);
 
         this.lights[lightN].setDiffuse(light.diffuse[0],
-                                        light.diffuse[1],
-                                        light.diffuse[2],
-                                        light.diffuse[3]);
+            light.diffuse[1],
+            light.diffuse[2],
+            light.diffuse[3]);
 
         this.lights[lightN].setSpecular(light.specular[0],
-                                        light.specular[1],
-                                        light.specular[2],
-                                        light.specular[3]);
+            light.specular[1],
+            light.specular[2],
+            light.specular[3]);
 
         console.log("Spot Light #"+i+": OK!");
 
         if(light.enabled) {
             this.lights[lightN].enable();
+            this.lightStatus.push(true);
             console.log('and enabled');
+        }
+        else {
+            this.lights[lightN].disable();
+            this.lightStatus.push(false);
+            console.log('and disabled!');
         }
 
 
@@ -186,41 +204,39 @@ XMLscene.prototype.setTransformations = function () {
         var transformation = this.graph.transformations[i];
         var id = transformation.id;
 
-        this.transformations[id] = this.setTransformation(id,transformation);
+        this.transformations[id] = transformation;
         console.log('Transformation #'+i+": OK!");
 
     }
 };
 
-XMLscene.prototype.setTransformation = function (id,transformation,matrix) {
-    var matrix = mat4.create();
+XMLscene.prototype.setTransformation = function (transformation) {
 
     for(var j=0; j < transformation.length; j++) {
         if (transformation[j].type === 'translate') {
-            mat4.translate(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
+            this.translate(transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]);
         }
 
         if (transformation[j].type === 'scale') {
-            mat4.scale(matrix, matrix, [transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]]);
+            this.scale(transformation[j].attributes[0], transformation[j].attributes[1], transformation[j].attributes[2]);
         }
 
         if (transformation[j].type === 'rotate') {
             switch (transformation[j].axis) {
                 case 'x':
-                    mat4.rotateX(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                    this.rotate(transformation[j].angle * Math.PI / 180, 1, 0, 0);
                     break;
 
                 case 'y':
-                    mat4.rotateY(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                    this.rotate(transformation[j].angle * Math.PI / 180, 0, 1, 0);
                     break;
 
                 case 'z':
-                    mat4.rotateZ(matrix, matrix, transformation[j].angle * Math.PI / 180);
+                    this.rotate(transformation[j].angle * Math.PI / 180, 0, 0, 1);
                     break;
             }
         }
     }
-    return matrix;
 };
 
 XMLscene.prototype.setTextures = function () {
@@ -230,10 +246,10 @@ XMLscene.prototype.setTextures = function () {
         var texture = this.graph.textures[i];
         var id = texture.id;
 
-        this.textures[id] = new CGFappearance(this);
+        this.textures[id] = new CGFtexture(this,texture.file);
         this.textures[id].length_s = texture.length_s;
         this.textures[id].length_t = texture.length_t;
-        this.textures[id].loadTexture(texture.file);
+        this.textures[id].file = texture.file;
 
         console.log('Texture #'+i+": OK!");
     }
@@ -253,45 +269,62 @@ XMLscene.prototype.setPrimitives = function () {
 };
 
 XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMaterial) {
+    //console.log(component.id);
     this.pushMatrix();
-    if(component.transformations.length == 1) {
-        this.multMatrix(this.transformations[component.transformations.transformationref]);
+
+    /*if(component.id === this.graph.root) {
+        if(component.transformations.hasRef) {
+            this.currentMatrix = this.transformations[component.transformations.transformationref];
+        }
+        else {
+            for(var i=0; i < component.transformations.length; i++) {
+                var transformation = component.transformations[i];
+                var id = transformation.id;
+
+                var currentMatrix = this.setTransformation(id,transformation);
+
+            }
+        }
+    }*/
+
+    if(component.transformations.hasRef) {
+       // console.log(component.transformations.transformationref);
+        this.setTransformation(this.transformations[component.transformations.transformationref]);
     }
     else {
         for(var i=0; i < component.transformations.length; i++) {
             var transformation = component.transformations[i];
             var id = transformation.id;
-
-            var explicitTransformation = this.setTransformation(id,transformation);
-            this.multMatrix(explicitTransformation);
-
+            this.setTransformation(transformation);
         }
     }
 
+    for(var i=0; i<component.childrenNodes.length; i++) {
+        if(component.material[0] === 'inherit')
+            var material = fatherMaterial;
+        else
+            var material = this.materials[component.material[0]]
 
-    for(var i=0; component.children.length; i++) {
-        var material = this.materials[component.material[0]];
-        var texture = this.textures[component.texture[0]];
+        if(component.texture === 'inherit')
+            var texture = fatherTexture;
+        else
+            var texture = this.textures[component.texture];
 
-        if(material === 'inherit') {
-            material = this.materials[fatherMaterial];
-        }
-
-        if(texture === 'inherit') {
-            texture = this.materials[fatherTexture];
-        }
 
         if(texture !== 'none') {
-            material.setTexture(texture);
+           material.setTexture(texture);
         }
 
-        material.apply;
+        material.apply();
 
-        if (component.children[i] === "component") {
-            this.setComponent(this.graph.components[component.children[i].id], texture, material);
+        if (component.childrenNodes[i].type === "component") {
+
+            this.setComponent(this.graph.components[component.childrenNodes[i].id], texture, material);
+
         }
         else {
-            this.primitives[component.children[i].id].display();
+            this.primitives[component.childrenNodes[i].id].display();
+           // console.log('Draw primitive '+component.childrenNodes[i].id+"'");
         }
     }
     this.popMatrix();
@@ -327,6 +360,7 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.setTransformations();
     this.setTextures();
     this.setPrimitives();
+    this.interface.addLights();
 };
 
 XMLscene.prototype.display = function () {
@@ -346,9 +380,10 @@ XMLscene.prototype.display = function () {
 	// Draw axis
 	//this.axis.display();
 
-   //this.rect.display();
+
    // this.torus.display();
-    this.cylinder.display();
+   //this.cylinder.display();
+
 	this.setDefaultAppearance();
 
 	// ---- END Background, camera and axis setup
@@ -357,7 +392,17 @@ XMLscene.prototype.display = function () {
 	// only get executed after the graph has loaded correctly.
 	// This is one possible way to do it
 	if (this.graph.loadedOk) {
+       // this.rect.display();
+        for(var i=0; i<this.lights.length;i++) {
+            if(this.lightStatus[i])
+                this.lights[i].enable();
+            else
+                this.lights[i].disable();
+            this.lights[i].update();
+        }
 	   this.setComponent(this.graph.components[this.graph.root]);
+
+
 	}
 };
 
