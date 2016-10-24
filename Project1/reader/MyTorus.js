@@ -45,12 +45,11 @@ MyTorus.prototype.initBuffers = function () {
             var y = (this.outter + (this.inner * Math.cos(theta))) * Math.sin(phi);
             var z = this.inner * Math.sin(theta);    //raio *
 
-            var u = 1 - (longNumber / this.slices);
-            var v = 1 - (latNumber / this.loops);
+
 
             this.vertices.push(x,y,z);
             this.normals.push(x,y,z);
-            this.textureCoords.push(v,u);
+            this.textureCoords.push(1 - (latNumber / this.loops), 1 - (longNumber / this.slices));
 
         }
     }
@@ -60,18 +59,10 @@ MyTorus.prototype.initBuffers = function () {
     {
         for(var longNumber= 0; longNumber < this.slices ; longNumber++)
         {
-            var first = (latNumber * (this.slices + 1)) + longNumber;
-            var second = first + this.slices + 1;
 
-            // this.indices.push(first);
-            //  this.indices.push(second);
-            //  this.indices.push(first + 1);
-            //  this.indices.push(second);
-            //  this.indices.push(second + 1);
-            //  this.indices.push(first + 1);
+            this.indices.push((latNumber * (this.slices + 1)) + longNumber, ((latNumber * (this.slices + 1)) + longNumber) + this.slices + 1 + 1, ((latNumber * (this.slices + 1)) + longNumber) + this.slices + 1);
+            this.indices.push((latNumber * (this.slices + 1)) + longNumber, ((latNumber * (this.slices + 1)) + longNumber) + 1, ((latNumber * (this.slices + 1)) + longNumber) + this.slices + 1 + 1);
 
-            this.indices.push(first, second + 1, second);
-            this.indices.push(first, first + 1, second + 1);
 
         }
 

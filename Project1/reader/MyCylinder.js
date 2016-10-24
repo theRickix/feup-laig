@@ -33,7 +33,6 @@ MyCylinder.prototype.display = function () {
     this.scene.translate(0, 0, 1);
     this.bottom.display();
     this.scene.popMatrix();
-
     this.scene.pushMatrix();
     this.scene.rotate(Math.PI, 0, 1, 0);
     this.top.display();
