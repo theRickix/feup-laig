@@ -466,7 +466,7 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 		if(transformation[0].getElementsByTagName("transformationref").length > 0) {
 			var transformationref = transformation[0].getElementsByTagName("transformationref");
 			tmp_component['transformations']['hasRef'] = true;
-			console.log(this.reader.getString(transformationref[0],'id'));
+			//console.log(this.reader.getString(transformationref[0],'id'));
 			tmp_component['transformations']['transformationref'] = this.reader.getString(transformationref[0],'id');
 			//console.log(tmp_component.transformations.transformationref);
 		}

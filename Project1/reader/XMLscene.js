@@ -400,7 +400,7 @@ XMLscene.prototype.display = function () {
 
 	this.applyViewMatrix();
 
-	this.axis.display();
+	//this.axis.display();
 
 	this.setDefaultAppearance();
 
