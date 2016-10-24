@@ -2,15 +2,22 @@
  * MySphere
  * @constructor
  */
-function MySphere(scene, radius, slices, stacks) {
+
+function MySphere (scene, id, radius, slices, stacks)
+{
     CGFobject.call(this,scene);
 
+    this.id = id;
     this.radius = radius;
     this.slices = slices;
     this.stacks = stacks;
 
+
     this.initBuffers();
-}
+
+
+
+};
 
 
 MySphere.prototype = Object.create(CGFobject.prototype);
@@ -18,57 +25,38 @@ MySphere.prototype.constructor = MySphere;
 
 MySphere.prototype.initBuffers = function() {
 
+    this.primitiveType = this.scene.gl.TRIANGLES;
+
     this.vertices = [];
     this.indices = [];
     this.normals = [];
-    this.texCoords = [];
+    this.texCoords=[];
 
 
-    var angLat = 2 * Math.PI / this.slices;
-    var angVert = Math.PI / this.stacks;
+    var theta = Math.PI / this.stacks;
+    var phi = 2*Math.PI / this.slices;
 
 
-    //Vertices & Normals
-    for (var i = this.stacks; i >= 0; i--) {
-
-        for (var j = 0; j < this.slices; j++) {
-
-            this.vertices.push(
-                Math.cos(angLat * j) * Math.sin(angVert * i) * this.radius,
-                Math.cos(angVert * i) * this.radius,
-                Math.sin(angLat * j) * Math.sin(angVert * i) * this.radius);
-
-            this.normals.push(
-                Math.cos(angLat * j) * Math.sin(angVert * i),
-                Math.cos(angVert * i),
-                Math.sin(angLat * j) * Math.sin(angVert * i));
-
-            var s = 1 - (i / this.stacks);
-            var t = 1 - (j / this.slices);
-
-            this.texCoords.push(s,t);
-
+    for ( var latband = 0; latband <= this.stacks; ++latband)
+    {
+        for (var longBand = 0; longBand <=this.slices; ++longBand)
+        {
+            this.vertices.push(this.radius * Math.sin(latband * theta) * Math.cos(longBand * phi), this.radius * Math.sin(latband * theta) * Math.sin(longBand * phi), this.radius * Math.cos(latband * theta));
+            this.normals.push(Math.sin(latband * theta) * Math.cos(longBand * phi), Math.sin(latband * theta) * Math.sin(longBand * phi), Math.cos(latband * theta));
+            this.texCoords.push(longBand/this.slices, latband/this.stacks);
         }
-        t -= this.textT;
     }
 
-
-    for (var j = 0; j < this.stacks; j++) {
-        for (var i = 0; i < this.slices; i++) {
-
-            this.indices.push(
-                (j * (this.slices + 1)) + i,
-                (j * (this.slices + 1)) + i + this.slices + 1 + 1,
-                (j * (this.slices + 1)) + i + this.slices + 1);
-            this.indices.push(
-                (j * (this.slices + 1)) + i,
-                (j * (this.slices + 1)) + i + 1,
-                (j * (this.slices + 1)) + i + this.slices + 1 + 1);
+    for ( var latband = 0; latband < this.stacks; ++latband)
+    {
+        for(var longBand = 0; longBand < this.slices; ++longBand)
+        {
+            this.indices.push(latband * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand + 1);
+            this.indices.push(latband * (this.slices + 1) + longBand, (latband + 1) * (this.slices + 1) + longBand + 1, latband * (this.slices + 1) + longBand + 1);
         }
-
     }
 
-    this.primitiveType = this.scene.gl.TRIANGLES;
+    //this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
-};
 
+};
