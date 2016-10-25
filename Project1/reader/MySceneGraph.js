@@ -386,7 +386,7 @@ MySceneGraph.prototype.parseRectangle= function(element,id) {
 	var x2 = this.reader.getFloat(element, 'x2');
 	var y2 = this.reader.getFloat(element, 'y2');
 
-	var primitive = new MyRectangle(this.scene,id,x1,y1,x2,y2);
+	var primitive = new MyRectangle(this.scene,x1,y1,x2,y2);
 	primitive['id'] = id;
 	this.primitives.push(primitive);
 

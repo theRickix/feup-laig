@@ -2,10 +2,9 @@
  * MyRectangle
  * @constructor
  */
-function MyRectangle(scene, id, x1, y1, x2, y2) {
+function MyRectangle(scene,x1, y1, x2, y2) {
     CGFobject.call(this,scene);
 
-    this.id = id;
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
