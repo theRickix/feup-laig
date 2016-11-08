@@ -405,8 +405,6 @@ XMLscene.prototype.display = function () {
 
 	this.setDefaultAppearance();
 
-    this.diamond.display();
-
 	if (this.graph.loadedOk) {
         for(var i=0; i<this.lights.length;i++) {
             if(this.lightStatus[i])
