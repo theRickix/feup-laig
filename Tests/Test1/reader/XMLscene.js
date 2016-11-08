@@ -25,6 +25,7 @@ XMLscene.prototype.init = function (application) {
     this.torus = new MyTorus(this,5,10,5,5);
     this.sphere = new MySphere(this,'',2,10,10);
     this.cylinder = new MyCylinder(this,5,5,10,5,5);
+    this.diamond = new MyDiamond(this,15);
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -406,6 +407,7 @@ XMLscene.prototype.display = function () {
 	this.setDefaultAppearance();
 
     this.diamond.display();
+    //this.rect.display();
 
 	if (this.graph.loadedOk) {
         for(var i=0; i<this.lights.length;i++) {
@@ -415,7 +417,7 @@ XMLscene.prototype.display = function () {
                 this.lights[i].disable();
             this.lights[i].update();
         }
-	   this.setComponent(this.graph.components[this.graph.root],null,null);
+	   //this.setComponent(this.graph.components[this.graph.root],null,null);
 
 
 	}
