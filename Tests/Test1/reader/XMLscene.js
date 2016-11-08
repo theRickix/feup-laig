@@ -25,7 +25,7 @@ XMLscene.prototype.init = function (application) {
     this.torus = new MyTorus(this,5,10,5,5);
     this.sphere = new MySphere(this,'',2,10,10);
     this.cylinder = new MyCylinder(this,5,5,10,5,5);
-    this.diamond = new MyDiamond(this,15);
+    this.diamond = new MyDiamond(this,5);
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
