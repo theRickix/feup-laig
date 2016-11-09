@@ -392,6 +392,7 @@ XMLscene.prototype.onGraphLoaded = function ()
 	/*this.gl.clearColor(this.graph.background[0],this.graph.background[1],this.graph.background[2],this.graph.background[3]);
 	this.lights[0].setVisible(true);
     this.lights[0].enable();*/
+	//inicializa objetos para desenhar, menos os componentes
 	this.setAxis();
 	this.setIllumination();
     this.setCameras();
@@ -430,7 +431,7 @@ XMLscene.prototype.display = function () {
                 this.lights[i].disable();
             this.lights[i].update();
         }
-	   //this.setComponent(this.graph.components[this.graph.root],null,null);
+	   this.setComponent(this.graph.components[this.graph.root],null,null);
 
 
 	}
