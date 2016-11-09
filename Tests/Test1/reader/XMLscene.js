@@ -26,6 +26,9 @@ XMLscene.prototype.init = function (application) {
     this.sphere = new MySphere(this,'',2,10,10);
     this.cylinder = new MyCylinder(this,5,5,10,5,5);
     this.diamond = new MyDiamond(this,5);
+
+    this.material = new CGFappearance(this);
+    this.texture = new CGFtexture(this,"blabla.jpeg");
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
@@ -311,6 +314,7 @@ XMLscene.prototype.setPrimitives = function () {
  */
 XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMaterial) {
     //console.log(component.id);
+    //Aplica nova matriz
     this.pushMatrix();
 
     if(component.transformations.hasRef) {
@@ -326,10 +330,16 @@ XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMateri
     }
 
     for(var i=0; i<component.childrenNodes.length; i++) {
-        if(component.material[0] === 'inherit')
+        if(this.graph.material_force === false) {
+            if(component.material[0] === 'inherit')
+                var material = fatherMaterial;
+            else
+                var material = this.materials[component.material[0]];
+        }
+        else {
             var material = fatherMaterial;
-        else
-            var material = this.materials[component.material[0]]
+        }
+
 
         if(component.texture === 'inherit')
             var texture = fatherTexture;
@@ -353,6 +363,7 @@ XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMateri
            // console.log('Draw primitive '+component.childrenNodes[i].id+"'");
         }
     }
+    //Volta para a matriz anterior quando chega a uma primitiva
     this.popMatrix();
 
 };
@@ -406,6 +417,8 @@ XMLscene.prototype.display = function () {
 
 	this.setDefaultAppearance();
 
+    this.material.setTexture(texture);
+    this.material.apply();
     this.diamond.display();
     //this.rect.display();
 

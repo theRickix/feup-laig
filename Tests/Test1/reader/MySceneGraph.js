@@ -276,6 +276,9 @@ MySceneGraph.prototype.parseMaterials= function(rootElement) {
 	var elems =  rootElement.getElementsByTagName('materials');
 	var materials=elems[0];
 
+	//EX2
+	//var material_force = this.reader.getBoolean(materials,'force');
+
 	this.materials = [];
 
 	for(var i=0; i < materials.childElementCount; i++) {
@@ -374,6 +377,10 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 			case "torus":
 				this.parseTorus(primitive.children[0],id);
 				break;
+
+			case "diamond":
+				this.parseDiamond(primitive.children[0],id);
+				break;
 		}
 
 	}
@@ -387,6 +394,15 @@ MySceneGraph.prototype.parseRectangle= function(element,id) {
 	var y2 = this.reader.getFloat(element, 'y2');
 
 	var primitive = new MyRectangle(this.scene,x1,y1,x2,y2);
+	primitive['id'] = id;
+	this.primitives.push(primitive);
+
+};
+
+MySceneGraph.prototype.parseDiamond= function(element,id) {
+	var slices = this.reader.getFloat(element, 'slices');
+
+	var primitive = new MyDiamond(this.scene,slices);
 	primitive['id'] = id;
 	this.primitives.push(primitive);
 
