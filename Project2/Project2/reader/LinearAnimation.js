@@ -1,4 +1,4 @@
-function LinearAnimation(id,span,controlPoints,scene) {
+function LinearAnimation(scene,id,span,controlPoints) {
     init(id,scene);
 
     this.span = span;
@@ -7,8 +7,9 @@ function LinearAnimation(id,span,controlPoints,scene) {
     this.vectors = [];
     this.inc = [];
 
-    this.currentPoint = 0;
-    this.points = [];
+    this.currentControlPoint = 0; //indice de ponto de controlo
+    this.currentPoint = this.controlPoints[0]; //current point
+    //this.points = [];
 
     this.calcPoints();
 
@@ -34,7 +35,7 @@ LinearAnimation.prototype.calcPoints = function () {
         this.inc[i] = calcInc(time,this.vectors[i]);
     }
 
-    var i=1;
+   /* var i=1;
     var notFinished = true;
     var controlPointDestination = 1;
 
@@ -50,7 +51,7 @@ LinearAnimation.prototype.calcPoints = function () {
         this.points[i][2] = this.points[i-0][2] + this.inc[controlPointDestination-1][2]; //increment z
         if(this.points[i] == this.controlPoints[controlPointDestination])
             controlPointDestination++; //next
-    }
+    }*/
 }
 
 LinearAnimation.prototype.calcInc = function(time,vector) {
@@ -64,16 +65,24 @@ LinearAnimation.prototype.calcInc = function(time,vector) {
 }
 
 LinearAnimation.prototype.animate = function() {
-    if(this.currentPoint >= this.points.length) {
-        this.scene.translate(this.points[this.currentPoint][0],
-                            this.points[this.currentPoint][1],
-                            this.points[this.currentPoint][2]);
+    if(this.currentControlPoint >= this.controlPoints.length) {
+        this.scene.translate(this.inc[this.currentControlPoint - 1][0],
+                            this.inc[this.currentControlPoint - 1][1],
+                            this.inc[this.currentControlPoint - 1][2]);
 
+        this.finished = true;
         return;
     }
 
-    this.scene.translate(this.points[this.currentPoint][0],
-                        this.points[this.currentPoint][1],
-                        this.points[this.currentPoint][2]);
+    this.scene.translate(this.inc[this.currentControlPoint - 1][0],
+                            this.inc[this.currentControlPoint - 1][1],
+                            this.inc[this.currentControlPoint - 1][2]);
+
+    this.currentPoint[0] += this.inc[this.currentControlPoint - 1][0];
+    this.currentPoint[1] += this.inc[this.currentControlPoint - 1][1];
+    this.currentPoint[2] += this.inc[this.currentControlPoint - 1][2];
+
+    if(this.currentPoint == this.controlPoints[this.currentControlPoint])
+        this.currentControlPoint++;
 
 }
