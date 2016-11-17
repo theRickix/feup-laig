@@ -417,6 +417,19 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 			case "torus":
 				this.parseTorus(primitive.children[0],id);
 				break;
+
+			case "plane":
+				this.parsePlane(primitive.children[0],id);
+				break;
+
+			case "patch":
+				this.parsePatch(primitive.children[0],id);
+				break;
+
+			case "vehicle":
+				//new Vehicle blabla, since it doesn't have anything to parse
+				break;
+
 		}
 
 	}
@@ -474,6 +487,14 @@ MySceneGraph.prototype.parseSphere= function(element,id) {
 	var primitive = new MySphere(this.scene,radius,slices,stacks);
 	primitive['id'] = id;
 	this.primitives.push(primitive);
+};
+
+MySceneGraph.prototype.parsePlane= function(element,id) {
+	//TODO
+};
+
+MySceneGraph.prototype.parsePatch= function(element,id) {
+	//TODO
 };
 
 MySceneGraph.prototype.parseTorus= function(element,id) {
