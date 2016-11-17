@@ -76,6 +76,12 @@ MySceneGraph.prototype.onXMLReady=function()
 		return;
 	}
 
+	error = this.parseAnimations(rootElement);
+	if (error != null) {
+		this.onXMLError(error);
+		return;
+	}
+
 	error = this.parsePrimitives(rootElement);
 	if (error != null) {
 		this.onXMLError(error);
@@ -343,6 +349,43 @@ MySceneGraph.prototype.parseTransformations= function(rootElement) {
 	}
 };
 
+MySceneGraph.prototype.parseAnimations= function(rootElement) {
+	var elems =  rootElement.getElementsByTagName('animations');
+
+	var animations = elems[0];
+	this.animations = [];
+	//console.log(transformations.childElementCount);
+	for(var i=0; i < animations.childElementCount; i++) {
+
+		var animation =  animations.children[i];
+
+		var tmp_animation = [];
+		tmp_animation['id'] = this.reader.getString(animation,'id');
+		tmp_animation['type'] = this.reader.getString(animation,'type');
+		tmp_animation['span'] = this.reader.getString(animation,'span');
+
+		if (type==='linear') {
+			tmp_animation['controlpoints'] = [];
+			for(var j=0; j<animation.childElementCount; j++) {
+				var control_point =  animation.children[i];
+				tmp_animation.push(this.parseCoordinates(control_point,false));
+			}
+		}
+		else {
+			var center = this.reader.getString(animation,'center');
+			tmp_animation['center'] = center.split(" ");
+
+			tmp_animation['radius'] = this.reader.getString(animation,'radius');
+			tmp_animation['startang'] = this.reader.getString(animation,'endang');
+			tmp_animation['rotang'] = this.reader.getString(animation,'rotang');
+		}
+
+
+		this.transformations.push(tmp_animation);
+		console.log("Animation #"+i+"' with id '"+animation.id+"' added!");
+	}
+};
+
 MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 	var elems =  rootElement.getElementsByTagName('primitives');
 
@@ -497,6 +540,16 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 			}
 			tmp_component['transformations']['hasRef'] = false;
 		}
+
+		//ANIMATIONS
+		var animation = component.getElementsByTagName("animation");
+
+		tmp_component['animation'] = [];
+		for(var j=0; j<animation[0].childElementCount; j++) {
+			var id = this.reader.getString(animation[0].children[j], "id");
+			tmp_component.animation.push(id);
+		}
+
 
 		//MATERIALS
 		var materials = component.getElementsByTagName("materials");
