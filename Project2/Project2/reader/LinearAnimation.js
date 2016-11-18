@@ -1,24 +1,27 @@
 function LinearAnimation(scene,id,span,controlPoints) {
     init(id,scene);
 
-    this.span = span;
+    this.span = span*1000;
     this.controlPoints = controlPoints;
 
     this.vectors = [];
-    this.inc = [];
 
-    this.currentControlPoint = 0; //indice de ponto de controlo
+    this.currentControlPoint = 0; //indice de ponto de controlo atual
     this.currentPoint = this.controlPoints[0]; //current point
     //this.points = [];
 
-    this.calcPoints();
+    this.time_begin = null; //time of animation begin
+    this.time_begin_point = 0; //time of control point begin
+    this.time_between_points = this.span/(this.controlPoints.length-1); //time elapsed between control points
+
+    this.calcVectors();
 
 }
 
 LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
 
-LinearAnimation.prototype.calcPoints = function () {
+LinearAnimation.prototype.calcVectors = function () {
 
     for(var i=1; i<this.controlPoints.length; i++) {
         var vector = [];
@@ -28,61 +31,50 @@ LinearAnimation.prototype.calcPoints = function () {
         this.vectors.push(vector);
     }
 
-    var time = this.span/(this.controlPoints.length - 1);
-
-
-    for(var i=0; i<this.vectors.length; i++) {
-        this.inc[i] = calcInc(time,this.vectors[i]);
-    }
-
-   /* var i=1;
-    var notFinished = true;
-    var controlPointDestination = 1;
-
-    //initialize points with first control point
-    this.points[0][0] = this.controlPoints[0][0];
-    this.points[0][1] = this.controlPoints[0][1];
-    this.points[0][2] = this.controlPoints[0][2];
-
-    //create all points, including intermediates
-    while(notFinished) {
-        this.points[i][0] = this.points[i-0][0] + this.inc[controlPointDestination-1][0]; //increment x
-        this.points[i][1] = this.points[i-0][1] + this.inc[controlPointDestination-1][1]; //increment y
-        this.points[i][2] = this.points[i-0][2] + this.inc[controlPointDestination-1][2]; //increment z
-        if(this.points[i] == this.controlPoints[controlPointDestination])
-            controlPointDestination++; //next
-    }*/
 }
 
-LinearAnimation.prototype.calcInc = function(time,vector) {
+LinearAnimation.prototype.calcInc = function(timeElapsed,vector) {
     var inc = [];
 
-    inc[0] = vector[0] / (30 * time);
-    inc[1] = vector[1] / (30 * time);
-    inc[2] = vector[2] / (30 * time);
+    inc[0] = vector[0] / timeElapsed;
+    inc[1] = vector[1] / timeElapsed;
+    inc[2] = vector[2] / timeElapsed;
 
     return inc;
 }
 
-LinearAnimation.prototype.animate = function() {
-    if(this.currentControlPoint >= this.controlPoints.length) {
-        this.scene.translate(this.inc[this.currentControlPoint - 1][0],
-                            this.inc[this.currentControlPoint - 1][1],
-                            this.inc[this.currentControlPoint - 1][2]);
+LinearAnimation.prototype.animate = function(time) {
 
+    //animation begin
+    if(this.time_begin === null) {}
+        this.time_begin = this.time_begin_point = time;
+
+
+    if(this.currentControlPoint >= this.controlPoints.length) {
         this.finished = true;
-        return;
+        return this.finished;
     }
 
-    this.scene.translate(this.inc[this.currentControlPoint - 1][0],
-                            this.inc[this.currentControlPoint - 1][1],
-                            this.inc[this.currentControlPoint - 1][2]);
+    //calculate incrementation in relation to elapsed time
+    var inc = this.calcInc(this.time_between_points-(time-this.time_begin_point),
+                         this.vectors[this.currentControlPoint]);
 
-    this.currentPoint[0] += this.inc[this.currentControlPoint - 1][0];
-    this.currentPoint[1] += this.inc[this.currentControlPoint - 1][1];
-    this.currentPoint[2] += this.inc[this.currentControlPoint - 1][2];
+    //translate to next point
+    this.scene.translate(inc[0], inc[1], inc[2]);
 
-    if(this.currentPoint == this.controlPoints[this.currentControlPoint])
+    //calculate the point translated
+    this.currentPoint[0] += inc[0];
+    this.currentPoint[1] += inc[1];
+    this.currentPoint[2] += inc[2];
+
+    if(this.currentPoint >= this.controlPoints[this.currentControlPoint+1])
         this.currentControlPoint++;
 
+    var deltaPoint = (time-this.time_begin_point)/this.time_between_points;
+
+    if(deltaPoint === 1) {
+        this.time_begin_point = time;
+        deltaPoint = 0;
+        this.currentControlPoint++;
+    }
 }
