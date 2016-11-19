@@ -490,11 +490,46 @@ MySceneGraph.prototype.parseSphere= function(element,id) {
 };
 
 MySceneGraph.prototype.parsePlane= function(element,id) {
-	//TODO
+	var dimX = this.reader.getFloat(element, 'dimX');
+	var dimY = this.reader.getFloat(element, 'dimY');
+	var partsX = this.reader.getInteger(element, 'partsX');
+	var partsY = this.reader.getInteger(element, 'partsY');
+
+	var primitive = new MyPlane(this.scene,dimX,dimY,partsX,partsY);
+	primitive['id'] = id;
+	this.primitives.push(primitive);
+
 };
 
 MySceneGraph.prototype.parsePatch= function(element,id) {
-	//TODO
+
+
+	var elems =  rootElement.getElementsByTagName('patch');
+
+
+	var patch = elems[0];
+
+	this.patch = [];
+
+	this.patch['OrderU'] = this.reader.getInteger(patch, "OrderU");
+	this.patch['OrderV'] = this.reader.getInteger(patch, "OrderV");
+	this.patch['PartsU'] = this.reader.getInteger(patch, "OrderU");
+	this.patch['PartsV'] = this.reader.getInteger(patch, "PartsV");
+
+	var controlpoint = patch.getElementsByTagName("controlpoint");
+
+
+	this.patch['controlpoint'] = this.parseCoordinates(controlpoint[0]);
+
+
+};
+
+MySceneGraph.prototype.parseVehicle= function(element,id) {
+
+	var primitive = new MyVehicle(this.scene);
+	primitive['id'] = id;
+
+	this.primitives.push(primitive);
 };
 
 MySceneGraph.prototype.parseTorus= function(element,id) {
