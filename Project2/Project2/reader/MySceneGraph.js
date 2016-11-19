@@ -361,14 +361,14 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 
 		var tmp_animation = [];
 		tmp_animation['id'] = this.reader.getString(animation,'id');
-		tmp_animation['type'] = this.reader.getString(animation,'type');
+		tmp_animation['anim_type'] = this.reader.getString(animation,'type');
 		tmp_animation['span'] = this.reader.getString(animation,'span');
 
-		if (type==='linear') {
+		if (tmp_animation.anim_type==='linear') {
 			tmp_animation['controlpoints'] = [];
 			for(var j=0; j<animation.childElementCount; j++) {
-				var control_point =  animation.children[i];
-				tmp_animation.push(this.parseCoordinates(control_point,false));
+				var control_point = animation.children[j];
+				tmp_animation.controlpoints.push(this.parseCoordinatesAnimation(control_point));
 			}
 		}
 		else {
@@ -381,7 +381,7 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 		}
 
 
-		this.transformations.push(tmp_animation);
+		this.animations.push(tmp_animation);
 		console.log("Animation #"+i+"' with id '"+animation.id+"' added!");
 	}
 };
@@ -606,7 +606,6 @@ MySceneGraph.prototype.parseComponents= function(rootElement) {
 			tmp_component.animation.push(id);
 		}
 
-
 		//MATERIALS
 		var materials = component.getElementsByTagName("materials");
 
@@ -658,6 +657,14 @@ MySceneGraph.prototype.parseCoordinates= function(element,hasW) {
 		return vec4.fromValues(x, y, z, w);
 	}
 };
+
+MySceneGraph.prototype.parseCoordinatesAnimation= function(element) {
+	var x = this.reader.getFloat(element, 'xx');
+	var y = this.reader.getFloat(element, 'yy');
+	var z = this.reader.getFloat(element, 'zz');
+	return vec3.fromValues(x, y, z);
+
+}
 
 MySceneGraph.prototype.parseColours= function(element) {
 	var r = this.reader.getFloat(element, 'r');

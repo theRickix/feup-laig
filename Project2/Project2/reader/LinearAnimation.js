@@ -1,80 +1,113 @@
 function LinearAnimation(scene,id,span,controlPoints) {
-    init(id,scene);
+    this.init(id,scene);
 
     this.span = span*1000;
+
     this.controlPoints = controlPoints;
 
-    this.vectors = [];
+    this.span_per_control = this.span/this.controlPoints.length;
+
+    this.totaldistance = 0;
 
     this.currentControlPoint = 0; //indice de ponto de controlo atual
-    this.currentPoint = this.controlPoints[0]; //current point
-    //this.points = [];
+    this.currentPoint = vec3.fromValues(0,0,0); //initialize current point
 
-    this.time_begin = null; //time of animation begin
-    this.time_begin_point = 0; //time of control point begin
-    this.time_between_points = this.span/(this.controlPoints.length-1); //time elapsed between control points
+    this.time_begin = -1; //time of animation begin
 
-    this.calcVectors();
+    this.calcTotalDistances();
 
 }
 
 LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
 
-LinearAnimation.prototype.calcVectors = function () {
+LinearAnimation.prototype.calcTotalDistances = function () {
+    this.distX = 0;
+    this.distY = 0;
+    this.distZ = 0;
 
     for(var i=1; i<this.controlPoints.length; i++) {
-        var vector = [];
-        vector[0] = this.controlPoints[i][0] - this.controlPoints[i-1][0];
-        vector[1] = this.controlPoints[i][1] - this.controlPoints[i-1][1];
-        vector[2] = this.controlPoints[i][2] - this.controlPoints[i-1][2];
-        this.vectors.push(vector);
+        this.distX[i] = this.controlPoints[i][0] - this.controlPoints[i-1][0];
+        this.distY[i] = this.controlPoints[i][1] - this.controlPoints[i-1][1];
+        this.distZ[i] = this.controlPoints[i][2] - this.controlPoints[i-1][2];
     }
 
 }
 
-LinearAnimation.prototype.calcInc = function(timeElapsed,vector) {
-    var inc = [];
+LinearAnimation.prototype.calcTotalDistances = function () {
+    this.distX = 0;
+    this.distY = 0;
+    this.distZ = 0;
 
-    inc[0] = vector[0] / timeElapsed;
-    inc[1] = vector[1] / timeElapsed;
-    inc[2] = vector[2] / timeElapsed;
+    for(var i=1; i<this.controlPoints.length; i++) {
+        this.distX[i] = this.controlPoints[i][0] - this.controlPoints[i-1][0];
+        this.distY[i] = this.controlPoints[i][1] - this.controlPoints[i-1][1];
+        this.distZ[i] = this.controlPoints[i][2] - this.controlPoints[i-1][2];
+    }
 
-    return inc;
 }
+
+
 
 LinearAnimation.prototype.animate = function(time) {
+    console.log('ANIMATION');
 
     //animation begin
-    if(this.time_begin === null) {}
-        this.time_begin = this.time_begin_point = time;
-
-
-    if(this.currentControlPoint >= this.controlPoints.length) {
-        this.finished = true;
-        return this.finished;
-    }
-
-    //calculate incrementation in relation to elapsed time
-    var inc = this.calcInc(this.time_between_points-(time-this.time_begin_point),
-                         this.vectors[this.currentControlPoint]);
-
-    //translate to next point
-    this.scene.translate(inc[0], inc[1], inc[2]);
-
-    //calculate the point translated
-    this.currentPoint[0] += inc[0];
-    this.currentPoint[1] += inc[1];
-    this.currentPoint[2] += inc[2];
-
-    if(this.currentPoint >= this.controlPoints[this.currentControlPoint+1])
-        this.currentControlPoint++;
-
-    var deltaPoint = (time-this.time_begin_point)/this.time_between_points;
-
-    if(deltaPoint === 1) {
+    if (this.time_begin == -1) {
+        this.time_begin = time;
+        this.time_last_frame = time;
         this.time_begin_point = time;
-        deltaPoint = 0;
-        this.currentControlPoint++;
     }
+    else {
+
+
+        //time between frames
+        var deltaframe = time - this.time_last_frame;
+        var time_passed = time-this.time_begin_point;
+        var time_to_control = this.span_per_control-time_passed;
+
+        var deltapointX = this.controlPoints[this.currentControlPoint][0]-this.currentPoint[0];
+        var deltapointY = this.controlPoints[this.currentControlPoint][1]-this.currentPoint[1];
+        var deltapointZ = this.controlPoints[this.currentControlPoint][2]-this.currentPoint[2];
+
+        this.velocityX = deltapointX / time_to_control;
+        this.velocityY = deltapointY / time_to_control;
+        this.velocityZ = deltapointZ / time_to_control;
+
+        //calculate the point translated in relation to direction
+        this.currentPoint[0] += this.velocityX*deltaframe;
+        this.currentPoint[1] += this.velocityY*deltaframe;
+        this.currentPoint[2] += this.velocityZ*deltaframe;
+
+        console.log(deltapointX);
+
+        //translate to next point
+        this.scene.translate(this.currentPoint[0],this.currentPoint[1],this.currentPoint[2]);
+
+        if(time-this.time_begin_point >= this.span_per_control) {
+            this.currentControlPoint++;
+            this.time_begin_point=time;
+
+
+            this.currentPoint[0] = this.controlPoints[this.currentControlPoint-1][0];
+            this.currentPoint[1] = this.controlPoints[this.currentControlPoint-1][1];
+            this.currentPoint[2] = this.controlPoints[this.currentControlPoint-1][2];
+
+        }
+
+        if (this.currentControlPoint >= this.controlPoints.length) {
+            this.finished = true;
+        }
+
+        this.time_last_frame = time;
+
+    }
+
+
+
+
+}
+
+LinearAnimation.prototype.lastPoint = function(time) {
+    this.scene.translate(this.currentPoint[0],this.currentPoint[1],this.currentPoint[2]);
 }

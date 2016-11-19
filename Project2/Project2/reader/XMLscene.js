@@ -290,6 +290,28 @@ XMLscene.prototype.setTextures = function () {
 };
 
 /*
+ * Set given animations
+ */
+XMLscene.prototype.setAnimations = function () {
+    this.animations = [];
+
+    for(var i=0; i < this.graph.animations.length; i++) {
+        var animation = this.graph.animations[i];
+        var id = animation.id;
+
+        if(animation.anim_type == 'linear') {
+            this.animations[id] = new LinearAnimation(this,id,animation.span,animation.controlpoints);
+        }
+        else {
+            this.animations[id] = new CircularAnimation(this,id,animation.span, animation.center, animation.radius, animation.startang, animation.rotang);
+        }
+
+        this.animations[id].anim_type = animation.anim_type;
+        console.log('Animation #'+i+": OK!");
+    }
+};
+
+/*
  * Set all the primitives
  */
 XMLscene.prototype.setPrimitives = function () {
@@ -342,6 +364,18 @@ XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMateri
 
         material.apply();
 
+        for(var j=0; j<component.animation.length; j++) {
+            //if the animation hasn't finished, continue animating; break is used so it won't go to another animation while performing this one
+            if(!this.animations[component.animation[j]].hasFinished()) {
+                this.animations[component.animation[j]].animate(Date.now());
+                break;
+            }
+            //if it has finished, translate to last point; this is because next animations will continue from this one
+            else {
+                this.animations[component.animation[j]].lastPoint();
+            }
+        }
+
         if (component.childrenNodes[i].type === "component") {
 
             this.setComponent(this.graph.components[component.childrenNodes[i].id], texture, material);
@@ -387,6 +421,7 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.setMaterials();
     this.setTransformations();
     this.setTextures();
+    this.setAnimations();
     this.setPrimitives();
     this.interface.addLights();
 
