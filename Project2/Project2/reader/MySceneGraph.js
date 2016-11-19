@@ -362,7 +362,7 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 		var tmp_animation = [];
 		tmp_animation['id'] = this.reader.getString(animation,'id');
 		tmp_animation['anim_type'] = this.reader.getString(animation,'type');
-		tmp_animation['span'] = this.reader.getString(animation,'span');
+		tmp_animation['span'] = this.reader.getInteger(animation,'span');
 
 		if (tmp_animation.anim_type==='linear') {
 			tmp_animation['controlpoints'] = [];
@@ -375,9 +375,9 @@ MySceneGraph.prototype.parseAnimations= function(rootElement) {
 			var center = this.reader.getString(animation,'center');
 			tmp_animation['center'] = center.split(" ");
 
-			tmp_animation['radius'] = this.reader.getString(animation,'radius');
-			tmp_animation['startang'] = this.reader.getString(animation,'endang');
-			tmp_animation['rotang'] = this.reader.getString(animation,'rotang');
+			tmp_animation['radius'] = this.reader.getInteger(animation,'radius');
+			tmp_animation['startang'] = this.reader.getInteger(animation,'startang');
+			tmp_animation['rotang'] = this.reader.getInteger(animation,'rotang');
 		}
 
 
@@ -502,24 +502,20 @@ MySceneGraph.prototype.parsePlane= function(element,id) {
 };
 
 MySceneGraph.prototype.parsePatch= function(element,id) {
+	var orderU = this.reader.getInteger(element, "orderU");
+	var orderV = this.reader.getInteger(element, "orderV");
+	var partsU = this.reader.getInteger(element, "partsU");
+	var partsV = this.reader.getInteger(element, "partsV");
 
+	var controlpoints = [];
 
-	var elems =  rootElement.getElementsByTagName('patch');
+	for(var i = 0; i<element.childElementCount;i++) {
+		controlpoints.push(this.parseCoordinates(element.children[i],false));
+	}
 
-
-	var patch = elems[0];
-
-	this.patch = [];
-
-	this.patch['OrderU'] = this.reader.getInteger(patch, "OrderU");
-	this.patch['OrderV'] = this.reader.getInteger(patch, "OrderV");
-	this.patch['PartsU'] = this.reader.getInteger(patch, "OrderU");
-	this.patch['PartsV'] = this.reader.getInteger(patch, "PartsV");
-
-	var controlpoint = patch.getElementsByTagName("controlpoint");
-
-
-	this.patch['controlpoint'] = this.parseCoordinates(controlpoint[0]);
+	var primitive = new MyPatch(this.scene,orderU,orderV,partsU,partsV,controlpoints);
+	primitive['id'] = id;
+	this.primitives.push(primitive);
 
 
 };

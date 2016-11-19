@@ -88,11 +88,6 @@ LinearAnimation.prototype.animate = function(time) {
             this.currentControlPoint++;
             this.time_begin_point=time;
 
-
-            this.currentPoint[0] = this.controlPoints[this.currentControlPoint-1][0];
-            this.currentPoint[1] = this.controlPoints[this.currentControlPoint-1][1];
-            this.currentPoint[2] = this.controlPoints[this.currentControlPoint-1][2];
-
         }
 
         if (this.currentControlPoint >= this.controlPoints.length) {

@@ -125,9 +125,12 @@
 
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <primitive id="sphere">
+        <primitive id="patch">
 
-            <sphere radius="5" slices="20" stacks="20" />
+            <patch orderU="2" orderV="3" partsU="7" partsV="9" >
+                <controlpoint x="0.0" y="0.0" z="0.0" />
+                <controlpoint x="2.0" y="1.0" z="0.0" />
+            </patch>
 
         </primitive>
 
@@ -146,8 +149,7 @@
             </transformation>
 
             <animation>
-                <animationref id="linear"/>
-                <animationref id="circular"/>
+
             </animation>
 
             <materials>
@@ -166,7 +168,7 @@
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
 
-                <primitiveref id="sphere" />
+                <primitiveref id="patch" />
 
             </children>
 
