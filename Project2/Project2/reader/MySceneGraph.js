@@ -430,6 +430,10 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 				//new Vehicle blabla, since it doesn't have anything to parse
 				break;
 
+			case "chessboard":
+				this.parseChessboard(primitive.children[0], id);
+				break;
+
 		}
 
 	}
@@ -518,6 +522,24 @@ MySceneGraph.prototype.parsePatch= function(element,id) {
 	this.primitives.push(primitive);
 
 
+};
+
+MySceneGraph.prototype.parseChessboard= function(element,id) {
+
+	var du = this.reader.getInteger(element, 'du');
+	var dv = this.reader.getInteger(element, 'dv');
+	var textureRef = this.reader.getString(element, 'textureref');
+	var color1 = this.parseColours(element.getElementsByTagName("c1")[0]);
+	var color2 = this.parseColours(element.getElementsByTagName("c2")[0]);
+	var colorSelected = this.parseColours(element.getElementsByTagName("cs")[0]);
+	var su = this.reader.getInteger(element, 'su');
+	var sv = this.reader.getInteger(element, 'sv');
+
+	var primitive = new MyChessboard(this.scene, du, dv, textureRef, su, sv, color1, color2, colorSelected);
+	primitive['id'] = id;
+	primitive['shader'] = 0;
+
+	this.primitives.push(primitive);
 };
 
 MySceneGraph.prototype.parseVehicle= function(element,id) {

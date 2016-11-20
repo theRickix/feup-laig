@@ -125,12 +125,15 @@
 
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <primitive id="patch">
+        <primitive id="chessboard">
 
-            <patch orderU="2" orderV="3" partsU="7" partsV="9" >
-                <controlpoint x="0.0" y="0.0" z="0.0" />
-                <controlpoint x="2.0" y="1.0" z="0.0" />
-            </patch>
+            <chessboard du="10" dv="10" textureref="floor.png" su="10" sv="10">
+                <c1 r="1" g="0" b="0" a="1" />
+                <c2 r="0" g="0" b="1" a="1" />
+                <cs r="0" g="1" b="0" a="1" />
+
+            </chessboard>
+
 
         </primitive>
 
@@ -168,7 +171,7 @@
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
 
-                <primitiveref id="patch" />
+                <primitiveref id="chessboard" />
 
             </children>
 
