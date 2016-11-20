@@ -1,11 +1,11 @@
-function MyPatch(scene, degU, degV, partsU, partsV, controlVertices)
+function MyPatch(scene, orderU, orderV, partsU, partsV, controlPoints)
 {
     this.scene = scene;
-    this.degU = degU;
-    this.degV = degV;
+    this.orderU = orderU;
+    this.orderV = orderV;
     this.partsU = partsU;
     this.partsV = partsV;
-    this.controlVertices = controlVertices;
+    this.controlPoints = controlPoints;
 
     this.initValues();
     this.buildSurf();
@@ -14,35 +14,33 @@ function MyPatch(scene, degU, degV, partsU, partsV, controlVertices)
 MyPatch.prototype = Object.create(MySurface.prototype);
 MyPatch.prototype.constructor = MyPatch;
 
-MyPatch.prototype.buildSurf = function()
-{
-    //Computes vertices according to given control vertices
-        this.computedVertices = [];
+MyPatch.prototype.buildSurf = function() {
+    //Computes vertices according to given control points
+    this.computedPoints = [];
 
-        for (var u = 0; u <= this.degU; u++)
-        {
-            var tmp = [];
-            for (var v = 0; v <= this.degV; v++)
-            {
-                tmp.push(this.controlVertices[u * (this.degV + 1) + v]);
-            }
-            this.computedVertices.push(tmp);
+    for (u = 0; u < this.orderU + 1; u++) {
+        var tmp = [];
+        for (var v = 0; v < this.orderV + 1; v++) {
+            tmp.push([this.controlPoints[u * (this.orderV + 1) + v][0], this.controlPoints[u * (this.orderV + 1) + v][1], this.controlPoints[u * (this.orderV + 1) + v][2], 1]);
         }
+        this.computedPoints.push(tmp);
+    }
 
-
-    //Generates knots vectors according to given degree
-
-
-    var knotsU = this.generateKnotsVector(this.degU);
-    var knotsV = this.generateKnotsVector(this.degV);
-
-    var patchNurbsSurface = new CGFnurbsSurface(this.degU, this.degV, knotsU, knotsV, this.computedVertices);
-    this.getSurfPoint = function(u, v)
+    var getSurfPoint = function(u, v)
     {
         return patchNurbsSurface.getPoint(u, v);
     }
 
-    this.surfaceObject = new CGFnurbsObject(this.scene, this.getSurfPoint(), this.partsU, this.partsV);
+    //Generates knots vectors according to given degree
+
+
+    var knotsU = this.generateKnotsVector(this.orderU);
+    var knotsV = this.generateKnotsVector(this.orderV);
+
+    var patchNurbsSurface = new CGFnurbsSurface(this.orderU, this.orderV, knotsU, knotsV, this.computedPoints);
+
+
+    this.surfaceObject = new CGFnurbsObject(this.scene, getSurfPoint, this.partsU, this.partsV);
 };
 
 MyPatch.prototype.generateKnotsVector = function(deg) {
