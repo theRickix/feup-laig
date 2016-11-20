@@ -1,4 +1,4 @@
-function  MyChessboard(scene, du, dv, textureref, su, sv, c1, c2, cs){
+function MyChessboard(scene, du, dv, textureref, su, sv, c1, c2, cs){
 	CGFobject.call(this,scene);
 	this.initBuffers();
 	this.scene = scene;
