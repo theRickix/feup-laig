@@ -427,7 +427,7 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 				break;
 
 			case "vehicle":
-				//new Vehicle blabla, since it doesn't have anything to parse
+				this.parseVehicle(id);
 				break;
 
 			case "chessboard":
@@ -542,7 +542,7 @@ MySceneGraph.prototype.parseChessboard= function(element,id) {
 	this.primitives.push(primitive);
 };
 
-MySceneGraph.prototype.parseVehicle= function(element,id) {
+MySceneGraph.prototype.parseVehicle= function(id) {
 
 	var primitive = new MyVehicle(this.scene);
 	primitive['id'] = id;

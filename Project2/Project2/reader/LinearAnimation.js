@@ -34,21 +34,6 @@ LinearAnimation.prototype.calcTotalDistances = function () {
 
 }
 
-LinearAnimation.prototype.calcTotalDistances = function () {
-    this.distX = 0;
-    this.distY = 0;
-    this.distZ = 0;
-
-    for(var i=1; i<this.controlPoints.length; i++) {
-        this.distX[i] = this.controlPoints[i][0] - this.controlPoints[i-1][0];
-        this.distY[i] = this.controlPoints[i][1] - this.controlPoints[i-1][1];
-        this.distZ[i] = this.controlPoints[i][2] - this.controlPoints[i-1][2];
-    }
-
-}
-
-
-
 LinearAnimation.prototype.animate = function(time) {
     console.log('ANIMATION');
 
@@ -95,12 +80,7 @@ LinearAnimation.prototype.animate = function(time) {
         }
 
         this.time_last_frame = time;
-
     }
-
-
-
-
 }
 
 LinearAnimation.prototype.lastPoint = function(time) {

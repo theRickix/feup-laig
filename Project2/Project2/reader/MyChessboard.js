@@ -12,9 +12,9 @@ function MyChessboard(scene, du, dv, textureref, su, sv, c1, c2, cs){
 	this.c2 = c2;
 	this.cs = cs;
 
-	var dimension = 1;
-	var offX = dimension/this.du;
-	var offY = dimension/this.dv;
+	var dim = 1;
+	var offX = dim/this.du;
+	var offY = dim/this.dv;
 
 
 	this.chessShader = new CGFshader(this.scene.gl,"shaders/chess.vert", "shaders/chess.frag");
@@ -24,8 +24,9 @@ function MyChessboard(scene, du, dv, textureref, su, sv, c1, c2, cs){
 	this.chessShader.setUniformsValues({c1: [this.c1[0], this.c1[1], this.c1[2], this.c1[3]]});
 	this.chessShader.setUniformsValues({c2: [this.c2[0], this.c2[1], this.c2[2], this.c2[3]]});
 	this.chessShader.setUniformsValues({cs: [this.cs[0], this.cs[1], this.cs[2], this.cs[3]]});
-	this.chessShader.setUniformsValues({distX: offX});
-	this.chessShader.setUniformsValues({distY: offY});
+	this.chessShader.setUniformsValues({dim: this.dim});
+	this.chessShader.setUniformsValues({xDist: offX});
+	this.chessShader.setUniformsValues({yDist: offY});
 	this.chessShader.setUniformsValues({su: this.su});
 	this.chessShader.setUniformsValues({sv: this.sv});
 	this.chessShader.setUniformsValues({du: this.du});

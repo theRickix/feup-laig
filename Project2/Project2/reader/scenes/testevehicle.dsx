@@ -27,8 +27,8 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="view1" near="0.1" far="100" angle="0.4">
-            <from x="0" y="10" z="10" />
+        <perspective id="view1" near="0.1" far="500" angle="0.2">
+            <from x="1" y="5" z="10" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -125,14 +125,9 @@
 
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <primitive id="chessboard">
+        <primitive id="vehicle">
 
-            <chessboard du="10" dv="10" textureref="res/floor.png" su="40" sv="40">
-                <c1 r="1" g="0" b="0" a="1" />
-                <c2 r="0" g="0" b="1" a="1" />
-                <cs r="0" g="1" b="0" a="1" />
-
-            </chessboard>
+            <vehicle/>
 
 
         </primitive>
@@ -147,7 +142,7 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-                <translate x="1" y="1" z="1" />
+                <translate x="0" y="0" z="0" />
 
             </transformation>
 
@@ -171,7 +166,7 @@
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
 
-                <primitiveref id="chessboard" />
+                <primitiveref id="vehicle" />
 
             </children>
 
