@@ -35,7 +35,7 @@
     </views>
 
 
-    <illumination doublesided="tt" local="tt" >
+    <illumination doublesided="true" local="true" >
 
         <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
         <background r="0.1" g="0.1" b="0.2" a="1.0" />

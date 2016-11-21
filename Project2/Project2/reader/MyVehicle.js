@@ -57,7 +57,6 @@ MyVehicle.prototype.constructor = MyVehicle;
 MyVehicle.prototype.display = function(){
     this.scene.pushMatrix();
         this.patch.display();
-        this.triangle.display();
     this.scene.popMatrix();
 
 };
