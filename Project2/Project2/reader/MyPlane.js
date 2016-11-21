@@ -1,52 +1,37 @@
-function MyPlane(scene, xLength, yLength, uDivs, vDivs)
-{
+function MyPlane(scene, dimX, dimY, partsX, partsY) {
 
     this.scene = scene;
 
-    this.xLength = xLength;
-    this.uDivs = uDivs;
+    this.dimX = dimX;
+    this.partsX = partsX;
 
-    this.yLength = yLength;
-    this.vDivs = vDivs;
+    this.dimY = dimY;
+    this.partsY = partsY;
 
-    //As it is a simple plane, u = 1 && v = 1
-    //and the knots vector will be equal to this.
-    var controlPoints = [
-                            //Left control points
-                            [
-                                //Control Point 1
-                                [-this.xLength/2, -this.yLength/2, 0, 1],
-                                //Control Point 2
-                                [-this.xLength/2, this.yLength/2, 0, 1]
-                            ],
-                            //Right control points
-                            [
-                                //Control Point 1
-                                [this.xLength/2, -this.yLength/2, 0, 1],
-                                //Control Point 2
-                                [this.xLength/2, this.yLength/2, 0, 1]
-                            ]
-                        ];
-    this.initValues();
+    var controlPoints = [[
+                        [-this.dimX/2, -this.dimY/2, 0, 1],
+                        [-this.dimX/2, this.dimY/2, 0, 1]],
+                        [[this.dimX/2, -this.dimY/2, 0, 1],
+                        [this.dimX/2, this.dimY/2, 0, 1]]];
+    this.surfaceObject = null;
     this.buildSurf(controlPoints);
 }
 
 
-MyPlane.prototype = Object.create(MySurface.prototype);
+MyPlane.prototype = Object.create(MyPlane.prototype);
 MyPlane.prototype.constructor = MyPlane;
 
-MyPlane.prototype.buildSurf = function(controlPoints)
-{
+MyPlane.prototype.buildSurf = function(controlPoints) {
     var planeKnots = [0, 0, 1, 1];
     var planeNurbsSurf = new CGFnurbsSurface(1, 1, planeKnots, planeKnots, controlPoints);
-    getSurfPoint = function(u, v)
-    {
+
+    getSurfPoint = function(u, v) {
         return planeNurbsSurf.getPoint(u, v);
     };
 
-    this.surfaceObject = new CGFnurbsObject(this.scene, getSurfPoint, this.uDivs, this.vDivs);
+    this.surfaceObject = new CGFnurbsObject(this.scene, getSurfPoint, this.partsX, this.partsY);
 };
 
 MyPlane.prototype.display = function() {
-    this.getSurfaceObject().display();
+    this.surfaceObject.display();
 }

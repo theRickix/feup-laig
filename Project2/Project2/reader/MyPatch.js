@@ -1,21 +1,20 @@
-function MyPatch(scene, orderU, orderV, partsU, partsV, controlPoints)
-{
+function MyPatch(scene, orderU, orderV, partsU, partsV, controlPoints) {
     this.scene = scene;
     this.orderU = orderU;
     this.orderV = orderV;
     this.partsU = partsU;
     this.partsV = partsV;
     this.controlPoints = controlPoints;
+    this.surfaceObject = null;
 
-    this.initValues();
     this.buildSurf();
 }
 
-MyPatch.prototype = Object.create(MySurface.prototype);
+MyPatch.prototype = Object.create(MyPatch.prototype);
 MyPatch.prototype.constructor = MyPatch;
 
 MyPatch.prototype.buildSurf = function() {
-    //Computes vertices according to given control points
+
     this.computedPoints = [];
 
     for (u = 0; u < this.orderU + 1; u++) {
@@ -26,13 +25,9 @@ MyPatch.prototype.buildSurf = function() {
         this.computedPoints.push(tmp);
     }
 
-    var getSurfPoint = function(u, v)
-    {
+    var getSurfPoint = function(u, v) {
         return patchNurbsSurface.getPoint(u, v);
     }
-
-    //Generates knots vectors according to given degree
-
 
     var knotsU = this.generateKnotsVector(this.orderU);
     var knotsV = this.generateKnotsVector(this.orderV);
@@ -46,13 +41,11 @@ MyPatch.prototype.buildSurf = function() {
 MyPatch.prototype.generateKnotsVector = function(deg) {
     var knots = [];
 
-    for(var i = 0; i <= deg; i++)
-    {
+    for(var i = 0; i <= deg; i++) {
         knots.push(0);
     }
 
-    for(var i = 0; i <= deg; i++)
-    {
+    for(var i = 0; i <= deg; i++) {
         knots.push(1);
     }
 
@@ -60,5 +53,5 @@ MyPatch.prototype.generateKnotsVector = function(deg) {
 };
 
 MyPatch.prototype.display = function() {
-    this.getSurfaceObject().display();
+    this.surfaceObject.display();
 }
