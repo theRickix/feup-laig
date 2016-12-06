@@ -8,6 +8,7 @@ function MyPlane(scene, dimX, dimY, partsX, partsY) {
     this.dimY = dimY;
     this.partsY = partsY;
 
+    //calculate vertex points o
     var controlPoints = [[
                         [-this.dimX/2, -this.dimY/2, 0, 1],
                         [-this.dimX/2, this.dimY/2, 0, 1]],

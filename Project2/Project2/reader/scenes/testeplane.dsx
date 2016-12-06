@@ -35,7 +35,7 @@
     </views>
 
 
-    <illumination doublesided="true" local="true" >
+    <illumination doublesided="tt" local="tt" >
 
         <ambient r="0.5" g="0.5" b="0.5" a="0.8" />
         <background r="0.1" g="0.1" b="0.2" a="1.0" />
@@ -54,7 +54,7 @@
             <specular r="1" g="1" b="1" a="1" />
         </omni>
 
-        <spot id="spot" enabled="true" angle="60" exponent="1" >
+        <spot id="ss" enabled="true" angle="60" exponent="1" >
             <target x="1" y="1" z="1" />
             <ambient r="1" g="1" b="1" a="1" />
             <diffuse r="1" g="1" b="1" a="1" />
@@ -125,9 +125,9 @@
 
         <!-- Deve existir um ou mais blocos "primitive" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <primitive id="vehicle">
+        <primitive id="plane">
 
-            <vehicle/>
+            <plane dimX="3" dimY="2" partsX="10" partsY="7"/>
 
         </primitive>
 
@@ -141,13 +141,12 @@
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
 
-                <translate x="0" y="0" z="0" />
+                <translate x="1" y="1" z="1" />
 
             </transformation>
 
             <animation>
-                <animationref id="circular"/>
-                <animationref id="linear"/>
+
             </animation>
 
             <materials>
@@ -166,7 +165,7 @@
             <!-- bloco "children" obrigatorio num "component" -->
             <children>
 
-                <primitiveref id="vehicle" />
+                <primitiveref id="plane" />
 
             </children>
 

@@ -365,12 +365,14 @@ XMLscene.prototype.setComponent = function (component,fatherTexture,fatherMateri
         material.apply();
 
         for(var j=0; j<component.animation.length; j++) {
-            //if the animation hasn't finished, continue animating; break is used so it won't go to another animation while performing this one
+            //if the animation hasn't finished, continue animating;
+            // break is used so it won't go to another animation while performing this one
             if(!this.animations[component.animation[j]].hasFinished()) {
                 this.animations[component.animation[j]].animate(Date.now());
                 break;
             }
-            //if it has finished, translate to last point; this is because next animations will continue from this one
+            //if it has finished, translate to last point;
+            // this is because next animations will continue from this one
             else {
                 this.animations[component.animation[j]].lastPoint();
             }

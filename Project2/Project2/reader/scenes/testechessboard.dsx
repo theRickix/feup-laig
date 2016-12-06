@@ -127,7 +127,7 @@
         <!-- Os identificadores "id" nao podem ser repetidos -->
         <primitive id="chessboard">
 
-            <chessboard du="10" dv="10" textureref="res/floor.png" su="40" sv="40">
+            <chessboard du="10" dv="10" textureref="res/floor.png" su="10" sv="10">
                 <c1 r="1" g="0" b="0" a="1" />
                 <c2 r="0" g="0" b="1" a="1" />
                 <cs r="0" g="1" b="0" a="1" />

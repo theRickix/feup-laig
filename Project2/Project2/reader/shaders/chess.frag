@@ -28,10 +28,12 @@ void main() {
 	float x = coords[0] / xDist;
 	float y = coords[1] / yDist;
 
+    //check if distance of x and y are odd number
 	if(mod(du, 2.0) != 0.0 || mod(dv, 2.0) != 0.0){
 		x -= (xDist*du/2.0);
 		y -= (yDist*dv/2.0);
 	}
+
 
 	if(mod(x, 2.0) < 1.0 ^^ mod(y, 2.0) < 1.0)
 	    gl_FragColor = c1;
@@ -48,6 +50,8 @@ void main() {
 
 		float cx = coords[0];
 		float cy = coords[1];
+
+		//assign the color selected to the point
 		if(cx >= xMin && cx <= xMax && cy >= yMin && cy <= yMax)
 			gl_FragColor = cs;
 	}
