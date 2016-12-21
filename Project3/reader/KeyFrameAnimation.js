@@ -28,7 +28,7 @@ KeyFrameAnimation.prototype.animate = function(time)
 	}
 
 	//If the last keyframe has been reached, stops animating
-	if(currentKeyFrame > keyframeSet.length)
+	if(currentKeyFrame >= keyframeSet.length)
 	{
 		return;
 	}
