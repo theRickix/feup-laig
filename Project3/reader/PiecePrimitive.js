@@ -33,6 +33,6 @@ PiecePrimitive.prototype.display = function() {
     this.scene.translate(0, 0, -0.5);
     this.piece.display();
     this.scene.popMatrix();
-    
+
 
 }
