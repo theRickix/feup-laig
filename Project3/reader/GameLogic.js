@@ -16,7 +16,7 @@ function GameLogic(playerList, board)
      */
     this.currentGameState = 0;
 
-    gameLoop();
+    this.gameLoop();
 }
 
 GameLogic.prototype.constructor = GameLogic;
@@ -29,9 +29,11 @@ GameLogic.prototype.gameLoop = function()
             /* Present title screen */
             break;
         case 1:
-            runGame();
+            this.runGame();
+            this.applyAnimations();
             break;
     }
+    this.gameLoop();
 };
 
 GameLogic.prototype.checkWinCondition = function()
@@ -46,7 +48,7 @@ GameLogic.prototype.checkWinCondition = function()
     }
 };
 
-GameLogic.prototype.makePlay = function(play)
+GameLogic.prototype.setPlay = function(play)
 {
     this.currentPlay = play;
 };
@@ -55,9 +57,56 @@ GameLogic.prototype.runGame = function()
 {
     if(this.currentPlay != null)
     {
-        //TODO: apply animation to pieces affected in play
+        var animationKeyFrames = createAnimationKeyFrames();
+        //apply the animation to the piece
+        this.currentPlay.targetpiece.animation = new KeyFrameAnimation(
+            this.board.scene,
+            animationKeyFrames
+        );
         this.currentPlay = null;
     }
 
     checkWinCondition();
+};
+
+GameLogic.prototype.createAnimationKeyFrames = function()
+{
+    var pieceAnimation = [];
+    pieceAnimation.push(new KeyFrame(
+        this.board.scene,                       //the scene
+        0,                                      //the keyframe time
+        this.currentPlay.targetPiece.truePosition,  //the target position
+        0,                                      //the target rotation
+        1                                       //the target scale
+    ));
+    
+    pieceAnimation.push(new KeyFrame(
+        this.board.scene,                       //the scene
+        2,                                      //the keyframe time
+        vec3.fromValues(this.currentPlay.targetPiece.truePosition.x, 
+                        this.currentPlay.targetPiece.truePosition.y + 2, 
+                        this.currentPlay.targetPiece.truePosition.z),  //the target position
+        0,                                      //the target rotation
+        1                                       //the target scale
+    ));
+
+    pieceAnimation.push(new KeyFrame(
+        this.board.scene,                       //the scene
+        2,                                      //the keyframe time
+        vec3.fromValues(this.currentPlay.targetPos.x, 
+                        this.currentPlay.targetPos.y + 2, 
+                        this.currentPlay.targetPos.z),  //the target position
+        0,                                      //the target rotation
+        1                                       //the target scale
+    ));
+
+    pieceAnimation.push(new KeyFrame(
+        this.board.scene,                       //the scene
+        0,                                      //the keyframe time
+        this.currentPlay.targetPos,  //the target position
+        0,                                      //the target rotation
+        1                                       //the target scale
+    ));
+
+    return pieceAnimation;
 }
