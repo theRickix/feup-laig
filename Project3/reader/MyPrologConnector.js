@@ -1,6 +1,7 @@
-function MyPrologConnector(port,scene) {
+function MyPrologConnector(port,scene,game) {
     this.port = port;
     this.scene = scene;
+    this.game = game;
 };
 
 MyPrologConnector.prototype = Object.create(MyPrologConnector.prototype);
