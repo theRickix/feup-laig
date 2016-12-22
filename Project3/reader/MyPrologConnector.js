@@ -1,5 +1,6 @@
-function MyPrologConnector(port) {
+function MyPrologConnector(port,scene) {
     this.port = port;
+    this.scene = scene;
 };
 
 MyPrologConnector.prototype = Object.create(MyPrologConnector.prototype);
