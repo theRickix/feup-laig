@@ -1,7 +1,26 @@
-function GameLogic(playerList, board)
+function GameLogic(gamemode,board)
 {
     //The list of players currently playing the game
-    this.playerList = playerList;
+
+    this.player1;
+    this.player2;
+    if(gamemode == GameMode.HvsH) { //Human vs Human
+        this.player1 = new MyPlayer(scene,PlayerType.HUMAN,Color.WHITE);
+        this.player2 = new MyPlayer(scene,PlayerType.HUMAN,Color.BLACK);
+    }
+    else if(gamemode == GameMode.HvsC) { //Human vs Human
+        this.player1 = new MyPlayer(scene,PlayerType.HUMAN,Color.WHITE);
+        this.player2 = new MyPlayer(scene,PlayerType.COMPUTER,Color.BLACK);
+    }
+    else if(gamemode == GameMode.CvsC) { //Human vs Human
+        this.player1 = new MyPlayer(scene,PlayerType.COMPUTER,Color.WHITE);
+        this.player2 = new MyPlayer(scene,PlayerType.COMPUTER,Color.BLACK);
+    }
+    else {
+        return "error in game mode";
+    }
+
+
     //The current board object
     this.board = board;
 
