@@ -14,7 +14,7 @@ function TileConfig(scene, color, x, z, texture, id) {
     this.geom = new TilePrimitive(scene, 1, this.texture);
 }
 
-TileConfig.prototype.constructor = Tile;
+TileConfig.prototype.constructor = TileConfig;
 
 TileConfig.prototype.setOccupied = function(newOccupied) {
     this.occupied = newOccupied;   //tile occuppied
@@ -26,4 +26,12 @@ TileConfig.prototype.display = function() {
     this.scene.translate(this.x, 0, this.z);
     this.geom.display();
     this.scene.popMatrix();
+}
+
+TileConfig.prototype.getX= function() {
+    return this.x;
+}
+
+TileConfig.prototype.getZ= function() {
+    return this.y;
 }

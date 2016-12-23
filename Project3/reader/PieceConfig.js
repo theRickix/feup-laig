@@ -1,4 +1,4 @@
-function PieceConfig(scene, color, texture, boardPosition)
+function PieceConfig(scene,tile, color, texture)
 {
     this.scene = scene;
     this.tile = tile;
@@ -6,14 +6,13 @@ function PieceConfig(scene, color, texture, boardPosition)
     this.dama = false;
 
     //Position on the board as a x,y pair (vec2)
-    this.boardPosition = boardPosition;
 
-    this.geom = new PiecePrimitive(this.scene, 1.5, 0.4, 0.4, 100, 100, texture, vec3.fromValues(boardPosition.x + .5, 0, boardPosition.y + .5));
+    this.geom = new PiecePrimitive(this.scene, 1.5, 0.4, 0.4, 100, 100, texture, vec3.fromValues(this.tile.getX() + .5, 0, this.tile.getZ() + .5));
 
     this.animation;
 }
 
-PieceConfig.prototype.constructor = Piece;
+PieceConfig.prototype.constructor = PieceConfig;
 
 PieceConfig.prototype.display = function() {
 

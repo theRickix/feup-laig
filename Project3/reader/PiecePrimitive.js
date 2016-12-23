@@ -11,7 +11,7 @@ function PiecePrimitive(scene, height, base, top, stacks, slices, texture, trueP
     this.top = top;
 
     //Position to be applied on the matrix (vec3)
-    this.truePosition = truePostion;
+    this.truePosition = truePosition;
 
     this.appearance = new CGFappearance(this.scene);
     this.appearance.setAmbient(0.8, 0.7, 0.8, 1);

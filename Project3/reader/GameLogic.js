@@ -1,4 +1,4 @@
-function GameLogic(gamemode)
+function GameLogic(gamemode,scene)
 {
     //The list of players currently playing the game
 
@@ -21,7 +21,7 @@ function GameLogic(gamemode)
     }
     this.currentPlayer = this.player1;
 
-
+    this.scene = scene;
     //The current board object
     this.board = new Board(this.scene);
 
@@ -33,7 +33,7 @@ function GameLogic(gamemode)
     //The current play being made
     this.currentPlay = null;
 
-    this.gameLoop();
+   // this.gameLoop();
 }
 
 GameLogic.prototype.constructor = GameLogic;
@@ -50,7 +50,7 @@ GameLogic.prototype.gameLoop = function()
         );
     }
 
-    this.checkWinCondition();
+    //this.checkWinCondition();
 
     this.gameLoop();
 };
