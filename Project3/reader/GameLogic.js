@@ -1,4 +1,4 @@
-function GameLogic(gamemode, board)
+function GameLogic(gamemode)
 {
     //The list of players currently playing the game
 
@@ -19,10 +19,11 @@ function GameLogic(gamemode, board)
     else {
         return "error in game mode";
     }
+    this.currentPlayer = this.player1;
 
 
     //The current board object
-    this.board = board;
+    this.board = new Board(this.scene);
 
     //The current turn of play
     this.turnNumber = 0;
@@ -112,3 +113,11 @@ GameLogic.prototype.createAnimationKeyFrames = function()
 
     return pieceAnimation;
 }
+
+GameLogic.prototype.changePlayer = function()
+{
+    if(this.currentPlayer == this.player1)
+        this.currentPlayer = this.player2;
+    else
+        this.currentPlayer = this.player1;
+};

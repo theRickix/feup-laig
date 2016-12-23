@@ -20,11 +20,12 @@ XMLscene.prototype.init = function (application) {
 	this.gl.enable(this.gl.CULL_FACE);
     this.gl.depthFunc(this.gl.LEQUAL);
     this.enableTextures(true);
-	this.axis=new CGFaxis(this);
+    this.setPickEnabled(true);
+	/*this.axis=new CGFaxis(this);
     this.rect = new MyRectangle(this,'',1,1,5,5);
     this.torus = new MyTorus(this,5,10,5,5);
     this.sphere = new MySphere(this,'',2,10,10);
-    this.cylinder = new MyCylinder(this,5,5,10,5,5);
+    this.cylinder = new MyCylinder(this,5,5,10,5,5);*/
 };
 
 XMLscene.prototype.setDefaultAppearance = function () {
