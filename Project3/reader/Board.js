@@ -44,7 +44,7 @@ Board.prototype.buildBoardObject = function()
             //Textura e id? (ultimos nulls)
             this.boardObject[x].push(new TileConfig(this.scene, currentTileColor, x + .5, y + .5, null, null));
         }
-        colorStart != colorStart;
+        colorStart = !colorStart;
     }
 }
 
