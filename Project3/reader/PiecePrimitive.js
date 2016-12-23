@@ -1,4 +1,4 @@
-function PiecePrimitive(scene, height, base, top, stacks, slices, texture, boardPosition, truePosition) {
+function PiecePrimitive(scene, height, base, top, stacks, slices, texture, truePosition) {
     CGFobject.call(this, scene);
     this.scene = scene;
     this.texture = texture;
@@ -10,8 +10,6 @@ function PiecePrimitive(scene, height, base, top, stacks, slices, texture, board
     this.base = base;
     this.top = top;
 
-    //Position on the board as a x,y pair (vec2)
-    this.boardPosition = boardPosition;
     //Position to be applied on the matrix (vec3)
     this.truePosition = truePostion;
 
