@@ -1,4 +1,4 @@
-function GameLogic(gamemode,board)
+function GameLogic(gamemode, board)
 {
     //The list of players currently playing the game
 
@@ -29,11 +29,8 @@ function GameLogic(gamemode,board)
     //The player index that won
     this.playerWon = -1;
 
-    /*The current game state:
-     * 0 - Game title
-     * 1 - Game being played
-     */
-    this.currentGameState = 0;
+    //The current play being made
+    this.currentPlay = null;
 
     this.gameLoop();
 }
@@ -42,16 +39,18 @@ GameLogic.prototype.constructor = GameLogic;
 
 GameLogic.prototype.gameLoop = function()
 {
-    switch(this.currentGameState)
+    if(this.currentPlay != null)
     {
-        case 0:
-            /* Present title screen */
-            break;
-        case 1:
-            this.runGame();
-            this.applyAnimations();
-            break;
+        var animationKeyFrames = createAnimationKeyFrames();
+        //apply the animation to the piece
+        this.currentPlay.targetpiece.animation = new KeyFrameAnimation(
+            this.board.scene,
+            animationKeyFrames
+        );
     }
+
+    this.checkWinCondition();
+
     this.gameLoop();
 };
 
@@ -70,22 +69,6 @@ GameLogic.prototype.checkWinCondition = function()
 GameLogic.prototype.setPlay = function(play)
 {
     this.currentPlay = play;
-};
-
-GameLogic.prototype.runGame = function()
-{
-    if(this.currentPlay != null)
-    {
-        var animationKeyFrames = createAnimationKeyFrames();
-        //apply the animation to the piece
-        this.currentPlay.targetpiece.animation = new KeyFrameAnimation(
-            this.board.scene,
-            animationKeyFrames
-        );
-        this.currentPlay = null;
-    }
-
-    checkWinCondition();
 };
 
 GameLogic.prototype.createAnimationKeyFrames = function()
