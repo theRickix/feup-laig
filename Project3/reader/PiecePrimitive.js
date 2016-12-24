@@ -28,6 +28,11 @@ function PiecePrimitive(scene, height, base, top, stacks, slices, texture, trueP
 PiecePrimitive.prototype = Object.create(CGFobject.prototype);
 PiecePrimitive.prototype.constructor = PiecePrimitive;
 
+PiecePrimitive.prototype.setNewTexture = function(tex)
+{
+    this.appearance.setTexture(tex);
+}
+
 PiecePrimitive.prototype.display = function() {
     this.scene.pushMatrix();
     this.appearance.apply();

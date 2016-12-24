@@ -5,6 +5,9 @@ function PieceConfig(scene,tile, color, texture)
     this.color = color;
     this.dama = false;
 
+    this.unselectedTexture = texture;   //Texture when unselected
+    this.selectedTexture = null;        //Texture when selected
+
     //Position on the board as a x,y pair (vec2)
 
     this.geom = new PiecePrimitive(this.scene, 1.5, 0.4, 0.4, 100, 100, texture, vec3.fromValues(this.tile.getX() + .5, 0, this.tile.getZ() + .5));
@@ -14,7 +17,16 @@ function PieceConfig(scene,tile, color, texture)
 
 PieceConfig.prototype.constructor = PieceConfig;
 
-PieceConfig.prototype.display = function() {
+PieceConfig.prototype.display = function()
+{
+    if(this.selected)
+    {
+        this.geom.setTexture(this.selectedTexture);
+    }
+    else
+    {
+        this.geom.setTexture(this.unselectedTexture);
+    }
 
     this.scene.pushMatrix();
     //register geometry instead of tile

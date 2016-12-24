@@ -9,9 +9,8 @@ function Board(scene)
     this.textures["bordeaux"] = new CGFtexture(this.scene, "res/bordeaux.jpg");
     this.textures["whitePiece"] = new CGFtexture(this.scene, "res/whitePiece.jpg");
     this.textures["blackPiece"] = new CGFtexture(this.scene, "res/blackPiece.jpg");
-
-    this.boardObject = [];
-    this.buildBoard()
+    
+    this.buildBoard();
     this.buildPieces();
 }
 
@@ -32,46 +31,7 @@ Board.prototype.buildBoard = function() {
     }
     console.log(this.tiles[1].length);
 
-}
-/*Board.prototype.buildBoardObject = function()
-{
-    var colorStart = false; //if true color = white else if false color = black
-    for(var x = 0; x < 8; x++)
-    {
-        this.boardObject = new Array(10);
-        this.boardObject.push(new Array(10));
-        this.boardObject[x] = [];
-        for(var y = 0; y < 8; y++)
-        {
-            var currentTileColor;
-            if(y % 2 === 0)
-            {
-                if(!colorStart)
-                {
-                    currentTileColor = vec4.fromValues(0, 0, 0, 0);
-                }
-                else
-                {
-                    currentTileColor = vec4.fromValues(.8, .8, .8, 0);
-                }
-            }
-            else
-            {
-                if(!colorStart)
-                {
-                    currentTileColor = vec4.fromValues(.8, .8, .8, 0);
-                }
-                else
-                {
-                    currentTileColor = vec4.fromValues(0, 0, 0, 0);
-                }
-            }
-            //ID é uma string que contem "coluna+linha
-            this.boardObject[x].push(new TileConfig(this.scene, currentTileColor, x + .5, y + .5, null, y + "+" + x));
-        }
-        colorStart = !colorStart;
-    }
-};*/
+};
 
 Board.prototype.buildPieces= function()
 {
