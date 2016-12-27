@@ -469,7 +469,10 @@ XMLscene.prototype.logPicking= function() {
                 if (obj) {
                     var customId = this.pickResults[i][1];
                     console.log("Pickedobject: " + obj + ", withpickid " + customId);
-                    this.game.getPickedObject(customId);
+                    if(customId !=0) {
+                        this.game.getPickedObject(customId);
+                    }
+
                 }
             }
             this.pickResults.splice(0, this.pickResults.length);

@@ -19,7 +19,7 @@ Board.prototype.constructor = Board;
 
 Board.prototype.buildBoard = function() {
     //create tiles
-    var id=0;
+    var id=1;
     for(var x = 0; x<8; x++) {
         this.tiles[x] = [];
         for(var y=0; y<8; y++) {
@@ -71,8 +71,8 @@ Board.prototype.buildPieces= function()
 
 Board.prototype.getPickedObject = function(id,currentPlayer)
 {
-    var tileX = ~~(id /8);
-    var tileY = id%8;
+    var tileX = ~~((id-1) /8);
+    var tileY = (id-1)%8;
     console.log(tileX);
     console.log(tileY);
     if(this.tiles[tileX][tileY].isOccupied() &&  this.tiles[tileX][tileY].piece.color == currentPlayer.color)
