@@ -21,11 +21,11 @@ PieceConfig.prototype.display = function()
 {
     if(this.selected)
     {
-        this.geom.setTexture(this.selectedTexture);
+        this.geom.appearance.setTexture(this.selectedTexture);
     }
     else
     {
-        this.geom.setTexture(this.unselectedTexture);
+        this.geom.appearance.setTexture(this.unselectedTexture);
     }
 
     this.scene.pushMatrix();

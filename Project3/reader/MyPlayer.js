@@ -1,4 +1,4 @@
-function MyPlayer(scene, type, color, ) {
+function MyPlayer(scene, type, color) {
     this.scene = scene;
     this.type = type;
     this.color = color;
