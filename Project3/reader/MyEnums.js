@@ -13,4 +13,3 @@ const GameMode = {
     HvsC: 'Mode2',
     CvsC: 'Mode3'
 }
-

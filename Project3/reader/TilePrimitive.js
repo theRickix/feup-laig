@@ -1,9 +1,10 @@
-function TilePrimitive(scene, lenght, texture) {
+function TilePrimitive(scene, lenght, texture,selectedTexture) {
     CGFobject.call(this, scene);
 
     this.scene = scene;
     this.lenght = lenght;
     this.texture = texture;
+    this.selectedTexture = selectedTexture;
 
 
     this.appearance = new CGFappearance(this.scene);
@@ -22,7 +23,10 @@ function TilePrimitive(scene, lenght, texture) {
 TilePrimitive.prototype = Object.create(CGFobject.prototype);
 TilePrimitive.prototype.constructor = TilePrimitive;
 
-TilePrimitive.prototype.display = function() {
+TilePrimitive.prototype.display = function(selected) {
+
+    if(selected)
+        this.appearance.setTexture(this.selectedTexture);
 
     this.scene.pushMatrix();
     this.appearance.apply();
@@ -64,4 +68,7 @@ TilePrimitive.prototype.display = function() {
     this.scene.rotate(-Math.PI/2, 1, 0, 0);
     this.rect.display();
     this.scene.popMatrix();
+
+    if(selected)
+        this.appearance.setTexture(this.texture);
 };

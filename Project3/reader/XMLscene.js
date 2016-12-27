@@ -465,11 +465,11 @@ XMLscene.prototype.logPicking= function() {
     if (this.pickMode == false) {
         if (this.pickResults != null && this.pickResults.length > 0) {
             for (var i = 0; i < this.pickResults.length; i++) {
-                var obj
-                    = this.pickResults[i][0];
+                var obj = this.pickResults[i][0];
                 if (obj) {
                     var customId = this.pickResults[i][1];
                     console.log("Pickedobject: " + obj + ", withpickid " + customId);
+                    this.game.getPickedObject(customId);
                 }
             }
             this.pickResults.splice(0, this.pickResults.length);

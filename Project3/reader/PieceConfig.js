@@ -1,7 +1,9 @@
-function PieceConfig(scene,tile, color, texture)
+function PieceConfig(scene,tile, texture,color)
 {
     this.scene = scene;
     this.tile = tile;
+    this.tile.piece = this; //bidirectional
+    this.tile.setOccupied(true);
     this.color = color;
     this.dama = false;
 

@@ -121,3 +121,7 @@ GameLogic.prototype.changePlayer = function()
     else
         this.currentPlayer = this.player1;
 };
+
+GameLogic.prototype.getPickedObject = function(id) {
+    this.board.getPickedObject(id,this.currentPlayer);
+};
