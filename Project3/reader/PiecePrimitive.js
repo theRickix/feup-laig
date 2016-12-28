@@ -20,7 +20,7 @@ function PiecePrimitive(scene, height, base, top, stacks, slices, texture, trueP
     this.appearance.setShininess(120);
     this.appearance.setTexture(this.texture);
 
-    this.piece = new MyCylinder(this.scene,base, top, height, slices, stacks);
+    this.piece = new Cyl(this.scene,base, top, height, slices, stacks);
 
     this.initBuffers();
 };
