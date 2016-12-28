@@ -11,6 +11,7 @@ function TileConfig(scene, color, x, z, texture,selectedTexture, id) {
     this.id = id;
     this.type = "Tile";
     this.selected = false;
+    this.piece = -1;
 
     this.geom = new TilePrimitive(scene, 1, this.texture,this.selectedTexture);
 }

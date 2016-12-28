@@ -13,3 +13,9 @@ const GameMode = {
     HvsC: 'Mode2',
     CvsC: 'Mode3'
 }
+
+const MoveResult = {
+    NO: 'No',
+    NORMAL: 'Normal',
+    EAT: 'Eat'
+}

@@ -1,11 +1,13 @@
-function PieceConfig(scene,tile, texture,color)
+function PieceConfig(scene,tile, texture,color,id)
 {
     this.scene = scene;
     this.tile = tile;
-    this.tile.piece = this; //bidirectional
+    this.id = id;
+    this.tile.piece = this.id;
     this.tile.setOccupied(true);
     this.color = color;
     this.dama = false;
+    this.eaten = false;
 
     this.unselectedTexture = texture;   //Texture when unselected
     this.selectedTexture = null;        //Texture when selected
@@ -43,4 +45,13 @@ PieceConfig.prototype.display = function()
 
 PieceConfig.prototype.setTile = function(newTile) {
     this.tile = newTile;
+}
+
+PieceConfig.prototype.remove = function() {
+    this.eaten = true;
+    this.tile = null;
+};
+
+PieceConfig.prototype.isAlive = function() {
+    return !this.eaten;
 }

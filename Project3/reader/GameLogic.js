@@ -128,7 +128,7 @@ GameLogic.prototype.getPickedObject = function(id)
     var tileY = this.getCol(id);
     console.log(tileX);
     console.log(tileY);
-    if(this.board.tiles[tileX][tileY].isOccupied() &&  this.board.tiles[tileX][tileY].piece.color == this.currentPlayer.color) {
+    if(this.board.tiles[tileX][tileY].isOccupied() &&  this.board.pieces[this.board.tiles[tileX][tileY].piece].color == this.currentPlayer.color) {
         this.selectedTile = id;
         this.hasSelectedPiece = true;
     }
@@ -144,21 +144,9 @@ GameLogic.prototype.playPiece = function(id)
 
 
     if(this.currentPlayer.color == Color.WHITE)
-        var hasValidMove = this.checkValidMoveNormalWhite(tileX,tileY,tileXDest,tileYDest);
+        this.checkValidMoveNormalWhite(tileX,tileY,tileXDest,tileYDest);
     else
-        var hasValidMove = this.checkValidMoveNormalBlack(tileX,tileY,tileXDest,tileYDest);
-
-    if(hasValidMove) {
-        this.board.tiles[tileX][tileY].setOccupied(false);
-        this.board.tiles[tileXDest][tileYDest].setOccupied(true);
-        this.board.tiles[tileXDest][tileYDest].piece = this.board.tiles[tileX][tileY].piece;
-        this.board.tiles[tileX][tileY].piece = null;
-        this.board.tiles[tileXDest][tileYDest].piece.tile = this.board.tiles[tileXDest][tileYDest];
-
-        this.selectedTile = null;
-        this.hasSelectedPiece = false;
-        this.changePlayer();
-    }
+        this.checkValidMoveNormalBlack(tileX,tileY,tileXDest,tileYDest);
 
 };
 
@@ -179,15 +167,64 @@ GameLogic.prototype.getCol = function(id) {
 GameLogic.prototype.checkValidMoveNormalWhite = function (xOrigin,yOrigin,xDest,yDest) {
     if(!this.board.tiles[xDest][yDest].isOccupied()) {
         if(xDest == (xOrigin + 1) && (yDest == (yOrigin+1) || (yDest== yOrigin-1)))
-            return true;
+            this.moveNormal(xOrigin,yOrigin,xDest,yDest);
+
+        if (xDest == (xOrigin + 2)) {
+            if (yDest == (yOrigin + 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin + 1][yOrigin + 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin + 1, xOrigin + 1);
+            }
+
+            if (yDest == (yOrigin - 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin + 1][yOrigin - 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin + 1, xOrigin - 1);
+            }
+        }
     }
-    return false;
 };
 
 GameLogic.prototype.checkValidMoveNormalBlack = function (xOrigin,yOrigin,xDest,yDest) {
     if(!this.board.tiles[xDest][yDest].isOccupied()) {
         if(xDest == (xOrigin -1) && (yDest == (yOrigin+1) || (yDest== yOrigin-1)))
-            return true;
+            this.moveNormal(xOrigin,yOrigin,xDest,yDest);
+
+        if (xDest == (xOrigin - 2)) {
+            if (yDest == (yOrigin + 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin - 1][yOrigin + 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin - 1, xOrigin + 1);
+            }
+
+            if (yDest == (yOrigin - 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin - 1][yOrigin - 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin - 1, xOrigin - 1);
+            }
+        }
     }
-    return false;
 };
+
+GameLogic.prototype.moveNormal = function (xOrigin,yOrigin,xDest,yDest) {
+    this.board.tiles[xOrigin][yOrigin].setOccupied(false);
+    this.board.tiles[xDest][yDest].setOccupied(true);
+    this.board.tiles[xDest][yDest].piece = this.board.tiles[xOrigin][yOrigin].piece;
+    this.board.tiles[xOrigin][yOrigin].piece = -1;
+    this.board.pieces[this.board.tiles[xDest][yDest].piece].tile = this.board.tiles[xDest][yDest];
+
+    this.selectedTile = null;
+    this.hasSelectedPiece = false;
+    this.changePlayer();
+}
+
+GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
+    this.board.tiles[xOrigin][yOrigin].setOccupied(false);
+    this.board.tiles[xDest][yDest].setOccupied(true);
+    this.board.tiles[xDest][yDest].piece = this.board.tiles[xOrigin][yOrigin].piece;
+    this.board.tiles[xOrigin][yOrigin].piece = -1;
+    this.board.pieces[this.board.tiles[xDest][yDest].piece].tile = this.board.tiles[xDest][yDest];
+
+    this.board.pieces[this.board.tiles[xEat][yEat].piece].remove();
+    this.board.tiles[xEat][yEat].piece = null;
+    this.board.tiles[xEat][yEat].setOccupied(false);
+
+    this.selectedTile = null;
+    this.hasSelectedPiece = false;
+}

@@ -39,35 +39,35 @@ Board.prototype.buildPieces= function()
 {
     //Cria um board de acordo com esta img: http://www.iggamecenter.com/images/info/checkers_rus/2.png
 
-    this.pieces[0] = new PieceConfig(this.scene, this.tiles[0][0], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[1] = new PieceConfig(this.scene, this.tiles[0][2], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[2] = new PieceConfig(this.scene, this.tiles[0][4], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[3] = new PieceConfig(this.scene, this.tiles[0][6], this.textures["whitePiece"],Color.WHITE);
+    this.pieces[0] = new PieceConfig(this.scene, this.tiles[0][0], this.textures["whitePiece"],Color.WHITE,0);
+    this.pieces[1] = new PieceConfig(this.scene, this.tiles[0][2], this.textures["whitePiece"],Color.WHITE,1);
+    this.pieces[2] = new PieceConfig(this.scene, this.tiles[0][4], this.textures["whitePiece"],Color.WHITE,2);
+    this.pieces[3] = new PieceConfig(this.scene, this.tiles[0][6], this.textures["whitePiece"],Color.WHITE,3);
 
-    this.pieces[4] = new PieceConfig(this.scene, this.tiles[1][1], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[5] = new PieceConfig(this.scene, this.tiles[1][3], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[6] = new PieceConfig(this.scene, this.tiles[1][5], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[7] = new PieceConfig(this.scene, this.tiles[1][7], this.textures["whitePiece"],Color.WHITE);
+    this.pieces[4] = new PieceConfig(this.scene, this.tiles[1][1], this.textures["whitePiece"],Color.WHITE,4);
+    this.pieces[5] = new PieceConfig(this.scene, this.tiles[1][3], this.textures["whitePiece"],Color.WHITE,5);
+    this.pieces[6] = new PieceConfig(this.scene, this.tiles[1][5], this.textures["whitePiece"],Color.WHITE,6);
+    this.pieces[7] = new PieceConfig(this.scene, this.tiles[1][7], this.textures["whitePiece"],Color.WHITE,7);
 
-    this.pieces[8] = new PieceConfig(this.scene, this.tiles[2][0], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[9] = new PieceConfig(this.scene, this.tiles[2][2], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[10] = new PieceConfig(this.scene, this.tiles[2][4], this.textures["whitePiece"],Color.WHITE);
-    this.pieces[11] = new PieceConfig(this.scene, this.tiles[2][6], this.textures["whitePiece"],Color.WHITE);
+    this.pieces[8] = new PieceConfig(this.scene, this.tiles[2][0], this.textures["whitePiece"],Color.WHITE,8);
+    this.pieces[9] = new PieceConfig(this.scene, this.tiles[2][2], this.textures["whitePiece"],Color.WHITE,9);
+    this.pieces[10] = new PieceConfig(this.scene, this.tiles[2][4], this.textures["whitePiece"],Color.WHITE,10);
+    this.pieces[11] = new PieceConfig(this.scene, this.tiles[2][6], this.textures["whitePiece"],Color.WHITE,11);
 
-    this.pieces[12] = new PieceConfig(this.scene, this.tiles[5][1], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[13] = new PieceConfig(this.scene, this.tiles[5][3], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[14] = new PieceConfig(this.scene, this.tiles[5][5], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[15] = new PieceConfig(this.scene, this.tiles[5][7], this.textures["blackPiece"],Color.BLACK);
+    this.pieces[12] = new PieceConfig(this.scene, this.tiles[5][1], this.textures["blackPiece"],Color.BLACK,12);
+    this.pieces[13] = new PieceConfig(this.scene, this.tiles[5][3], this.textures["blackPiece"],Color.BLACK,13);
+    this.pieces[14] = new PieceConfig(this.scene, this.tiles[5][5], this.textures["blackPiece"],Color.BLACK,14);
+    this.pieces[15] = new PieceConfig(this.scene, this.tiles[5][7], this.textures["blackPiece"],Color.BLACK,15);
 
-    this.pieces[16] = new PieceConfig(this.scene, this.tiles[6][0], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[17] = new PieceConfig(this.scene, this.tiles[6][2], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[18] = new PieceConfig(this.scene, this.tiles[6][4], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[19] = new PieceConfig(this.scene, this.tiles[6][6], this.textures["blackPiece"],Color.BLACK);
+    this.pieces[16] = new PieceConfig(this.scene, this.tiles[6][0], this.textures["blackPiece"],Color.BLACK,16);
+    this.pieces[17] = new PieceConfig(this.scene, this.tiles[6][2], this.textures["blackPiece"],Color.BLACK,17);
+    this.pieces[18] = new PieceConfig(this.scene, this.tiles[6][4], this.textures["blackPiece"],Color.BLACK,18);
+    this.pieces[19] = new PieceConfig(this.scene, this.tiles[6][6], this.textures["blackPiece"],Color.BLACK,19);
 
-    this.pieces[20] = new PieceConfig(this.scene, this.tiles[7][1], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[21] = new PieceConfig(this.scene, this.tiles[7][3], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[22] = new PieceConfig(this.scene, this.tiles[7][5], this.textures["blackPiece"],Color.BLACK);
-    this.pieces[23] = new PieceConfig(this.scene, this.tiles[7][7], this.textures["blackPiece"],Color.BLACK);
+    this.pieces[20] = new PieceConfig(this.scene, this.tiles[7][1], this.textures["blackPiece"],Color.BLACK,20);
+    this.pieces[21] = new PieceConfig(this.scene, this.tiles[7][3], this.textures["blackPiece"],Color.BLACK,21);
+    this.pieces[22] = new PieceConfig(this.scene, this.tiles[7][5], this.textures["blackPiece"],Color.BLACK,22);
+    this.pieces[23] = new PieceConfig(this.scene, this.tiles[7][7], this.textures["blackPiece"],Color.BLACK,23);
 };
 
 Board.prototype.display = function()
@@ -85,6 +85,9 @@ Board.prototype.display = function()
         }
     }
 
-    for(p in this.pieces)
-        this.pieces[p].display();
+    for(p in this.pieces) {
+        if (this.pieces[p].isAlive())
+            this.pieces[p].display();
+    }
+
 };
