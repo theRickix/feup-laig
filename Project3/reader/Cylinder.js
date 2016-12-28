@@ -2,25 +2,25 @@
  * cylinder
  * @constructor
  */
-function Cyl(scene, base, top, height, slices, stacks) {
+function Cylinder(scene, base, top, height, slices, stacks) {
     CGFobject.call(this,scene);
 
     this.coverBase = new Circle(this.scene, base, slices);
     this.coverTop = new Circle(this.scene, top , slices);
-    this.side = new CylinderSide(this.scene, base, top , height ,slices , stacks);
+    this.surface = new Surface(this.scene, base, top , height ,slices , stacks);
 
 
     this.slices = slices;
     this.height = height;
 };
 
-Cyl.prototype = Object.create(CGFobject.prototype);
-Cyl.prototype.constructor = Cyl;
+Cylinder.prototype = Object.create(CGFobject.prototype);
+Cylinder.prototype.constructor = Cylinder;
 
-Cyl.prototype.display = function() {
+Cylinder.prototype.display = function() {
 
 
-    this.side.display();
+    this.surface.display();
 
 
     this.scene.pushMatrix();
@@ -41,10 +41,10 @@ Cyl.prototype.display = function() {
 
 //=============================================================================
 
+//the surface
 
 
-
-function CylinderSide(scene, base ,top , height, slices, stacks) {
+function Surface(scene, base ,top , height, slices, stacks) {
     CGFobject.call(this,scene);
 
     this.base = base;
@@ -56,10 +56,10 @@ function CylinderSide(scene, base ,top , height, slices, stacks) {
     this.initBuffers();
 };
 
-CylinderSide.prototype = Object.create(CGFobject.prototype);
-CylinderSide.prototype.constructor = CylinderSide;
+Surface.prototype = Object.create(CGFobject.prototype);
+Surface.prototype.constructor = Surface;
 
-CylinderSide.prototype.initBuffers = function() {
+Surface.prototype.initBuffers = function() {
 
     this.angulo = (Math.PI*2)/this.slices;
 
@@ -109,6 +109,8 @@ CylinderSide.prototype.initBuffers = function() {
 };
 
 //======================
+
+//Circle for top and bottom
 
 function Circle(scene,radius, slices) {
     CGFobject.call(this,scene);
