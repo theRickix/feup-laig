@@ -23,7 +23,7 @@ function GameLogic(gamemode,scene)
 
     this.scene = scene;
     //The current board object
-    this.board = new Board(this.scene);
+    this.board = new Board(this.scene,this);
 
     //The current turn of play
     this.turnNumber = 0;
@@ -122,6 +122,34 @@ GameLogic.prototype.changePlayer = function()
         this.currentPlayer = this.player1;
 };
 
-GameLogic.prototype.getPickedObject = function(id) {
-    this.board.getPickedObject(id,this.currentPlayer);
+GameLogic.prototype.getPickedObject = function(id)
+{
+    var tileX = ~~((id-1) /8);
+    var tileY = (id-1)%8;
+    console.log(tileX);
+    console.log(tileY);
+    if(this.board.tiles[tileX][tileY].isOccupied() &&  this.board.tiles[tileX][tileY].piece.color == this.currentPlayer.color) {
+        this.selectedTile = id;
+        this.hasSelectedPiece = true;
+    }
+
+};
+
+GameLogic.prototype.playPiece = function(id)
+{
+    var tileXDest = ~~((id-1) /8);
+    var tileYDest = (id-1)%8;
+    var tileX = ~~((this.selectedTile-1) /8);
+    var tileY = (this.selectedTile-1)%8;
+    if(!this.board.tiles[tileXDest][tileYDest].isOccupied()) {
+        this.board.tiles[tileX][tileY].setOccupied(false);
+        this.board.tiles[tileXDest][tileYDest].setOccupied(true);
+        this.board.tiles[tileXDest][tileYDest].piece = this.board.tiles[tileX][tileY].piece;
+        this.board.tiles[tileX][tileY].piece = null;
+        this.board.tiles[tileXDest][tileYDest].piece.tile = this.board.tiles[tileXDest][tileYDest];
+
+        this.selectedTile = null;
+        this.hasSelectedPiece = false;
+    }
+
 };

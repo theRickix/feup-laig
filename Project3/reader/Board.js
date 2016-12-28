@@ -1,7 +1,8 @@
-function Board(scene)
+function Board(scene,game)
 {
     this.tiles = [];
     this.pieces = [];
+    this.game = game;
 
     this.scene = scene;
     this.textures = [];
@@ -69,23 +70,13 @@ Board.prototype.buildPieces= function()
     this.pieces[23] = new PieceConfig(this.scene, this.tiles[7][7], this.textures["blackPiece"],Color.BLACK);
 };
 
-Board.prototype.getPickedObject = function(id,currentPlayer)
-{
-    var tileX = ~~((id-1) /8);
-    var tileY = (id-1)%8;
-    console.log(tileX);
-    console.log(tileY);
-    if(this.tiles[tileX][tileY].isOccupied() &&  this.tiles[tileX][tileY].piece.color == currentPlayer.color)
-        this.selectedTile = id;
-};
-
 Board.prototype.display = function()
 {
     for(var x = 0; x < 8; x++)
     {
         for(var y = 0; y < 8; y++)
         {   var selected;
-            if(this.selectedTile != this.tiles[x][y].id)
+            if(this.game.selectedTile != this.tiles[x][y].id)
                 selected=false;
             else
                 selected=true;
