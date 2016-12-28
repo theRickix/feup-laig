@@ -471,11 +471,14 @@ XMLscene.prototype.logPicking= function() {
                     console.log("Pickedobject: " + obj + ", withpickid " + customId);
                     if(customId !=0) {
                         if(!this.game.hasSelectedPiece)
-                            this.game.getPickedObject(customId);
-                        else
-                            this.game.playPiece(customId);
+                                this.game.getPickedObject(customId);
+                        else {
+                            if(this.game.selectedTile == customId)
+                                this.game.resetSelectedTile()
+                            else
+                                this.game.playPiece(customId);
+                        }
                     }
-
                 }
             }
             this.pickResults.splice(0, this.pickResults.length);

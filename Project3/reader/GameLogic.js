@@ -124,8 +124,8 @@ GameLogic.prototype.changePlayer = function()
 
 GameLogic.prototype.getPickedObject = function(id)
 {
-    var tileX = ~~((id-1) /8);
-    var tileY = (id-1)%8;
+    var tileX = this.getRow(id);
+    var tileY = this.getCol(id);
     console.log(tileX);
     console.log(tileY);
     if(this.board.tiles[tileX][tileY].isOccupied() &&  this.board.tiles[tileX][tileY].piece.color == this.currentPlayer.color) {
@@ -137,11 +137,18 @@ GameLogic.prototype.getPickedObject = function(id)
 
 GameLogic.prototype.playPiece = function(id)
 {
-    var tileXDest = ~~((id-1) /8);
-    var tileYDest = (id-1)%8;
-    var tileX = ~~((this.selectedTile-1) /8);
-    var tileY = (this.selectedTile-1)%8;
-    if(!this.board.tiles[tileXDest][tileYDest].isOccupied()) {
+    var tileXDest = this.getRow(id);
+    var tileYDest = this.getCol(id);
+    var tileX = this.getRow(this.selectedTile);
+    var tileY = this.getCol(this.selectedTile);
+
+
+    if(this.currentPlayer.color == Color.WHITE)
+        var hasValidMove = this.checkValidMoveNormalWhite(tileX,tileY,tileXDest,tileYDest);
+    else
+        var hasValidMove = this.checkValidMoveNormalBlack(tileX,tileY,tileXDest,tileYDest);
+
+    if(hasValidMove) {
         this.board.tiles[tileX][tileY].setOccupied(false);
         this.board.tiles[tileXDest][tileYDest].setOccupied(true);
         this.board.tiles[tileXDest][tileYDest].piece = this.board.tiles[tileX][tileY].piece;
@@ -150,6 +157,37 @@ GameLogic.prototype.playPiece = function(id)
 
         this.selectedTile = null;
         this.hasSelectedPiece = false;
+        this.changePlayer();
     }
 
+};
+
+GameLogic.prototype.resetSelectedTile = function()
+{
+    this.selectedTile = null;
+    this.hasSelectedPiece = false;
+};
+
+GameLogic.prototype.getRow = function(id) {
+    return ~~((id-1)/8);
+};
+
+GameLogic.prototype.getCol = function(id) {
+    return (id-1)%8;
+};
+
+GameLogic.prototype.checkValidMoveNormalWhite = function (xOrigin,yOrigin,xDest,yDest) {
+    if(!this.board.tiles[xDest][yDest].isOccupied()) {
+        if(xDest == (xOrigin + 1) && (yDest == (yOrigin+1) || (yDest== yOrigin-1)))
+            return true;
+    }
+    return false;
+};
+
+GameLogic.prototype.checkValidMoveNormalBlack = function (xOrigin,yOrigin,xDest,yDest) {
+    if(!this.board.tiles[xDest][yDest].isOccupied()) {
+        if(xDest == (xOrigin -1) && (yDest == (yOrigin+1) || (yDest== yOrigin-1)))
+            return true;
+    }
+    return false;
 };
