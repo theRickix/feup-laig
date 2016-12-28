@@ -21,7 +21,7 @@ XMLscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
     this.enableTextures(true);
     this.setPickEnabled(true);
-    this.game = new GameLogic(GameMode.HvsH,this);
+   // this.game = new GameLogic(GameMode.HvsH,this);
 	/*this.axis=new CGFaxis(this);
     this.rect = new MyRectangle(this,'',1,1,5,5);
     this.torus = new MyTorus(this,5,10,5,5);
@@ -442,8 +442,6 @@ XMLscene.prototype.display = function () {
     this.loadIdentity();
 
 	this.applyViewMatrix();
-
-	this.game.board.display();
 
 	this.setDefaultAppearance();
 

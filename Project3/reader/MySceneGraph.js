@@ -434,6 +434,10 @@ MySceneGraph.prototype.parsePrimitives= function(rootElement) {
 				this.parseChessboard(primitive.children[0], id);
 				break;
 
+			case "gameboard":
+				this.parseGameboard(id);
+				break;
+
 		}
 
 	}
@@ -549,6 +553,16 @@ MySceneGraph.prototype.parseVehicle= function(id) {
 
 	this.primitives.push(primitive);
 };
+
+MySceneGraph.prototype.parseGameboard= function(id) {
+
+	var primitive = new GameLogic(GameMode.HvsH,this.scene);
+	primitive['id'] = id;
+	this.scene.game = primitive;
+
+	this.primitives.push(primitive);
+};
+
 
 MySceneGraph.prototype.parseTorus= function(element,id) {
 	var inner = this.reader.getFloat(element, 'inner');

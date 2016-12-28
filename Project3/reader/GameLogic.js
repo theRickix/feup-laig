@@ -230,3 +230,7 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.selectedTile = null;
     this.hasSelectedPiece = false;
 };
+
+GameLogic.prototype.display = function() {
+    this.board.display();
+}
