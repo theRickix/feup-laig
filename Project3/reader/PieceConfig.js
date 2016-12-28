@@ -12,7 +12,7 @@ function PieceConfig(scene,tile, texture,color)
 
     //Position on the board as a x,y pair (vec2)
 
-    this.geom = new PiecePrimitive(this.scene, 1.5, 0.4, 0.4, 100, 100, texture, vec3.fromValues(this.tile.getX() + .5, 0, this.tile.getZ() + .5));
+    this.geom = new PiecePrimitive(this.scene, 0.5, 0.5, 0.5, 100, 100, texture, vec3.fromValues(this.tile.getX() + .5, 0, this.tile.getZ() + .5));
 
     this.animation;
 }
