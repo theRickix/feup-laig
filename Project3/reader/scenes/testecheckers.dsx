@@ -27,8 +27,8 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="view1" near="0.1" far="500" angle="0.4">
-            <from x="30" y="25" z="25" />
+        <perspective id="view1" near="0.5" far="500" angle="0.5">
+            <from x="0" y="20" z="20" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -88,15 +88,13 @@
 
         <!-- Deve existir um ou mais blocos "transformation" -->
         <!-- Os identificadores "id" nao podem ser repetidos -->
-        <transformation id="ss">
+        <transformation id="tt">
             <!-- deve existir pelo menos uma instrução de transformacao; -->
             <!-- podem ser usadas tantas instrucoes quantas as -->
             <!-- necessárias, mas escritas pela mesma ordem que -->
             <!-- seria usada na sua escrita diretamente em código WebGL -->
 
-            <translate x="ff" y="ff" z="ff" />
-            <rotate axis="cc" angle="ff" />
-            <scale x="ff" y="ff" z="ff" />
+            <translate x="-4" y="4" z="1" />
         </transformation>
 
     </transformations>
@@ -140,8 +138,8 @@
 
             <!-- bloco "transformation" obrigatorio -->
             <transformation>
+                <transformationref id="tt"/>
 
-                <translate x="1" y="1" z="1" />
 
             </transformation>
 
