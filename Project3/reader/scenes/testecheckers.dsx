@@ -33,6 +33,11 @@
             <to x="5" y="0" z="0" />
         </perspective>
 
+        <perspective id="view2" near="0.5" far="500" angle="20">
+            <from x="-9" y="20" z="0" />
+            <to x="6" y="0" z="0" />
+        </perspective>
+
     </views>
 
 

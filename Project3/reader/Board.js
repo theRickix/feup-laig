@@ -7,7 +7,7 @@ function Board(scene,game)
     this.scene = scene;
     this.textures = [];
     this.textures["white"] = new CGFtexture(this.scene, "res/white.jpg");
-    this.textures["bordeaux"] = new CGFtexture(this.scene, "res/bordeaux.jpg");
+    this.textures["black"] = new CGFtexture(this.scene, "res/black.jpg");
     this.textures["whitePiece"] = new CGFtexture(this.scene, "res/whitePiece.jpg");
     this.textures["blackPiece"] = new CGFtexture(this.scene, "res/blackPiece.jpg");
     this.textures["lightGreen"] = new CGFtexture(this.scene, "res/lightGreen.gif");
@@ -25,9 +25,9 @@ Board.prototype.buildBoard = function() {
         this.tiles[x] = [];
         for(var y=0; y<8; y++) {
             if(x%2 == y%2)
-                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0.8, 0.8, 0.8, 0),x,y,this.textures["white"],this.textures["lightGreen"],id);
+                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0.8, 0.8, 0.8, 0),x,y,this.textures["black"],this.textures["lightGreen"],id);
             else
-                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0,0, 0, 0),x,y,this.textures["bordeaux"],this.textures["lightGreen"],id);
+                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0,0, 0, 0),x,y,this.textures["white"],this.textures["lightGreen"],id);
             id++;
         }
     }

@@ -287,7 +287,9 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
 };
 
 GameLogic.prototype.display = function() {
+    this.scene.pushMatrix();
     this.board.display();
+    this.scene.popMatrix();
 };
 
 GameLogic.prototype.turnKingIfPossible = function(piece,x) {
