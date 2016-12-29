@@ -143,16 +143,20 @@ GameLogic.prototype.getPickedObject = function(id)
 
 GameLogic.prototype.playPiece = function(id)
 {
-    var tileXDest = this.getRow(id);
-    var tileYDest = this.getCol(id);
-    var tileX = this.getRow(this.selectedTile);
-    var tileY = this.getCol(this.selectedTile);
+    var xDest = this.getRow(id);
+    var yDest = this.getCol(id);
+    var xOrigin = this.getRow(this.selectedTile);
+    var yOrigin = this.getCol(this.selectedTile);
 
-
-    if(this.currentPlayer.color == Color.WHITE)
-        this.checkValidMoveNormalWhite(tileX,tileY,tileXDest,tileYDest);
+    if(!this.board.pieces[this.board.tiles[xOrigin ][yOrigin].piece].isKing()) {
+        if(this.currentPlayer.color == Color.WHITE)
+            this.checkValidMoveNormalWhite(xOrigin,yOrigin,xDest,yDest);
+        else
+            this.checkValidMoveNormalBlack(xOrigin,yOrigin,xDest,yDest);
+    }
     else
-        this.checkValidMoveNormalBlack(tileX,tileY,tileXDest,tileYDest);
+        this.checkValidMoveKing(xOrigin,yOrigin,xDest,yDest);
+
 
 };
 
@@ -186,6 +190,7 @@ GameLogic.prototype.checkValidMoveNormalWhite = function (xOrigin,yOrigin,xDest,
                     this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin + 1, yOrigin - 1);
             }
         }
+
     }
 };
 
@@ -203,6 +208,40 @@ GameLogic.prototype.checkValidMoveNormalBlack = function (xOrigin,yOrigin,xDest,
             if (yDest == (yOrigin - 2)) {
                 if (this.board.pieces[this.board.tiles[xOrigin - 1][yOrigin - 1].piece].color != this.currentPlayer.color)
                     this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin - 1, yOrigin - 1);
+            }
+        }
+    }
+};
+
+GameLogic.prototype.checkValidMoveKing = function (xOrigin,yOrigin,xDest,yDest) {
+    if(!this.board.tiles[xDest][yDest].isOccupied()) {
+        if(xDest == (xOrigin -1) && (yDest == (yOrigin+1) || (yDest == yOrigin-1)))
+            this.moveNormal(xOrigin,yOrigin,xDest,yDest);
+
+        if (xDest == (xOrigin - 2)) {
+            if (yDest == (yOrigin + 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin - 1][yOrigin + 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin - 1, yOrigin + 1);
+            }
+
+            if (yDest == (yOrigin - 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin - 1][yOrigin - 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin - 1, yOrigin - 1);
+            }
+        }
+
+        if(xDest == (xOrigin + 1) && (yDest == (yOrigin+1) || (yDest== yOrigin-1)))
+            this.moveNormal(xOrigin,yOrigin,xDest,yDest);
+
+        if (xDest == (xOrigin + 2)) {
+            if (yDest == (yOrigin + 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin + 1][yOrigin + 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin + 1, yOrigin + 1);
+            }
+
+            if (yDest == (yOrigin - 2)) {
+                if (this.board.pieces[this.board.tiles[xOrigin + 1][yOrigin - 1].piece].color != this.currentPlayer.color)
+                    this.moveEat(xOrigin, yOrigin, xDest, yDest, xOrigin + 1, yOrigin - 1);
             }
         }
     }
@@ -241,6 +280,7 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
 
     this.selectedTile = null;
     this.hasSelectedPiece = false;
+    this.changePlayer();
 };
 
 GameLogic.prototype.display = function() {
