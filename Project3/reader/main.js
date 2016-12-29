@@ -12,7 +12,7 @@ function getUrlVars() {
 }	 
 
 serialInclude(['../lib/CGF.js', 'MyEnums.js','XMLscene.js', 'MySceneGraph.js', 'MyTriangle.js', 'MyRectangle.js','MyTorus.js','MyCylinder.js','DrawCylinder.js','MySphere.js','MyInterface.js','Animation.js', 'CircularAnimation.js','LinearAnimation.js','MySurface.js','MyPlane.js','MyPatch.js','MyChessboard.js','MyVehicle.js','GameLogic.js','Board.js','KeyFrame.js','KeyFrameAnimation.js',
-    'PieceConfig.js','PiecePrimitive.js','TileConfig.js','TilePrimitive.js','MyPlayer.js','MyPrologConnector.js', "Cylinder.js",
+    'PieceConfig.js','PiecePrimitive.js','TileConfig.js','TilePrimitive.js','MyPlayer.js','MyPrologConnector.js', "Cylinder.js",'MyCameraAnimation.js',
 
 main=function()
 {

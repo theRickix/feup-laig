@@ -121,10 +121,15 @@ GameLogic.prototype.changePlayer = function()
     if(this.currentPlayer == this.player1) {
         this.currentPlayer = this.player2;
         this.otherPlayer = this.player1;
+        this.scene.changingCamera = true;
+        this.scene.cameraAnimation = new MyCameraAnimation(this.scene,"",1,this.scene.graph.view.perspectives[0],this.scene.graph.view.perspectives[1]);
     }
     else {
         this.currentPlayer = this.player1;
         this.otherPlayer = this.player2;
+        this.scene.changingCamera = true;
+        this.scene.cameraAnimation = new MyCameraAnimation(this.scene,"",1,this.scene.graph.view.perspectives[1],this.scene.graph.view.perspectives[0]);
+
     }
 
 };

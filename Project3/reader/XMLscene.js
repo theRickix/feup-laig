@@ -21,6 +21,8 @@ XMLscene.prototype.init = function (application) {
     this.gl.depthFunc(this.gl.LEQUAL);
     this.enableTextures(true);
     this.setPickEnabled(true);
+    this.changingCamera = false;
+    this.cameraAnimation = null;
    // this.game = new GameLogic(GameMode.HvsH,this);
 	/*this.axis=new CGFaxis(this);
     this.rect = new MyRectangle(this,'',1,1,5,5);
@@ -434,6 +436,14 @@ XMLscene.prototype.onGraphLoaded = function ()
 XMLscene.prototype.display = function () {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
+    if(this.changingCamera) {
+        var finished = this.cameraAnimation.animate(Date.now());
+        if (finished) {
+            this.changingCamera = false;
+            this.cameraAnimation = null;
+        }
+    }
 
     this.logPicking();
     this.clearPickRegistration();
