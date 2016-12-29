@@ -20,6 +20,7 @@ function GameLogic(gamemode,scene)
         return "error in game mode";
     }
     this.currentPlayer = this.player1;
+    this.otherPlayer = this.player2;
 
     this.scene = scene;
     //The current board object
@@ -57,13 +58,13 @@ GameLogic.prototype.gameLoop = function()
 
 GameLogic.prototype.checkWinCondition = function()
 {
-    if(playerList[0].pieces <= 0)
+    if(this.player1.numberPieces <= 0)
     {
-        this.playerWon = 1;
+        this.playerWon = this.player1;
     }
-    else if(player[1].pieces <= 0)
+    else if(this.player2.numberPieces <= 0)
     {
-        this.playerWon = 0;
+        this.playerWon = this.player2;
     }
 };
 
@@ -116,10 +117,15 @@ GameLogic.prototype.createAnimationKeyFrames = function()
 
 GameLogic.prototype.changePlayer = function()
 {
-    if(this.currentPlayer == this.player1)
+    if(this.currentPlayer == this.player1) {
         this.currentPlayer = this.player2;
-    else
+        this.otherPlayer = this.player1;
+    }
+    else {
         this.currentPlayer = this.player1;
+        this.otherPlayer = this.player2;
+    }
+
 };
 
 GameLogic.prototype.getPickedObject = function(id)
@@ -209,6 +215,8 @@ GameLogic.prototype.moveNormal = function (xOrigin,yOrigin,xDest,yDest) {
     this.board.tiles[xOrigin][yOrigin].piece = -1;
     this.board.pieces[this.board.tiles[xDest][yDest].piece].tile = this.board.tiles[xDest][yDest];
 
+    this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
+
     this.selectedTile = null;
     this.hasSelectedPiece = false;
     this.changePlayer();
@@ -227,10 +235,9 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.board.tiles[xEat][yEat].piece = -1;
     this.board.tiles[xEat][yEat].setOccupied(false);
 
+    this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],yDest);
 
-    if((this.currentPlayer.color == Color.WHITE && xDest==7) ||
-        (this.currentPlayer.color == Color.BLACK && xDest==0))
-        this.turnKing(this.board.pieces[this.board.tiles[xDest][yDest].piece]);
+    this.otherPlayer.numberPieces--;
 
     this.selectedTile = null;
     this.hasSelectedPiece = false;
@@ -240,6 +247,9 @@ GameLogic.prototype.display = function() {
     this.board.display();
 };
 
-GameLogic.prototype.turnKing = function(piece) {
-    piece.turnKing();
-}
+GameLogic.prototype.turnKingIfPossible = function(piece,x) {
+    if((this.currentPlayer.color == Color.WHITE && x==7) ||
+        (this.currentPlayer.color == Color.BLACK && x==0)) {
+        piece.turnKing();
+    }
+};

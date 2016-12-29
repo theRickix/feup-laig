@@ -4,6 +4,8 @@ function MyPlayer(scene, type, color) {
     this.color = color;
     //Currently selected piece by the player
     this.selectedPiece = null;
+
+    this.numberPieces=12;
 }
 
 MyPlayer.prototype = Object.create(MyPlayer.prototype);
@@ -25,4 +27,4 @@ MyPlayer.prototype.unselectCurrentPiece = function()
         this.selectedPiece.selected = false;
         this.selectedPiece = null;
     }
-}
+};
