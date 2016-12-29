@@ -33,8 +33,8 @@ function GameLogic(gamemode,scene)
     //The current play being made
     this.currentPlay = null;
 
-    this.scene.interface.initScore();
     this.scene.interface.initSurrender();
+    this.scene.interface.initScore();
    // this.gameLoop();
 }
 

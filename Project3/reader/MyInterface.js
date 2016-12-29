@@ -12,17 +12,6 @@ MyInterface.prototype.init = function(application) {
     this.gui = new dat.GUI();
     this.gui2 = new dat.GUI();
 
-    /*dat.GUI.prototype.removeFolder = function(name) {
-        var folder = this.__folders[name];
-        if (!folder) {
-            return;
-        }
-        folder.close();
-        this.__ul.removeChild(folder.domElement.parentNode);
-        delete this.__folders[name];
-        this.onResize();
-    }*/
-
 
     this.lights = this.gui.addFolder("Lights");
     this.lights.open();

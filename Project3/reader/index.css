@@ -1,6 +1,8 @@
-@font-face {
-    font-family: 'Shadows Into Light', cursive;
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+* {
+    font-family: 'Roboto';
 }
+
 
 body, html {
     -webkit-background-size: cover;
@@ -19,13 +21,14 @@ canvas {
 }
 
 #name {
-    font-family: 'Shadows Into Light', cursive;
+
     font-size: 50px;
     color: #1d00b2;
     margin-top: 6%;
     text-align: center;
     position: relative;
     cursor: default;
+
 }
 
 
@@ -47,3 +50,7 @@ canvas {
     background-size: cover;
 }
 
+h1 {
+    color: black;
+    text-shadow: 2px 10px 20px #000000;
+}
