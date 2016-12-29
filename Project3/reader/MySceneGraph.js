@@ -145,7 +145,7 @@ MySceneGraph.prototype.parseViews = function(rootElement) {
 		var id = this.reader.getString(perspectives[i], 'id');
 		var near = this.reader.getFloat(perspectives[i], 'near');
 		var far = this.reader.getFloat(perspectives[i], 'far');
-		var angle = this.reader.getFloat(perspectives[i], 'angle');
+		var angle = this.reader.getFloat(perspectives[i], 'angle')*Math.PI/180;
 
 		var from = perspectives[i].getElementsByTagName('from');
 		var to = perspectives[i].getElementsByTagName('to');

@@ -27,9 +27,10 @@
         <!-- primeira vista; de cada vez que se pressione a tecla v/V, -->
         <!-- a vista muda para a proxima da lista; da -->
         <!-- ultima vista da lista volta 'a primeira -->
-        <perspective id="view1" near="0.5" far="500" angle="0.5">
-            <from x="0" y="20" z="20" />
-            <to x="0" y="0" z="0" />
+
+        <perspective id="view1" near="0.5" far="500" angle="20">
+            <from x="20" y="20" z="0" />
+            <to x="5" y="0" z="0" />
         </perspective>
 
     </views>
@@ -94,7 +95,7 @@
             <!-- necessárias, mas escritas pela mesma ordem que -->
             <!-- seria usada na sua escrita diretamente em código WebGL -->
 
-            <translate x="-4" y="4" z="1" />
+            <translate x="2" y="0" z="-3" />
         </transformation>
 
     </transformations>
