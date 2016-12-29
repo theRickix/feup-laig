@@ -34,6 +34,7 @@ function GameLogic(gamemode,scene)
     this.currentPlay = null;
 
     this.scene.interface.initScore();
+    this.scene.interface.initSurrender();
    // this.gameLoop();
 }
 
@@ -293,5 +294,14 @@ GameLogic.prototype.turnKingIfPossible = function(piece,x) {
     if((this.currentPlayer.color == Color.WHITE && x==7) ||
         (this.currentPlayer.color == Color.BLACK && x==0)) {
         piece.turnKing();
+    }
+};
+
+GameLogic.prototype.playerSurrender = function() {
+    if(this.currentPlayer == this.player1) {
+        location.replace("gameoverblack.html");
+    }
+    else if(this.currentPlayer == this.player2) {
+        location.replace("gameoverwhite.html");
     }
 };

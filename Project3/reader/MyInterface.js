@@ -60,6 +60,13 @@ MyInterface.prototype.initScore = function() {
     this.score2.domElement.style.pointerEvents = "none";
 };
 
+MyInterface.prototype.initSurrender = function() {
+    var self = this;
+    var surrender = { Surrender:function(){ self.scene.game.playerSurrender();}};
+    this.surrenderBtn = this.gui2.add(surrender,"Surrender");
+
+};
+
 MyInterface.prototype.setScore = function(score1,score2) {
     var Score = function() {
         this.Player1 = score1;
