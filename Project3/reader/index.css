@@ -51,6 +51,6 @@ canvas {
 }
 
 h1 {
-    color: black;
-    text-shadow: 2px 10px 20px #000000;
+    color: darkblue;
+    text-shadow: 2px 10px 20px darkblue;
 }
