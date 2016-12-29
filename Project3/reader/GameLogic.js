@@ -227,10 +227,19 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.board.tiles[xEat][yEat].piece = -1;
     this.board.tiles[xEat][yEat].setOccupied(false);
 
+
+    if((this.currentPlayer.color == Color.WHITE && xDest==7) ||
+        (this.currentPlayer.color == Color.BLACK && xDest==0))
+        this.turnKing(this.board.pieces[this.board.tiles[xDest][yDest].piece]);
+
     this.selectedTile = null;
     this.hasSelectedPiece = false;
 };
 
 GameLogic.prototype.display = function() {
     this.board.display();
+};
+
+GameLogic.prototype.turnKing = function(piece) {
+    piece.turnKing();
 }

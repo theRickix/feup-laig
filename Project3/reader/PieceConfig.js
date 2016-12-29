@@ -37,7 +37,8 @@ PieceConfig.prototype.display = function()
     this.scene.registerForPick(this.tile.id, this.geom);
     this.scene.translate(this.tile.x, 1, this.tile.z);
     if(this.dama == true) {         //se dama, entao faz scale
-        this.scene.scale(1, 2, 1);
+        this.scene.scale(1, 3, 1);
+        this.scene.translate(0,0.4,0);
     }
     this.geom.display();
     this.scene.popMatrix();
@@ -54,4 +55,12 @@ PieceConfig.prototype.remove = function() {
 
 PieceConfig.prototype.isAlive = function() {
     return !this.eaten;
-}
+};
+
+PieceConfig.prototype.turnKing = function() {
+    this.dama = true;
+};
+
+PieceConfig.prototype.isKing = function() {
+    return this.dama;
+};
