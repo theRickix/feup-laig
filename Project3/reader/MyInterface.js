@@ -10,11 +10,22 @@ MyInterface.prototype.init = function(application) {
     CGFinterface.prototype.init.call(this, application);
 
     this.gui = new dat.GUI();
+    this.gui2 = new dat.GUI();
+
+    /*dat.GUI.prototype.removeFolder = function(name) {
+        var folder = this.__folders[name];
+        if (!folder) {
+            return;
+        }
+        folder.close();
+        this.__ul.removeChild(folder.domElement.parentNode);
+        delete this.__folders[name];
+        this.onResize();
+    }*/
 
 
     this.lights = this.gui.addFolder("Lights");
     this.lights.open();
-
     return true;
 };
 
@@ -37,3 +48,29 @@ MyInterface.prototype.processKeyDown = function(event) {
     }
 };
 
+MyInterface.prototype.initScore = function() {
+    var Score = function() {
+        this.Player1 = 12;
+        this.Player2 = 12;
+    };
+    var text = new Score();
+    this.score1 = this.gui2.add(text, 'Player1', 0,12);
+    this.score2 = this.gui2.add(text, 'Player2', 0,12);
+    this.score1.domElement.style.pointerEvents = "none";
+    this.score2.domElement.style.pointerEvents = "none";
+};
+
+MyInterface.prototype.setScore = function(score1,score2) {
+    var Score = function() {
+        this.Player1 = score1;
+        this.Player2 = score2;
+    };
+    var text = new Score();
+    this.gui2.remove(this.score1);
+    this.gui2.remove(this.score2);
+    this.score1 = this.gui2.add(text, 'Player1', 0,12);
+    this.score2 = this.gui2.add(text, 'Player2', 0,12);
+    this.score1.domElement.style.pointerEvents = "none";
+    this.score2.domElement.style.pointerEvents = "none";
+    this.gui2.enabled = false;
+};

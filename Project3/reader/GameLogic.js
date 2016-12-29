@@ -1,7 +1,6 @@
 function GameLogic(gamemode,scene)
 {
     //The list of players currently playing the game
-
     this.player1;
     this.player2;
     if(gamemode == GameMode.HvsH) { //Human vs Human
@@ -34,6 +33,7 @@ function GameLogic(gamemode,scene)
     //The current play being made
     this.currentPlay = null;
 
+    this.scene.interface.initScore();
    // this.gameLoop();
 }
 
@@ -148,7 +148,7 @@ GameLogic.prototype.playPiece = function(id)
     var xOrigin = this.getRow(this.selectedTile);
     var yOrigin = this.getCol(this.selectedTile);
 
-    if(!this.board.pieces[this.board.tiles[xOrigin ][yOrigin].piece].isKing()) {
+    if(!this.board.pieces[this.board.tiles[xOrigin][yOrigin].piece].isKing()) {
         if(this.currentPlayer.color == Color.WHITE)
             this.checkValidMoveNormalWhite(xOrigin,yOrigin,xDest,yDest);
         else
@@ -278,9 +278,11 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
 
     this.otherPlayer.numberPieces--;
 
+
     this.selectedTile = null;
     this.hasSelectedPiece = false;
     this.changePlayer();
+    this.scene.interface.setScore(this.player1.numberPieces,this.player2.numberPieces);
 };
 
 GameLogic.prototype.display = function() {
