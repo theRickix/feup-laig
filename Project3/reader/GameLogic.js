@@ -235,7 +235,7 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.board.tiles[xEat][yEat].piece = -1;
     this.board.tiles[xEat][yEat].setOccupied(false);
 
-    this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],yDest);
+    this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
 
     this.otherPlayer.numberPieces--;
 
