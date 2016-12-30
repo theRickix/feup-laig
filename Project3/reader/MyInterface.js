@@ -56,6 +56,18 @@ MyInterface.prototype.initSurrender = function() {
 
 };
 
+MyInterface.prototype.initUndo = function() {
+    var self = this;
+    var undo = { Undo:function(){ self.scene.game.playUndo();}};
+    this.surrenderBtn = this.gui2.add(undo,"Undo");
+
+};
+
+MyInterface.prototype.removeUndo = function() {
+    this.gui2.remove(this.surrenderBtn);
+
+};
+
 MyInterface.prototype.setScore = function(score1,score2) {
     var Score = function() {
         this.Player1 = score1;

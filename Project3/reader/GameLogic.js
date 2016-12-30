@@ -312,3 +312,7 @@ GameLogic.prototype.playerSurrender = function() {
         location.replace("gameoverwhite.html");
     }
 };
+
+GameLogic.prototype.playUndo = function() {
+    //TODO
+};
