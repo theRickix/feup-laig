@@ -35,8 +35,11 @@ function GameLogic(gamemode,scene)
     this.playHistory = [];
     this.showingReply = false;
 
-    if(document.getElementById('replay') === null)
+    if(document.getElementById('replay') === null) {
         this.showingReplay = false;
+        this.time_begin_turn = Date.now();
+    }
+
     else {
         this.showingReplay = true;
         this.getHistory();
@@ -47,7 +50,9 @@ function GameLogic(gamemode,scene)
     this.scene.interface.initSurrender();
     this.scene.interface.initUndo();
     if(this.showingReplay)
-        this.scene.interface.initMenu()
+        this.scene.interface.initMenu();
+    else
+        this.scene.interface.initTimer(30,1);
     this.scene.interface.initScore();
    // this.gameLoop();
     console.log(this.playHistory);
@@ -137,6 +142,7 @@ GameLogic.prototype.createAnimationKeyFrames = function()
 
 GameLogic.prototype.changePlayer = function()
 {
+    this.time_begin_turn = Date.now();
     if(this.currentPlayer == this.player1) {
         this.currentPlayer = this.player2;
         this.otherPlayer = this.player1;
@@ -321,6 +327,19 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
 };
 
 GameLogic.prototype.display = function() {
+    if(!this.showingReplay) {
+        var player;
+        var time_now = Date.now();
+        if(time_now - this.time_begin_turn >= 30000)
+            this.playerSurrender();
+        else {
+            if(this.currentPlayer == this.player1)
+                player = 1;
+            else
+                player = 2;
+            this.scene.interface.updateTimer((30000 - (time_now-this.time_begin_turn))/1000,player);
+        }
+    }
     this.scene.pushMatrix();
     this.board.display();
     this.scene.popMatrix();
