@@ -429,7 +429,7 @@ XMLscene.prototype.onGraphLoaded = function ()
     this.setTextures();
     this.setAnimations();
     this.setPrimitives();
-    this.interface.addLights();
+    //this.interface.addLights();
 
 };
 
