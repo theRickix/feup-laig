@@ -56,10 +56,19 @@ MyInterface.prototype.initSurrender = function() {
 
 };
 
+
 MyInterface.prototype.initUndo = function() {
     var self = this;
     var undo = { Undo:function(){ self.scene.game.playUndo();}};
     this.surrenderBtn = this.gui2.add(undo,"Undo");
+
+};
+
+
+MyInterface.prototype.initMenu = function() {
+    var self = this;
+    var menu = { Menu:function(){ location.replace("index.html");}};
+    this.surrenderBtn = this.gui2.add(menu,"Menu");
 
 };
 

@@ -46,6 +46,8 @@ function GameLogic(gamemode,scene)
 
     this.scene.interface.initSurrender();
     this.scene.interface.initUndo();
+    if(this.showingReplay)
+        this.scene.interface.initMenu()
     this.scene.interface.initScore();
    // this.gameLoop();
     console.log(this.playHistory);
