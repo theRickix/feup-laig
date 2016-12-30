@@ -448,6 +448,8 @@ XMLscene.prototype.display = function () {
     this.logPicking();
     this.clearPickRegistration();
 
+
+
 	this.updateProjectionMatrix();
     this.loadIdentity();
 

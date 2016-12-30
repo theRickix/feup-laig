@@ -33,11 +33,22 @@ function GameLogic(gamemode,scene)
     //The current play being made
     this.currentPlay = null;
     this.playHistory = [];
+    this.showingReply = false;
+
+    if(document.getElementById('replay') === null)
+        this.showingReplay = false;
+    else {
+        this.showingReplay = true;
+        this.getHistory();
+        this.time_begin = -1;
+        console.log("TESTE");
+    }
 
     this.scene.interface.initSurrender();
     this.scene.interface.initUndo();
     this.scene.interface.initScore();
    // this.gameLoop();
+    console.log(this.playHistory);
 }
 
 GameLogic.prototype.constructor = GameLogic;
@@ -63,11 +74,15 @@ GameLogic.prototype.checkWinCondition = function()
 {
     if(this.player1.numberPieces <= 0)
     {
-        this.playerWon = this.player1;
+        this.playHistory.push(2);
+        this.saveHistory();
+        location.replace("gameoverblack.html");
     }
     else if(this.player2.numberPieces <= 0)
     {
-        this.playerWon = this.player2;
+        this.playHistory.push(1);
+        this.saveHistory();
+        location.replace("gameoverwhite.html");
     }
 };
 
@@ -265,14 +280,15 @@ GameLogic.prototype.moveNormal = function (xOrigin,yOrigin,xDest,yDest) {
     if(!this.board.pieces[this.board.tiles[xDest][yDest].piece].isKing())
         turnedKing = this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
 
-    this.addToHistoryNormal(xOrigin,yOrigin,xDest,yDest,turnedKing);
+    if(!this.showingReplay)
+        this.addToHistoryNormal(xOrigin,yOrigin,xDest,yDest,turnedKing);
     this.selectedTile = null;
     this.hasSelectedPiece = false;
+    this.checkWinCondition();
     this.changePlayer();
 };
 
 GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
-    //this.addToHistory();
     this.board.tiles[xOrigin][yOrigin].setOccupied(false);
     this.board.tiles[xDest][yDest].setOccupied(true);
     this.board.tiles[xDest][yDest].piece = this.board.tiles[xOrigin][yOrigin].piece;
@@ -292,11 +308,13 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
 
     this.otherPlayer.numberPieces--;
 
-    this.addToHistoryEat(xOrigin,yOrigin,xDest,yDest,xEat,yEat,pieceID,turnedKing);
+    if(!this.showingReplay)
+        this.addToHistoryEat(xOrigin,yOrigin,xDest,yDest,xEat,yEat,pieceID,turnedKing);
 
     this.selectedTile = null;
     this.hasSelectedPiece = false;
     this.changePlayer();
+    this.checkWinCondition();
     this.scene.interface.setScore(this.player1.numberPieces,this.player2.numberPieces);
 };
 
@@ -304,6 +322,8 @@ GameLogic.prototype.display = function() {
     this.scene.pushMatrix();
     this.board.display();
     this.scene.popMatrix();
+    if(this.showingReplay)
+        this.doHistoryPlay(Date.now());
 };
 
 GameLogic.prototype.turnKingIfPossible = function(piece,x) {
@@ -317,9 +337,13 @@ GameLogic.prototype.turnKingIfPossible = function(piece,x) {
 
 GameLogic.prototype.playerSurrender = function() {
     if(this.currentPlayer == this.player1) {
+        this.playHistory.push(2);
+        this.saveHistory();
         location.replace("gameoverblack.html");
     }
     else if(this.currentPlayer == this.player2) {
+        this.playHistory.push(2);
+        this.saveHistory();
         location.replace("gameoverwhite.html");
     }
 }
@@ -336,7 +360,7 @@ GameLogic.prototype.addToHistoryNormal = function(xOrigin,yOrigin,xDest,yDest,tu
     this.playHistory.push(play);
 };
 
-GameLogic.prototype.addToHistoryEat= function(xOrigin,yOrigin,xDest,yDest,xEat,yEat,pieceEaten,turnedKing) {
+GameLogic.prototype.addToHistoryEat = function(xOrigin,yOrigin,xDest,yDest,xEat,yEat,pieceEaten,turnedKing) {
     var play = {
         type: MoveResult.EAT,
         xOrigin: xOrigin,
@@ -347,8 +371,50 @@ GameLogic.prototype.addToHistoryEat= function(xOrigin,yOrigin,xDest,yDest,xEat,y
         yEat: yEat,
         pieceEaten: pieceEaten,
         turnedKing: turnedKing
-    }
+    };
     this.playHistory.push(play);
+};
+
+GameLogic.prototype.saveHistory = function() {
+    localStorage.setItem('replay', JSON.stringify(this.playHistory));
+};
+
+GameLogic.prototype.getHistory = function() {
+    this.playHistory = JSON.parse(localStorage.getItem('replay'));
+    this.playHistory.reverse();
+    console.log("SIZE"+this.playHistory.length);
+};
+
+GameLogic.prototype.showingReplay = function() {
+    return this.showingReplay;
+};
+
+GameLogic.prototype.doHistoryPlay = function(time) {
+    if(this.playHistory.length >1) {
+
+
+        if(this.time_begin == -1)
+            this.time_begin = time;
+
+        if(time - this.time_begin >= 3000) {
+            this.time_begin = time;
+            var play = this.playHistory.pop();
+            if(play.type == MoveResult.NORMAL) {
+                this.moveNormal(play.xOrigin,play.yOrigin,play.xDest,play.yDest);
+            }
+            else
+                this.moveEat(play.xOrigin,play.yOrigin,play.xDest,play.yDest,play.xEat,play.yEat);
+        }
+    }
+    else {
+        var winner = this.playHistory.pop();
+
+        if(winner == 1)
+            location.replace("gameoverwhite.html");
+        else
+            location.replace("gameoverblack.html");
+
+    }
 };
 
 GameLogic.prototype.playUndo = function() {
@@ -373,7 +439,6 @@ GameLogic.prototype.playUndo = function() {
         this.board.pieces[play.pieceEaten].tile = this.board.tiles[play.xEat][play.yEat];
         this.otherPlayer.numberPieces++;
         this.scene.interface.setScore(this.player1.numberPieces,this.player2.numberPieces);
-        console.log("HERE");
     }
 
 
