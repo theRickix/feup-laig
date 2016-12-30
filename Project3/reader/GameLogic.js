@@ -32,8 +32,10 @@ function GameLogic(gamemode,scene)
 
     //The current play being made
     this.currentPlay = null;
+    this.playHistory = [];
 
     this.scene.interface.initSurrender();
+    this.scene.interface.initUndo();
     this.scene.interface.initScore();
    // this.gameLoop();
 }
@@ -259,15 +261,18 @@ GameLogic.prototype.moveNormal = function (xOrigin,yOrigin,xDest,yDest) {
     this.board.tiles[xDest][yDest].piece = this.board.tiles[xOrigin][yOrigin].piece;
     this.board.tiles[xOrigin][yOrigin].piece = -1;
     this.board.pieces[this.board.tiles[xDest][yDest].piece].tile = this.board.tiles[xDest][yDest];
+    var turnedKing = false;
+    if(!this.board.pieces[this.board.tiles[xDest][yDest].piece].isKing())
+        turnedKing = this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
 
-    this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
-
+    this.addToHistoryNormal(xOrigin,yOrigin,xDest,yDest,turnedKing);
     this.selectedTile = null;
     this.hasSelectedPiece = false;
     this.changePlayer();
 };
 
 GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
+    //this.addToHistory();
     this.board.tiles[xOrigin][yOrigin].setOccupied(false);
     this.board.tiles[xDest][yDest].setOccupied(true);
     this.board.tiles[xDest][yDest].piece = this.board.tiles[xOrigin][yOrigin].piece;
@@ -275,15 +280,19 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.board.pieces[this.board.tiles[xDest][yDest].piece].tile = this.board.tiles[xDest][yDest];
 
     console.log("Piece ID: "+this.board.tiles[xEat][yEat].piece);
+    var pieceID = this.board.tiles[xEat][yEat].piece;
     this.board.pieces[this.board.tiles[xEat][yEat].piece].remove();
 
     this.board.tiles[xEat][yEat].piece = -1;
     this.board.tiles[xEat][yEat].setOccupied(false);
 
-    this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
+    var turnedKing = false;
+    if(!this.board.pieces[this.board.tiles[xDest][yDest].piece].isKing())
+        turnedKing = this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
 
     this.otherPlayer.numberPieces--;
 
+    this.addToHistoryEat(xOrigin,yOrigin,xDest,yDest,xEat,yEat,pieceID,turnedKing);
 
     this.selectedTile = null;
     this.hasSelectedPiece = false;
@@ -301,7 +310,9 @@ GameLogic.prototype.turnKingIfPossible = function(piece,x) {
     if((this.currentPlayer.color == Color.WHITE && x==7) ||
         (this.currentPlayer.color == Color.BLACK && x==0)) {
         piece.turnKing();
+        return true;
     }
+    return false;
 };
 
 GameLogic.prototype.playerSurrender = function() {
@@ -311,8 +322,64 @@ GameLogic.prototype.playerSurrender = function() {
     else if(this.currentPlayer == this.player2) {
         location.replace("gameoverwhite.html");
     }
+}
+
+GameLogic.prototype.addToHistoryNormal = function(xOrigin,yOrigin,xDest,yDest,turnedKing) {
+    var play = {
+        type: MoveResult.NORMAL,
+        xOrigin: xOrigin,
+        yOrigin: yOrigin,
+        xDest: xDest,
+        yDest: yDest,
+        turnedKing: turnedKing
+    }
+    this.playHistory.push(play);
+};
+
+GameLogic.prototype.addToHistoryEat= function(xOrigin,yOrigin,xDest,yDest,xEat,yEat,pieceEaten,turnedKing) {
+    var play = {
+        type: MoveResult.EAT,
+        xOrigin: xOrigin,
+        yOrigin: yOrigin,
+        xDest: xDest,
+        yDest: yDest,
+        xEat: xEat,
+        yEat: yEat,
+        pieceEaten: pieceEaten,
+        turnedKing: turnedKing
+    }
+    this.playHistory.push(play);
 };
 
 GameLogic.prototype.playUndo = function() {
-    //TODO
+    var play = this.playHistory.pop();
+
+    this.changePlayer();
+
+    this.board.tiles[play.xOrigin][play.yOrigin].setOccupied(true);
+    this.board.tiles[play.xDest][play.yDest].setOccupied(false);
+
+    this.board.tiles[play.xOrigin][play.yOrigin].piece = this.board.tiles[play.xDest][play.yDest].piece;
+    this.board.tiles[play.xDest][play.yDest].piece = -1;
+    this.board.pieces[this.board.tiles[play.xOrigin][play.yOrigin].piece].tile = this.board.tiles[play.xOrigin][play.yOrigin];
+
+    if(play.turnedKing)
+        this.board.pieces[this.board.tiles[play.xOrigin][play.yOrigin].piece].turnNormal();
+
+    if(play.type == MoveResult.EAT) {
+        this.board.tiles[play.xEat][play.yEat].setOccupied(true);
+        this.board.tiles[play.xEat][play.yEat].piece = play.pieceEaten;
+        this.board.pieces[play.pieceEaten].eaten = false;
+        this.board.pieces[play.pieceEaten].tile = this.board.tiles[play.xEat][play.yEat];
+        this.otherPlayer.numberPieces++;
+        this.scene.interface.setScore(this.player1.numberPieces,this.player2.numberPieces);
+        console.log("HERE");
+    }
+
+
+
+    this.selectedTile = null;
+    this.hasSelectedPiece = false;
+
+
 };

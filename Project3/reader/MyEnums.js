@@ -15,7 +15,6 @@ const GameMode = {
 }
 
 const MoveResult = {
-    NO: 'No',
     NORMAL: 'Normal',
     EAT: 'Eat'
 }

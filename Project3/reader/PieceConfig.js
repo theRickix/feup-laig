@@ -61,6 +61,10 @@ PieceConfig.prototype.turnKing = function() {
     this.dama = true;
 };
 
+PieceConfig.prototype.turnNormal = function() {
+    this.dama = false;
+};
+
 PieceConfig.prototype.isKing = function() {
     return this.dama;
 };
