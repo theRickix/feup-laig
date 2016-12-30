@@ -27,13 +27,13 @@ MyInterface.prototype.addLights = function() {
 
 MyInterface.prototype.processKeyDown = function(event) {
     switch (event.keyCode) {
-        case 86:
+        /*case 86:
             this.scene.nextCamera();
             break;
 
         case 118:
             this.scene.nextCamera();
-            break;
+            break;*/
     }
 };
 
