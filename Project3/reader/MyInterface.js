@@ -39,12 +39,12 @@ MyInterface.prototype.processKeyDown = function(event) {
 
 MyInterface.prototype.initScore = function() {
     var Score = function() {
-        this.Player1 = 12;
-        this.Player2 = 12;
+        this.White = 12;
+        this.Black = 12;
     };
     var text = new Score();
-    this.score1 = this.gui2.add(text, 'Player1', 0,12);
-    this.score2 = this.gui2.add(text, 'Player2', 0,12);
+    this.score1 = this.gui2.add(text, 'White', 0,12);
+    this.score2 = this.gui2.add(text, 'Black', 0,12);
     this.score1.domElement.style.pointerEvents = "none";
     this.score2.domElement.style.pointerEvents = "none";
 };
@@ -121,14 +121,14 @@ MyInterface.prototype.removeUndo = function() {
 
 MyInterface.prototype.setScore = function(score1,score2) {
     var Score = function() {
-        this.Player1 = score1;
-        this.Player2 = score2;
+        this.White = score1;
+        this.Black = score2;
     };
     var text = new Score();
     this.gui2.remove(this.score1);
     this.gui2.remove(this.score2);
-    this.score1 = this.gui2.add(text, 'Player1', 0,12);
-    this.score2 = this.gui2.add(text, 'Player2', 0,12);
+    this.score1 = this.gui2.add(text, 'White', 0,12);
+    this.score2 = this.gui2.add(text, 'Black', 0,12);
     this.score1.domElement.style.pointerEvents = "none";
     this.score2.domElement.style.pointerEvents = "none";
     this.gui2.enabled = false;
