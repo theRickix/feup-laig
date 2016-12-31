@@ -93,7 +93,7 @@ MyInterface.prototype.initTimer = function(time,player) {
 };
 
 MyInterface.prototype.updateTimer = function(time,player) {
-    console.log(time);
+
     this.gui3.remove(this.timer);
     var Timer;
     if(player == 1) {

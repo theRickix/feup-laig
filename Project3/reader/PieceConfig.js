@@ -36,7 +36,7 @@ PieceConfig.prototype.display = function()
     //register geometry instead of tile
     this.scene.registerForPick(this.tile.id, this.geom);
     this.scene.translate(this.tile.x, 1, this.tile.z);
-    if(this.dama == true) {         //se dama, entao faz scale
+    if(this.dama && !this.eaten) {         //se dama, entao faz scale
         this.scene.scale(1, 3, 1);
         this.scene.translate(0,0.4,0);
     }
@@ -48,9 +48,23 @@ PieceConfig.prototype.setTile = function(newTile) {
     this.tile = newTile;
 }
 
-PieceConfig.prototype.remove = function() {
+PieceConfig.prototype.remove = function(white,black) {
     this.eaten = true;
-    this.tile = null;
+    if(this.color == white.color) {
+        var nPieces = white.pieces.length;
+        var row = white.getRow(nPieces+1);
+        var col = white.getCol(nPieces+1);
+        this.tile = white.tiles[row][col];
+        white.pieces.push(this);
+    }
+    else {
+        var nPieces = black.pieces.length;
+        var row = black.getRow(nPieces+1);
+        var col = black.getCol(nPieces+1);
+        this.tile = black.tiles[row][col];
+        black.pieces.push(this);
+    }
+    console.log("x,y: "+row+" "+col);
 };
 
 PieceConfig.prototype.isAlive = function() {

@@ -24,6 +24,8 @@ function GameLogic(gamemode,scene)
     this.scene = scene;
     //The current board object
     this.board = new Board(this.scene,this);
+    this.auxBoardWhite = new AuxBoard(this.scene,this,Color.WHITE);
+    this.auxBoardBlack = new AuxBoard(this.scene,this,Color.BLACK);
 
     //The current turn of play
     this.turnNumber = 0;
@@ -44,7 +46,6 @@ function GameLogic(gamemode,scene)
         this.showingReplay = true;
         this.getHistory();
         this.time_begin = -1;
-        console.log("TESTE");
     }
 
     this.scene.interface.initSurrender();
@@ -305,7 +306,7 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
 
     console.log("Piece ID: "+this.board.tiles[xEat][yEat].piece);
     var pieceID = this.board.tiles[xEat][yEat].piece;
-    this.board.pieces[this.board.tiles[xEat][yEat].piece].remove();
+    this.board.pieces[this.board.tiles[xEat][yEat].piece].remove(this.auxBoardWhite,this.auxBoardBlack);
 
     this.board.tiles[xEat][yEat].piece = -1;
     this.board.tiles[xEat][yEat].setOccupied(false);
@@ -342,6 +343,8 @@ GameLogic.prototype.display = function() {
     }
     this.scene.pushMatrix();
     this.board.display();
+    this.auxBoardWhite.display();
+    this.auxBoardBlack.display();
     this.scene.popMatrix();
     if(this.showingReplay)
         this.doHistoryPlay(Date.now());
@@ -460,6 +463,10 @@ GameLogic.prototype.playUndo = function() {
         this.board.pieces[play.pieceEaten].tile = this.board.tiles[play.xEat][play.yEat];
         this.otherPlayer.numberPieces++;
         this.scene.interface.setScore(this.player1.numberPieces,this.player2.numberPieces);
+        if(this.otherPlayer.color == Color.WHITE)
+            this.auxBoardWhite.pieces.pop();
+        else
+            this.auxBoardBlack.pieces.pop();
     }
 
 
