@@ -25,9 +25,9 @@ Board.prototype.buildBoard = function() {
         this.tiles[x] = [];
         for(var y=0; y<8; y++) {
             if(x%2 == y%2)
-                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0.8, 0.8, 0.8, 0),x,y,this.textures["black"],this.textures["lightGreen"],id);
+                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0.8, 0.8, 0.8, 0),x,y,this.textures["black"],this.textures["lightGreen"],id,true);
             else
-                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0,0, 0, 0),x,y,this.textures["white"],this.textures["lightGreen"],id);
+                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0,0, 0, 0),x,y,this.textures["white"],this.textures["lightGreen"],id,true);
             id++;
         }
     }

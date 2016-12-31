@@ -20,14 +20,14 @@ AuxBoard.prototype.constructor = AuxBoard;
 
 AuxBoard.prototype.buildBoard = function() {
     //create tiles
-    var id=1;
+    var id=100;
     for(var x = 0; x<8; x++) {
         this.tiles[x] = [];
         for(var y=0; y<2; y++) {
             if(x%2 == y%2)
-                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0.8, 0.8, 0.8, 0),x,y,this.textures["black"],this.textures["lightGreen"],id);
+                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0.8, 0.8, 0.8, 0),x,y,this.textures["black"],this.textures["lightGreen"],id,false);
             else
-                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0,0, 0, 0),x,y,this.textures["white"],this.textures["lightGreen"],id);
+                this.tiles[x][y] = new TileConfig(this.scene,vec4.fromValues(0,0, 0, 0),x,y,this.textures["white"],this.textures["lightGreen"],id,false);
             id++;
         }
     }

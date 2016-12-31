@@ -1,9 +1,9 @@
-function TileConfig(scene, color, x, z, texture,selectedTexture, id) {
+function TileConfig(scene, color, x, z, texture,selectedTexture, id,forPick) {
     this.scene = scene;
     this.texture = texture;
     this.selectedTexture = selectedTexture;
     this.init_texture = texture;
-
+    this.forPick = forPick;
     this.occupied = false;
     this.color = color;
     this.x = x;
@@ -32,12 +32,12 @@ TileConfig.prototype.display = function(selected) {
     this.scene.translate(this.x, 0, this.z);
     this.geom.display(selected);
     this.scene.popMatrix();
-}
+};
 
 TileConfig.prototype.getX= function() {
     return this.x;
-}
+};
 
 TileConfig.prototype.getZ= function() {
     return this.y;
-}
+};
