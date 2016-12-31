@@ -468,8 +468,6 @@ GameLogic.prototype.playUndo = function() {
             this.auxBoardBlack.pieces.pop();
     }
 
-
-
     this.selectedTile = null;
     this.hasSelectedPiece = false;
 
