@@ -29,7 +29,7 @@ MyCameraAnimation.prototype.animate = function(time) {
 
 
     //time passed in %
-    var delta = (time-this.time_begin)/this.span
+    var delta = (time-this.time_begin)/this.span;
 
     var position = vec3.fromValues(this.initialView.position[0]+this.vecPosition[0]*delta,this.initialView.position[1]+this.vecPosition[1]*delta,this.initialView.position[2]+this.vecPosition[2]*delta);
     var target =  vec3.fromValues(this.initialView.target[0]+this.vecTarget[0]*delta,this.initialView.target[1]+this.vecTarget[1]*delta,this.initialView.target[2]+this.vecTarget[2]*delta);

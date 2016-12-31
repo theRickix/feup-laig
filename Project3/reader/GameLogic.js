@@ -33,7 +33,6 @@ function GameLogic(gamemode,scene)
     this.playerWon = -1;
 
     //The current play being made
-    this.currentPlay = null;
     this.playHistory = [];
     this.showingReply = false;
 
@@ -92,11 +91,6 @@ GameLogic.prototype.checkWinCondition = function()
         this.saveHistory();
         location.replace("gameoverwhite.html");
     }
-};
-
-GameLogic.prototype.setPlay = function(play)
-{
-    this.currentPlay = play;
 };
 
 GameLogic.prototype.createAnimationKeyFrames = function()
