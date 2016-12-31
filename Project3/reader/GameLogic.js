@@ -279,6 +279,8 @@ GameLogic.prototype.moveNormal = function (xOrigin,yOrigin,xDest,yDest) {
     this.board.tiles[xDest][yDest].piece = this.board.tiles[xOrigin][yOrigin].piece;
     this.board.tiles[xOrigin][yOrigin].piece = -1;
     this.board.pieces[this.board.tiles[xDest][yDest].piece].tile = this.board.tiles[xDest][yDest];
+    this.board.pieces[this.board.tiles[xDest][yDest].piece].initAnimation(this.board.tiles[xOrigin][yOrigin]);
+
     var turnedKing = false;
     if(!this.board.pieces[this.board.tiles[xDest][yDest].piece].isKing())
         turnedKing = this.turnKingIfPossible(this.board.pieces[this.board.tiles[xDest][yDest].piece],xDest);
@@ -297,6 +299,7 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.board.tiles[xDest][yDest].piece = this.board.tiles[xOrigin][yOrigin].piece;
     this.board.tiles[xOrigin][yOrigin].piece = -1;
     this.board.pieces[this.board.tiles[xDest][yDest].piece].tile = this.board.tiles[xDest][yDest];
+    this.board.pieces[this.board.tiles[xDest][yDest].piece].initAnimation(this.board.tiles[xOrigin][yOrigin]);
 
     console.log("Piece ID: "+this.board.tiles[xEat][yEat].piece);
     var pieceID = this.board.tiles[xEat][yEat].piece;
@@ -446,6 +449,7 @@ GameLogic.prototype.playUndo = function() {
     this.board.tiles[play.xOrigin][play.yOrigin].piece = this.board.tiles[play.xDest][play.yDest].piece;
     this.board.tiles[play.xDest][play.yDest].piece = -1;
     this.board.pieces[this.board.tiles[play.xOrigin][play.yOrigin].piece].tile = this.board.tiles[play.xOrigin][play.yOrigin];
+    this.board.pieces[this.board.tiles[play.xOrigin][play.yOrigin].piece].initAnimation(this.board.tiles[play.xDest][play.yDest]);
 
     if(play.turnedKing)
         this.board.pieces[this.board.tiles[play.xOrigin][play.yOrigin].piece].turnNormal();
@@ -454,6 +458,7 @@ GameLogic.prototype.playUndo = function() {
         this.board.tiles[play.xEat][play.yEat].setOccupied(true);
         this.board.tiles[play.xEat][play.yEat].piece = play.pieceEaten;
         this.board.pieces[play.pieceEaten].eaten = false;
+        var oldTile = this.board.pieces[play.pieceEaten].tile;
         this.board.pieces[play.pieceEaten].tile = this.board.tiles[play.xEat][play.yEat];
         this.otherPlayer.numberPieces++;
         this.scene.interface.setScore(this.player1.numberPieces,this.player2.numberPieces);

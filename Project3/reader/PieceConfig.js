@@ -2,6 +2,8 @@ function PieceConfig(scene,tile, texture,color,id)
 {
     this.scene = scene;
     this.tile = tile;
+    this.oldTile = null;
+    this.beingAnimated = false;
     this.id = id;
     this.tile.piece = this.id;
     this.tile.setOccupied(true);
@@ -23,18 +25,34 @@ PieceConfig.prototype.display = function()
     this.scene.pushMatrix();
     //register geometry instead of tile
     this.scene.registerForPick(this.tile.id, this.geom);
-    this.scene.translate(this.tile.x, 1, this.tile.z);
+    if(!this.beingAnimated)
+        this.scene.translate(this.tile.x, 1, this.tile.z);
+    else {
+        console.log("animou?");
+        var delta = (Date.now() - this.time_begin_animation)/500;
+        if(delta <=0.5)
+            var y = 1+4*delta;
+        else
+            var y = 3 - 4*(delta-0.5);
+        console.log(y);
+        this.scene.translate(this.oldTile.x+this.vecX*delta, y, this.oldTile.z+this.vecZ*delta);
+        if(delta >= 1) {
+            this.time_begin_animation=-1;
+            this.beingAnimated = false;
+        }
+    }
+
     if(this.dama && !this.eaten) {         //se dama, entao faz scale
         this.scene.scale(1, 3, 1);
         this.scene.translate(0,0.4,0);
     }
     this.geom.display();
     this.scene.popMatrix();
-}
+};
 
 PieceConfig.prototype.setTile = function(newTile) {
     this.tile = newTile;
-}
+};
 
 PieceConfig.prototype.remove = function(white,black) {
     this.eaten = true;
@@ -69,4 +87,12 @@ PieceConfig.prototype.turnNormal = function() {
 
 PieceConfig.prototype.isKing = function() {
     return this.dama;
+};
+
+PieceConfig.prototype.initAnimation = function(tile) {
+    this.beingAnimated = true;
+    this.oldTile = tile;
+    this.vecX = this.tile.x - this.oldTile.x;
+    this.vecZ = this.tile.z - this.oldTile.z;
+    this.time_begin_animation = Date.now();
 };
