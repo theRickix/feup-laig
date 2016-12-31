@@ -37,6 +37,7 @@ KeyFrameAnimation.prototype.animate = function(time)
 	this.currentAnimationTime += time - this.lastFrameTime;
 
 	this.interpTargetKeyFrames();
+	this.applyTransformation();
 	
 	//Set the last frame time
 	this.lastFrameTime = time;
@@ -56,8 +57,6 @@ KeyFrameAnimation.prototype.interpTargetKeyFrames = function()
 
 		this.interpCurrFrame(interpFactor);
 	}
-
-	this.applyTransformation();
 };
 
 KeyFrameAnimation.prototype.interpCurrFrame = function(interpFac)
