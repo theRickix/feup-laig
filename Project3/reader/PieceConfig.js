@@ -1,3 +1,6 @@
+/*
+ * PieceConfig constructor.
+ */
 function PieceConfig(scene,tile, texture,color,id)
 {
     this.scene = scene;
@@ -20,6 +23,9 @@ function PieceConfig(scene,tile, texture,color,id)
 
 PieceConfig.prototype.constructor = PieceConfig;
 
+/*
+ * Main display of piece.
+ */
 PieceConfig.prototype.display = function()
 {
     this.scene.pushMatrix();
@@ -54,6 +60,9 @@ PieceConfig.prototype.setTile = function(newTile) {
     this.tile = newTile;
 };
 
+/*
+ * Remove the piece to its auxiliar board.
+ */
 PieceConfig.prototype.remove = function(white,black) {
     this.eaten = true;
     if(this.color == white.color) {
@@ -73,22 +82,37 @@ PieceConfig.prototype.remove = function(white,black) {
     console.log("x,y: "+row+" "+col);
 };
 
+/*
+ * Getter to check if the piece is alive or not.
+ */
 PieceConfig.prototype.isAlive = function() {
     return !this.eaten;
 };
 
+/*
+ * Set the piece to king.
+ */
 PieceConfig.prototype.turnKing = function() {
     this.dama = true;
 };
 
+/*
+ * Reset the piece back to normal.
+ */
 PieceConfig.prototype.turnNormal = function() {
     this.dama = false;
 };
 
+/*
+ * Getter to check if piece is king.
+ */
 PieceConfig.prototype.isKing = function() {
     return this.dama;
 };
 
+/*
+ * Initialize animation when piece is played.
+ */
 PieceConfig.prototype.initAnimation = function(tile) {
     this.beingAnimated = true;
     this.oldTile = tile;

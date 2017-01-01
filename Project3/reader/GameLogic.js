@@ -1,8 +1,14 @@
+/*
+ * GameLogic initializer with GameMode (unused) and scene
+ */
 function GameLogic(gamemode,scene)
 {
     //The list of players currently playing the game
     this.player1;
     this.player2;
+
+    //Initialize the Players in relation to the GameMode. However, because there's only
+    //HvsH, the only "real" option is the first.
     if(gamemode == GameMode.HvsH) { //Human vs Human
         this.player1 = new MyPlayer(scene,PlayerType.HUMAN,Color.WHITE);
         this.player2 = new MyPlayer(scene,PlayerType.HUMAN,Color.BLACK);
@@ -18,24 +24,21 @@ function GameLogic(gamemode,scene)
     else {
         return "error in game mode";
     }
+    //Used to know what player is playing
     this.currentPlayer = this.player1;
     this.otherPlayer = this.player2;
 
     this.scene = scene;
-    //The current board object
+    //The current board object and auxiliar boards
     this.board = new Board(this.scene,this);
     this.auxBoardWhite = new AuxBoard(this.scene,this,Color.WHITE);
     this.auxBoardBlack = new AuxBoard(this.scene,this,Color.BLACK);
 
-    //The current turn of play
-    this.turnNumber = 0;
-    //The player index that won
-    this.playerWon = -1;
-
-    //The current play being made
+    //Initialize play history and showingReplay as false
     this.playHistory = [];
-    this.showingReply = false;
+    this.showingReplay = false;
 
+    //If Replay id is found in the page, show replay
     if(document.getElementById('replay') === null) {
         this.showingReplay = false;
         this.time_begin_turn = Date.now();
@@ -47,6 +50,7 @@ function GameLogic(gamemode,scene)
         this.time_begin = -1;
     }
 
+    //Initialize all interface otpions
     this.scene.interface.initSurrender();
     this.scene.interface.initUndo();
     if(this.showingReplay)
@@ -60,23 +64,10 @@ function GameLogic(gamemode,scene)
 
 GameLogic.prototype.constructor = GameLogic;
 
-GameLogic.prototype.gameLoop = function()
-{
-    if(this.currentPlay != null)
-    {
-        var animationKeyFrames = createAnimationKeyFrames();
-        //apply the animation to the piece
-        this.currentPlay.targetpiece.animation = new KeyFrameAnimation(
-            this.board.scene,
-            animationKeyFrames
-        );
-    }
-
-    //this.checkWinCondition();
-
-    this.gameLoop();
-};
-
+/*
+ * Check normal win condition. If one of the players has no pieces left, loses the game and the page
+ * redirects to the game over page.
+ */
 GameLogic.prototype.checkWinCondition = function()
 {
     if(this.player1.numberPieces <= 0)
@@ -133,8 +124,11 @@ GameLogic.prototype.createAnimationKeyFrames = function()
     ));
 
     return pieceAnimation;
-}
+};
 
+/*
+ * Change player currently playing and show camera animation.
+ */
 GameLogic.prototype.changePlayer = function()
 {
     this.time_begin_turn = Date.now();
@@ -154,6 +148,9 @@ GameLogic.prototype.changePlayer = function()
 
 };
 
+/*
+ * Get the picked piece
+ */
 GameLogic.prototype.getPickedObject = function(id)
 {
     var tileX = this.getRow(id);
@@ -167,6 +164,9 @@ GameLogic.prototype.getPickedObject = function(id)
 
 };
 
+/*
+ * Play to the destination tile with that id.
+ */
 GameLogic.prototype.playPiece = function(id)
 {
     var xDest = this.getRow(id);
@@ -186,25 +186,38 @@ GameLogic.prototype.playPiece = function(id)
 
 };
 
+/*
+ * Reset the selected tile.
+ */
 GameLogic.prototype.resetSelectedTile = function()
 {
     this.selectedTile = null;
     this.hasSelectedPiece = false;
 };
 
+/*
+ * Get the row of the tile from the id.
+ */
 GameLogic.prototype.getRow = function(id) {
     return ~~((id-1)/8);
 };
 
+/*
+ * Get the column of the tile from the id.
+ */
 GameLogic.prototype.getCol = function(id) {
     return (id-1)%8;
 };
 
+/*
+ * Check if the move is valid for a white piece.
+ */
 GameLogic.prototype.checkValidMoveNormalWhite = function (xOrigin,yOrigin,xDest,yDest) {
     if(!this.board.tiles[xDest][yDest].isOccupied()) {
+        //Check if  destination is diagonal and next to the piece.
         if(xDest == (xOrigin + 1) && (yDest == (yOrigin+1) || (yDest== yOrigin-1)))
             this.moveNormal(xOrigin,yOrigin,xDest,yDest);
-
+        //Check if destination is diagonal and two tiles from original, to eat a piece.
         if (xDest == (xOrigin + 2)) {
             if (yDest == (yOrigin + 2)) {
                 if (this.board.pieces[this.board.tiles[xOrigin + 1][yOrigin + 1].piece].color != this.currentPlayer.color)
@@ -220,11 +233,15 @@ GameLogic.prototype.checkValidMoveNormalWhite = function (xOrigin,yOrigin,xDest,
     }
 };
 
+/*
+ * Check if the move is valid for a black piece.
+ */
 GameLogic.prototype.checkValidMoveNormalBlack = function (xOrigin,yOrigin,xDest,yDest) {
     if(!this.board.tiles[xDest][yDest].isOccupied()) {
+        //Check if  destination is diagonal and next to the piece.
         if(xDest == (xOrigin -1) && (yDest == (yOrigin+1) || (yDest == yOrigin-1)))
             this.moveNormal(xOrigin,yOrigin,xDest,yDest);
-
+        //Check if destination is diagonal and two tiles from original, to eat a piece.
         if (xDest == (xOrigin - 2)) {
             if (yDest == (yOrigin + 2)) {
                 if (this.board.pieces[this.board.tiles[xOrigin - 1][yOrigin + 1].piece].color != this.currentPlayer.color)
@@ -239,6 +256,10 @@ GameLogic.prototype.checkValidMoveNormalBlack = function (xOrigin,yOrigin,xDest,
     }
 };
 
+
+/*
+ * Check if the move is valid for a king piece.
+ */
 GameLogic.prototype.checkValidMoveKing = function (xOrigin,yOrigin,xDest,yDest) {
     if(!this.board.tiles[xDest][yDest].isOccupied()) {
         if(xDest == (xOrigin -1) && (yDest == (yOrigin+1) || (yDest == yOrigin-1)))
@@ -273,6 +294,9 @@ GameLogic.prototype.checkValidMoveKing = function (xOrigin,yOrigin,xDest,yDest) 
     }
 };
 
+/*
+ * Do a normal move.
+ */
 GameLogic.prototype.moveNormal = function (xOrigin,yOrigin,xDest,yDest) {
     this.board.tiles[xOrigin][yOrigin].setOccupied(false);
     this.board.tiles[xDest][yDest].setOccupied(true);
@@ -292,6 +316,10 @@ GameLogic.prototype.moveNormal = function (xOrigin,yOrigin,xDest,yDest) {
     this.checkWinCondition();
     this.changePlayer();
 };
+
+/*
+ * Do a eat piece move.
+ */
 
 GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.board.tiles[xOrigin][yOrigin].setOccupied(false);
@@ -324,6 +352,9 @@ GameLogic.prototype.moveEat = function (xOrigin,yOrigin,xDest,yDest,xEat,yEat) {
     this.scene.interface.setScore(this.player1.numberPieces,this.player2.numberPieces);
 };
 
+/*
+ * Main display of the game.
+ */
 GameLogic.prototype.display = function() {
     if(!this.showingReplay) {
         var player;
@@ -347,6 +378,10 @@ GameLogic.prototype.display = function() {
         this.doHistoryPlay(Date.now());
 };
 
+
+/*
+ * Turn king if on the end of the board.
+ */
 GameLogic.prototype.turnKingIfPossible = function(piece,x) {
     if((this.currentPlayer.color == Color.WHITE && x==7) ||
         (this.currentPlayer.color == Color.BLACK && x==0)) {
@@ -356,6 +391,9 @@ GameLogic.prototype.turnKingIfPossible = function(piece,x) {
     return false;
 };
 
+/*
+ * Do the surrender of a player
+ */
 GameLogic.prototype.playerSurrender = function() {
     if(this.currentPlayer == this.player1) {
         this.playHistory.push(2);
@@ -367,8 +405,11 @@ GameLogic.prototype.playerSurrender = function() {
         this.saveHistory();
         location.replace("gameoverwhite.html");
     }
-}
+};
 
+/*
+ * Add a normal move to history.
+ */
 GameLogic.prototype.addToHistoryNormal = function(xOrigin,yOrigin,xDest,yDest,turnedKing) {
     var play = {
         type: MoveResult.NORMAL,
@@ -377,10 +418,14 @@ GameLogic.prototype.addToHistoryNormal = function(xOrigin,yOrigin,xDest,yDest,tu
         xDest: xDest,
         yDest: yDest,
         turnedKing: turnedKing
-    }
+    };
     this.playHistory.push(play);
 };
 
+
+/*
+ * Add a eat move to history.
+ */
 GameLogic.prototype.addToHistoryEat = function(xOrigin,yOrigin,xDest,yDest,xEat,yEat,pieceEaten,turnedKing) {
     var play = {
         type: MoveResult.EAT,
@@ -396,20 +441,32 @@ GameLogic.prototype.addToHistoryEat = function(xOrigin,yOrigin,xDest,yDest,xEat,
     this.playHistory.push(play);
 };
 
+/*
+ * Save the history in the end of the game.
+ */
 GameLogic.prototype.saveHistory = function() {
     localStorage.setItem('replay', JSON.stringify(this.playHistory));
 };
 
+/*
+ * Retrieve history when doing replay.
+ */
 GameLogic.prototype.getHistory = function() {
     this.playHistory = JSON.parse(localStorage.getItem('replay'));
     this.playHistory.reverse();
     console.log("SIZE"+this.playHistory.length);
 };
 
+/*
+ * Getter for showingReplay.
+ */
 GameLogic.prototype.showingReplay = function() {
     return this.showingReplay;
 };
 
+/*
+ * Make a play from the history when replaying.
+ */
 GameLogic.prototype.doHistoryPlay = function(time) {
     if(this.playHistory.length >1) {
 
@@ -438,6 +495,9 @@ GameLogic.prototype.doHistoryPlay = function(time) {
     }
 };
 
+/*
+ * Undo a play.
+ */
 GameLogic.prototype.playUndo = function() {
     var play = this.playHistory.pop();
 

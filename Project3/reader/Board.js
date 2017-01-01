@@ -1,3 +1,6 @@
+/*
+ * Board constructor.
+ */
 function Board(scene,game)
 {
     this.tiles = [];
@@ -18,6 +21,9 @@ function Board(scene,game)
 
 Board.prototype.constructor = Board;
 
+/*
+ * Build the tiles of the board.
+ */
 Board.prototype.buildBoard = function() {
     //create tiles
     var id=1;
@@ -35,6 +41,9 @@ Board.prototype.buildBoard = function() {
 
 };
 
+/*
+ * Build the pieces.
+ */
 Board.prototype.buildPieces= function()
 {
     //Cria um board de acordo com esta img: http://www.iggamecenter.com/images/info/checkers_rus/2.png
@@ -70,6 +79,9 @@ Board.prototype.buildPieces= function()
     this.pieces[23] = new PieceConfig(this.scene, this.tiles[7][7], this.textures["blackPiece"],Color.BLACK,23);
 };
 
+/*
+ * Board display.
+ */
 Board.prototype.display = function()
 {
     for(var x = 0; x < 8; x++)

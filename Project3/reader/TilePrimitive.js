@@ -1,3 +1,6 @@
+/*
+ * TilePrimitive constructor.
+ */
 function TilePrimitive(scene, lenght, texture,selectedTexture) {
     CGFobject.call(this, scene);
 
@@ -23,6 +26,9 @@ function TilePrimitive(scene, lenght, texture,selectedTexture) {
 TilePrimitive.prototype = Object.create(CGFobject.prototype);
 TilePrimitive.prototype.constructor = TilePrimitive;
 
+/*
+ * Display the geometry of the tile.
+ */
 TilePrimitive.prototype.display = function(selected) {
 
     if(selected)

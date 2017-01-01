@@ -37,6 +37,9 @@ MyInterface.prototype.processKeyDown = function(event) {
     }
 };
 
+/*
+ * Initialize score sliders.
+ */
 MyInterface.prototype.initScore = function() {
     var Score = function() {
         this.White = 12;
@@ -49,6 +52,9 @@ MyInterface.prototype.initScore = function() {
     this.score2.domElement.style.pointerEvents = "none";
 };
 
+/*
+ * Initialize surrender button.
+ */
 MyInterface.prototype.initSurrender = function() {
     var self = this;
     var surrender = { Surrender:function(){ self.scene.game.playerSurrender();}};
@@ -56,7 +62,9 @@ MyInterface.prototype.initSurrender = function() {
 
 };
 
-
+/*
+ * Initialize undo button.
+ */
 MyInterface.prototype.initUndo = function() {
     var self = this;
     var undo = { Undo:function(){ self.scene.game.playUndo();}};
@@ -64,13 +72,18 @@ MyInterface.prototype.initUndo = function() {
 
 };
 
-
+/*
+ * Initialize menu button-
+ */
 MyInterface.prototype.initMenu = function() {
     var menu = { Menu:function(){ location.replace("index.html");}};
     this.surrenderBtn = this.gui2.add(menu,"Menu");
 
 };
 
+/*
+ * Initialize play timer.
+ */
 MyInterface.prototype.initTimer = function(time,player) {
     this.gui3 = new dat.GUI();
     var Timer;
@@ -92,6 +105,9 @@ MyInterface.prototype.initTimer = function(time,player) {
     console.log("Teste");
 };
 
+/*
+ * Update the timer.
+ */
 MyInterface.prototype.updateTimer = function(time,player) {
 
     this.gui3.remove(this.timer);
@@ -114,11 +130,17 @@ MyInterface.prototype.updateTimer = function(time,player) {
     console.log("Teste");
 };
 
+/*
+ * Remove the undo button.
+ */
 MyInterface.prototype.removeUndo = function() {
     this.gui2.remove(this.surrenderBtn);
 
 };
 
+/*
+ * Update the score.
+ */
 MyInterface.prototype.setScore = function(score1,score2) {
     var Score = function() {
         this.White = score1;

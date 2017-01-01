@@ -1,3 +1,6 @@
+/*
+ * Actual PiecePrimite constructir with its geometry.
+ */
 function PiecePrimitive(scene, height, base, top, stacks, slices, texture, truePosition) {
     CGFobject.call(this, scene);
     this.scene = scene;
@@ -28,11 +31,9 @@ function PiecePrimitive(scene, height, base, top, stacks, slices, texture, trueP
 PiecePrimitive.prototype = Object.create(CGFobject.prototype);
 PiecePrimitive.prototype.constructor = PiecePrimitive;
 
-PiecePrimitive.prototype.setNewTexture = function(tex)
-{
-    this.appearance.setTexture(tex);
-}
-
+/*
+ * Display the peice geometry.
+ */
 PiecePrimitive.prototype.display = function() {
     this.scene.pushMatrix();
     this.appearance.apply();

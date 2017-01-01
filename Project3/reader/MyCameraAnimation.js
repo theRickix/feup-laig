@@ -1,4 +1,6 @@
-
+/*
+ * MyCameraAnimation constructor, with span, initial and final view.
+ */
 function MyCameraAnimation(scene, id, span, initialView,finalView) {
     this.init(id,scene);
     this.scene = scene;
@@ -20,7 +22,9 @@ function MyCameraAnimation(scene, id, span, initialView,finalView) {
 MyCameraAnimation.prototype = Object.create(Animation.prototype);
 MyCameraAnimation.prototype.constructor = MyCameraAnimation;
 
-
+/*
+ * Animate camera with intermediate perspectives.
+ */
 MyCameraAnimation.prototype.animate = function(time) {
 
     //animation begin

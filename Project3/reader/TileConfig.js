@@ -1,3 +1,6 @@
+/*
+ * TileConfig constructor.
+ */
 function TileConfig(scene, color, x, z, texture,selectedTexture, id,forPick) {
     this.scene = scene;
     this.texture = texture;
@@ -18,14 +21,23 @@ function TileConfig(scene, color, x, z, texture,selectedTexture, id,forPick) {
 
 TileConfig.prototype.constructor = TileConfig;
 
+/*
+ * Set the piece as occupied or not.
+ */
 TileConfig.prototype.setOccupied = function(newOccupied) {
-    this.occupied = newOccupied;   //tile occuppied
+    this.occupied = newOccupied;
 };
 
+/*
+ * Check if piece is occupied or not.
+ */
 TileConfig.prototype.isOccupied = function() {
     return this.occupied;
 };
 
+/*
+ * Display the tile.
+ */
 TileConfig.prototype.display = function(selected) {
     this.scene.pushMatrix();
     this.scene.registerForPick(this.id, this);
@@ -34,10 +46,16 @@ TileConfig.prototype.display = function(selected) {
     this.scene.popMatrix();
 };
 
+/*
+ * Get the X of the Tile.
+ */
 TileConfig.prototype.getX= function() {
     return this.x;
 };
 
+/*
+ * Get the Z of the file.
+ */
 TileConfig.prototype.getZ= function() {
     return this.y;
 };

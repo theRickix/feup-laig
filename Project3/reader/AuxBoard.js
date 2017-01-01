@@ -1,3 +1,6 @@
+/*
+ * Auxiliar Board constructor.
+ */
 function AuxBoard(scene,game,color)
 {
     this.tiles = [];
@@ -18,6 +21,9 @@ function AuxBoard(scene,game,color)
 
 AuxBoard.prototype.constructor = AuxBoard;
 
+/*
+ * Build the tiles of the auxiliar board.
+ */
 AuxBoard.prototype.buildBoard = function() {
     //create tiles
     var id=100;
@@ -35,6 +41,9 @@ AuxBoard.prototype.buildBoard = function() {
 
 };
 
+/*
+ * Display auxiliar board.
+ */
 AuxBoard.prototype.display = function()
 {
     this.scene.pushMatrix();
@@ -61,10 +70,16 @@ AuxBoard.prototype.display = function()
     this.scene.popMatrix();
 };
 
+/*
+ * Get row of a tile in the auxiliar board.
+ */
 AuxBoard.prototype.getRow = function(id) {
     return ~~((id-1)/2);
 };
 
+/*
+ * Get column of a tile in the auxiliar board.
+ */
 AuxBoard.prototype.getCol = function(id) {
     return (id-1)%2;
 };

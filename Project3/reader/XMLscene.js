@@ -437,7 +437,7 @@ XMLscene.prototype.display = function () {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    if(this.changingCamera) {
+    if(this.changingCamera) { //animate camera if true
         var finished = this.cameraAnimation.animate(Date.now());
         if (finished) {
             this.changingCamera = false;
@@ -471,6 +471,9 @@ XMLscene.prototype.display = function () {
 	}
 };
 
+/*
+ * Log picking function.
+ */
 XMLscene.prototype.logPicking= function() {
     if (this.pickMode == false) {
         if (this.pickResults != null && this.pickResults.length > 0) {
